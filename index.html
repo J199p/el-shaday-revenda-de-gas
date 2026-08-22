@@ -3,63 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY - CONTROLE DE VENDA DE GÁS</title>
+<title>EL SHADAY CONTROLE DE VENDAS</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f1f3a;font-family:Arial,sans-serif;color:#fff}
 .header{padding:25px 15px;text-align:center}
 .header h1{font-size:22px;line-height:1.2}
-.sub{opacity:.7;font-size:13px;margin-top:8px;display:flex;justify-content:space-between}
-.wrap{background:#fff;border-radius:25px 25px 0 0;padding:12px;min-height:80vh}
+.wrap{background:#fff;border-radius:25px 25px 0 0;padding:12px;min-height:85vh}
 table{width:100%;border-collapse:collapse;font-size:11px}
-th{padding:10px 4px;border-radius:10px;color:#fff;font-size:11px;line-height:1.1}
-td{padding:12px 4px;border-bottom:1px solid #eee;text-align:center;color:#000}
-.c-data{background:#2563eb}
-.c-cliente{background:#facc15;color:#000}
-.c-qtd{background:#16a34a}
-.c-unit{background:#111827}
-.c-total{background:#facc15;color:#000}
-.c-desp{background:#ef4444}
-.c-resumo{background:#0f766e}
-.footer{background:#0f766e;padding:16px;border-radius:0 0 25px 25px;display:flex;justify-content:space-between;align-items:center;margin:0 -12px -12px -12px;font-weight:bold;font-size:12px}
-.btn{background:#16a34a;border:none;color:#fff;padding:10px 16px;border-radius:10px;font-weight:bold}
+th{padding:10px 3px;border-radius:8px;color:#fff}
+td{padding:6px 2px;border-bottom:1px solid #eee;text-align:center;color:#000}
+td input{width:100%;border:none;text-align:center;font-size:11px;padding:5px;outline:none}
+.c-data{background:#2563eb}.c-cli{background:#facc15;color:#000}
+.c-qtd{background:#16a34a}.c-unit{background:#111827}
+.c-total{background:#facc15;color:#000}.c-desp{background:#ef4444}.c-res{background:#0f766e}
+.footer{background:#0f766e;padding:15px;border-radius:0 0 25px 25px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;margin:10px -12px -12px -12px}
+.btn{background:#16a34a;border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:bold}
+.calc{background:#f0f0f0;border-radius:6px;padding:4px;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>🔥 EL SHADAY - CONTROLE<br>DE VENDA DE GÁS</h1>
-<div class="sub"><span>Controle de Vendas • Out/2024</span><span>📄 ⋯</span></div>
-</div>
+<div class="header"><h1>🔥 EL SHADAY<br>CONTROLE DE VENDAS</h1></div>
 <div class="wrap">
 <table>
-<thead>
-<tr>
-<th class="c-data">Data</th>
-<th class="c-cliente">Cliente</th>
-<th class="c-qtd">Quant<br>Vendida</th>
-<th class="c-unit">Valor<br>Unitário</th>
-<th class="c-total">Valor<br>Total</th>
-<th class="c-desp">despesa</th>
-<th class="c-resumo">Resumo<br>Total</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>01/10/2024</td><td>João Silva</td><td>2</td><td>R$ 95,00</td><td>R$ 190,00</td><td>R$ 10,00</td><td>R$ 180,00</td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>03/10/2024</td><td>Maria Oliveira</td><td>1</td><td>R$ 95,00</td><td>R$ 95,00</td><td>R$ 5,00</td><td>R$ 90,00</td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>05/10/2024</td><td>Carlos Souza</td><td>3</td><td>R$ 95,00</td><td>R$ 285,00</td><td>R$ 15,00</td><td>R$ 270,00</td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>07/10/2024</td><td>Ana Costa</td><td>1</td><td>R$ 95,00</td><td>R$ 95,00</td><td>R$ 5,00</td><td>R$ 90,00</td></tr>
-</tbody>
+<thead><tr>
+<th class="c-data">Data</th><th class="c-cli">Cliente</th><th class="c-qtd">Quant<br>Vendida</th><th class="c-unit">Valor<br>Unitário</th><th class="c-total">Valor<br>Total</th><th class="c-desp">despesa</th><th class="c-res">Resumo<br>Total</th>
+</tr></thead>
+<tbody id="corpo"></tbody>
 </table>
-<div class="footer">
-<span>TOTAL GERAL: 7 vendas • R$ 630,00</span>
-<button class="btn">+ Nova Venda</button>
+<div class="footer"><span id="totalGeral">TOTAL GERAL: 0 vendas • R$ 0,00</span><button class="btn" onclick="addLinha()">+ Nova Venda</button></div>
 </div>
-</div>
+<script>
+function addLinha(){
+let tr=document.createElement('tr');
+tr.innerHTML=`<td><input placeholder="__/__/__"></td>
+<td><input placeholder="Cliente"></td>
+<td><input type="number" class="qtd" placeholder="0" oninput="calcular()"></td>
+<td><input type="number" class="unit" placeholder="0" oninput="calcular()"></td>
+<td class="vTotal calc">R$ 0,00</td>
+<td><input type="number" class="desp" placeholder="0" oninput="calcular()"></td>
+<td class="resumo calc">R$ 0,00</td>`;
+document.getElementById('corpo').appendChild(tr);
+}
+function calcular(){
+let tv=0, trs=0;
+document.querySelectorAll('#corpo tr').forEach(l=>{
+let q=parseFloat(l.querySelector('.qtd')?.value)||0;
+let vu=parseFloat(l.querySelector('.unit')?.value)||0;
+let d=parseFloat(l.querySelector('.desp')?.value)||0;
+let total=q*vu;
+let res=total-d;
+l.querySelector('.vTotal').innerText='R$ '+total.toFixed(2).replace('.',',');
+l.querySelector('.resumo').innerText='R$ '+res.toFixed(2).replace('.',',');
+if(q>0){tv+=q; trs+=res;}
+});
+document.getElementById('totalGeral').innerText=`TOTAL GERAL: ${tv} vendas • R$ ${trs.toFixed(2).replace('.',',')}`;
+}
+for(let i=0;i<25;i++) addLinha();
+</script>
 </body>
 </html>
