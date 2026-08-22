@@ -8,18 +8,22 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#f5f7fb;font-family:Arial,sans-serif}
 .top{background:#1e3a8a;color:#fff;padding:15px;border-radius:0 0 20px 20px;text-align:center}
-.top h1{font-size:19px;margin-bottom:10px}
+.top h1{font-size:19px}
 .data-top{background:#fff;padding:10px;border-radius:12px;display:flex;justify-content:center;align-items:center;gap:8px;color:#000;margin:10px 20px 0 20px}
-.data-top input{border:none;font-size:15px;font-weight:bold;color:#1e3a8a;outline:none}
-.card{background:#fff;margin:15px;border-radius:20px;padding:12px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+.data-top input{border:none;font-weight:bold;color:#1e3a8a}
+.estoque{display:flex;gap:10px;margin:15px}
+.est{flex:1;background:#fff;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.est.cheio{border-left:5px solid #16a34a}.est.vazio{border-left:5px solid #ef4444}
+.est h3{font-size:12px;color:#666}.est p{font-size:22px;font-weight:bold;margin-top:5px}
+.card{background:#fff;margin:0 15px 15px 15px;border-radius:20px;padding:12px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
 table{width:100%;border-collapse:separate;border-spacing:4px}
-th{padding:12px 4px;border-radius:10px;color:#fff;font-size:10px;text-align:center}
-td{padding:0}
-td input{width:100%;height:48px;border:1px solid #ddd;border-radius:10px;text-align:center;background:#fafafa}
-.calc{background:#eef2ff;height:48px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:11px}
+th{padding:10px 3px;border-radius:10px;color:#fff;font-size:10px;text-align:center}
+td input{width:100%;height:45px;border:1px solid #ddd;border-radius:10px;text-align:center;background:#fafafa}
+.calc{background:#eef2ff;height:45px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:10px}
 .c-cli{background:#facc15;color:#000}.c-qtd{background:#16a34a}.c-unit{background:#000}.c-total{background:#facc15;color:#000}.c-desp{background:#ef4444}.c-res{background:#0f766e}
 .footer{background:#0f766e;margin:15px;border-radius:15px;padding:15px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:bold}
-.btn{background:#16a34a;border:none;color:#fff;padding:12px 18px;border-radius:10px;font-weight:bold}
+.btn{background:#16a34a;border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:bold}
+.btn-est{background:#2563eb;border:none;color:#fff;padding:6px 10px;border-radius:8px;margin-top:5px;font-size:11px}
 </style>
 </head>
 <body>
@@ -28,40 +32,86 @@ td input{width:100%;height:48px;border:1px solid #ddd;border-radius:10px;text-al
 <div class="data-top">📅 Data: <input type="date" id="dataTop"></div>
 </div>
 
+<div class="estoque">
+<div class="est cheio"><h3>🔵 ESTOQUE CHEIO</h3><p id="qCheio">0</p><button class="btn-est" onclick="altEstoque('cheio',1)">+1</button> <button class="btn-est" onclick="altEstoque('cheio',-1)">-1</button></div>
+<div class="est vazio"><h3>🔴 ESTOQUE VAZIO</h3><p id="qVazio">0</p><button class="btn-est" onclick="altEstoque('vazio',1)">+1</button> <button class="btn-est" onclick="altEstoque('vazio',-1)">-1</button></div>
+</div>
+
 <div class="card">
 <table>
 <thead><tr>
-<th class="c-cli">Cliente<br>👤</th><th class="c-qtd">Quant<br>Vendida</th><th class="c-unit">Valor<br>Unitário</th><th class="c-total">Valor<br>Total</th><th class="c-desp">despesa</th><th class="c-res">Resumo<br>Total</th>
+<th class="c-cli">Cliente</th><th class="c-qtd">Quant</th><th class="c-unit">Unitário</th><th class="c-total">Total</th><th class="c-desp">despesa</th><th class="c-res">Resumo</th>
 </tr></thead>
 <tbody id="corpo"></tbody>
 </table>
 </div>
 
-<div class="footer"><span id="total">TOTAL GERAL: 0 vendas • R$ 0,00</span><button class="btn" onclick="nova()">+ Nova Venda</button></div>
+<div class="footer"><span id="total">TOTAL: 0 vendas • R$ 0,00</span><button class="btn" onclick="nova()">+ Nova Venda</button></div>
 
 <script>
-function nova(){
+let estoque={cheio: parseInt(localStorage.getItem('estCheio')||0), vazio: parseInt(localStorage.getItem('estVazio')||0)};
+
+function altEstoque(tipo,qtd){
+estoque[tipo]+=qtd; if(estoque[tipo]<0) estoque[tipo]=0;
+localStorage.setItem('estCheio',estoque.cheio);
+localStorage.setItem('estVazio',estoque.vazio);
+atualizaEstoque();
+}
+function atualizaEstoque(){
+document.getElementById('qCheio').innerText=estoque.cheio;
+document.getElementById('qVazio').innerText=estoque.vazio;
+}
+
+function nova(dados=null){
 let tr=document.createElement('tr');
-tr.innerHTML=`<td><input placeholder="Nome"></td><td><input type="number" class="q" oninput="calc()" placeholder="0"></td><td><input type="number" class="vu" oninput="calc()" placeholder="0"></td><td><div class="calc vt">R$ 0,00</div></td><td><input type="number" class="d" oninput="calc()" placeholder="0"></td><td><div class="calc rt">R$ 0,00</div></td>`;
+let nome=dados?dados.nome:''; let q=dados?dados.q:''; let vu=dados?dados.vu:''; let d=dados?dados.d:'';
+tr.innerHTML=`<td><input value="${nome}" placeholder="Nome" oninput="salvar()"></td>
+<td><input type="number" value="${q}" class="q" oninput="calc();salvar()" placeholder="0"></td>
+<td><input type="number" value="${vu}" class="vu" oninput="calc();salvar()" placeholder="0"></td>
+<td><div class="calc vt">R$ 0,00</div></td>
+<td><input type="number" value="${d}" class="des" oninput="calc();salvar()" placeholder="0"></td>
+<td><div class="calc rt">R$ 0,00</div></td>`;
 document.getElementById('corpo').appendChild(tr);
 }
+
 function calc(){
 let tv=0,tt=0;
 document.querySelectorAll('#corpo tr').forEach(r=>{
 let q=parseFloat(r.querySelector('.q')?.value)||0;
 let vu=parseFloat(r.querySelector('.vu')?.value)||0;
-let d=parseFloat(r.querySelector('.d')?.value)||0;
-let vt=q*vu; let rt=vt-d;
+let desp=parseFloat(r.querySelector('.des')?.value)||0;
+let vt=q*vu; let rt=vt-desp;
 r.querySelector('.vt').innerText='R$ '+vt.toFixed(2).replace('.',',');
 r.querySelector('.rt').innerText='R$ '+rt.toFixed(2).replace('.',',');
 if(q>0){tv+=q;tt+=rt;}
 });
-document.getElementById('total').innerText=`TOTAL GERAL: ${tv} vendas • R$ ${tt.toFixed(2).replace('.',',')}`;
+document.getElementById('total').innerText=`TOTAL: ${tv} vendas • R$ ${tt.toFixed(2).replace('.',',')}`;
 }
-// Cria 10 linhas vazias
-for(let i=0;i<10;i++) nova();
-// Coloca data de hoje automaticamente
-document.getElementById('dataTop').valueAsDate = new Date();
+
+function salvar(){
+let dados=[];
+document.querySelectorAll('#corpo tr').forEach(r=>{
+dados.push({
+nome:r.querySelector('input').value,
+q:r.querySelector('.q').value,
+vu:r.querySelector('.vu').value,
+d:r.querySelector('.des').value
+});
+});
+localStorage.setItem('elshaday_vendas',JSON.stringify(dados));
+localStorage.setItem('elshaday_data',document.getElementById('dataTop').value);
+}
+
+function carregar(){
+let salvos=JSON.parse(localStorage.getItem('elshaday_vendas')||'[]');
+if(salvos.length>0){ salvos.forEach(d=>nova(d)); } else { for(let i=0;i<10;i++) nova(); }
+let dataSalva=localStorage.getItem('elshaday_data');
+if(dataSalva) document.getElementById('dataTop').value=dataSalva;
+else document.getElementById('dataTop').valueAsDate=new Date();
+calc(); atualizaEstoque();
+}
+carregar();
+document.getElementById('dataTop').addEventListener('change',salvar);
 </script>
 </body>
 </html>
