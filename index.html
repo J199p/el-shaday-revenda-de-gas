@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY</title>
+<title>EL SHADAY - GRAVANDO SOMA</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
@@ -27,15 +27,15 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 
 <div id="telaSenha">
 <h1>🔒 EL SHADAY</h1>
-<p style="margin-top:10px">Digite a senha</p>
+<p>Digite a senha</p>
 <input type="password" id="inputSenha" placeholder="Senha">
 <button onclick="verificarSenha()">ENTRAR</button>
-<p style="font-size:12px;margin-top:15px;opacity:.7">Senha: 1999</p>
+<p style="font-size:12px;margin-top:10px">Senha: 1999</p>
 </div>
 
 <div class="top">
 <h1>🔥 EL SHADAY CONTROLE DE VENDAS</h1>
-<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS</div>
+<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS - <span id="statusSave" style="color:green">● Gravando</span></div>
 </div>
 <div class="estoque">
 <div class="est cheio"><small>🔵 CHEIO RESTANTE</small><p id="qCheio">200</p></div>
@@ -53,96 +53,97 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 </div>
 
 <script>
-const SENHA_CORRETA = "1999";
-const ESTOQUE_INICIAL = 200;
+const SENHA = "1999";
+const ESTOQUE = 200;
+const CHAVE = "ELSHADAY_VENDAS_FINAL_V5"; // chave única que nunca muda
 
 function verificarSenha(){
-if(document.getElementById('inputSenha').value===SENHA_CORRETA){
-document.getElementById('telaSenha').style.display='none';
-localStorage.setItem('logado_elshaday','1');
-}else alert('Senha incorreta!');
+ if(document.getElementById('inputSenha').value===SENHA){
+  document.getElementById('telaSenha').style.display='none';
+  localStorage.setItem('logado','1');
+ }else alert('Senha errada!');
 }
-function sair(){ localStorage.removeItem('logado_elshaday'); location.reload(); }
-if(localStorage.getItem('logado_elshaday')==='1') document.getElementById('telaSenha').style.display='none';
+function sair(){ localStorage.removeItem('logado'); location.reload(); }
+if(localStorage.getItem('logado')==='1') document.getElementById('telaSenha').style.display='none';
 
-function novaLinha(d=null){
-let tr=document.createElement('tr');
-tr.innerHTML=`<td><input value="${d?d.n:''}" placeholder="Nome"></td>
-<td><input type="number" value="${d?d.q:''}" class="q" placeholder="0"></td>
-<td><input type="number" value="${d?d.vu:''}" class="vu" placeholder="0"></td>
-<td><div class="calc vt">R$ 0</div></td>
-<td><input type="number" value="${d?d.de:''}" class="de" placeholder="0"></td>
-<td><div class="calc rt">R$ 0</div></td>`;
-document.getElementById('corpo').appendChild(tr);
-tr.querySelectorAll('input').forEach(inp=>inp.addEventListener('input', ()=>{ calcular(); salvar(); }));
+function novaLinha(d){
+ let tr=document.createElement('tr');
+ tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td>
+ <td><input type="number" class="q" value="${d?d.q:''}" placeholder="0"></td>
+ <td><input type="number" class="vu" value="${d?d.vu:''}" placeholder="0"></td>
+ <td><div class="calc vt">R$ 0</div></td>
+ <td><input type="number" class="de" value="${d?d.de:''}" placeholder="0"></td>
+ <td><div class="calc rt">R$ 0</div></td>`;
+ document.getElementById('corpo').appendChild(tr);
+ tr.querySelectorAll('input').forEach(i=>{
+  i.addEventListener('input', ()=>{ calcular(); salvar(); });
+  i.addEventListener('change', ()=>{ calcular(); salvar(); });
+ });
 }
 
 function calcular(){
-let vend=0, dinheiro=0;
-document.querySelectorAll('#corpo tr').forEach(r=>{
-let q=parseFloat(r.querySelector('.q')?.value)||0;
-let vu=parseFloat(r.querySelector('.vu')?.value)||0;
-let de=parseFloat(r.querySelector('.de')?.value)||0;
-let vt=q*vu; let rt=vt-de;
-r.querySelector('.vt').innerText='R$ '+vt.toFixed(0);
-r.querySelector('.rt').innerText='R$ '+rt.toFixed(0);
-vend+=q; dinheiro+=rt;
-});
-let cheio = ESTOQUE_INICIAL - vend; if(cheio<0) cheio=0;
-document.getElementById('qCheio').innerText=cheio;
-document.getElementById('qVazio').innerText=vend;
-document.getElementById('qVend').innerText=vend;
-document.getElementById('tot').innerText=`TOTAL: ${vend} botijões • R$ ${dinheiro.toFixed(2).replace('.',',')}`;
+ let vend=0, din=0;
+ document.querySelectorAll('#corpo tr').forEach(r=>{
+  let q=parseFloat(r.querySelector('.q').value)||0;
+  let vu=parseFloat(r.querySelector('.vu').value)||0;
+  let de=parseFloat(r.querySelector('.de').value)||0;
+  let vt=q*vu; let rt=vt-de;
+  r.querySelector('.vt').innerText='R$ '+vt;
+  r.querySelector('.rt').innerText='R$ '+rt;
+  vend+=q; din+=rt;
+ });
+ let cheio=ESTOQUE-vend; if(cheio<0) cheio=0;
+ document.getElementById('qCheio').innerText=cheio;
+ document.getElementById('qVazio').innerText=vend;
+ document.getElementById('qVend').innerText=vend;
+ document.getElementById('tot').innerText=`TOTAL: ${vend} botijões • R$ ${din.toFixed(2).replace('.',',')}`;
 }
 
 function salvar(){
-// AQUI QUE GRAVA NA SOMA PRA NÃO ZERAR
-let arr=[];
-document.querySelectorAll('#corpo tr').forEach(r=>{
-arr.push({n:r.querySelectorAll('input')[0].value, q:r.querySelector('.q').value, vu:r.querySelector('.vu').value, de:r.querySelector('.de').value});
-});
-localStorage.setItem('elshaday_gravado', JSON.stringify(arr));
-localStorage.setItem('elshaday_data', document.getElementById('data').value);
+ let arr=[];
+ document.querySelectorAll('#corpo tr').forEach(r=>{
+  arr.push({n:r.querySelector('.cli').value, q:r.querySelector('.q').value, vu:r.querySelector('.vu').value, de:r.querySelector('.de').value});
+ });
+ localStorage.setItem(CHAVE, JSON.stringify(arr));
+ localStorage.setItem(CHAVE+'_DATA', document.getElementById('data').value);
+ document.getElementById('statusSave').innerText='● Gravado!';
+ setTimeout(()=>{ document.getElementById('statusSave').innerText='● Gravando'; },1000);
+ console.log('SALVOU', arr);
 }
 
 function carregar(){
-let dados = JSON.parse(localStorage.getItem('elshaday_gravado')||'[]');
-let dataSalva = localStorage.getItem('elshaday_data');
-if(dados.length>0){
-dados.forEach(d=>novaLinha(d));
-}else{
-for(let i=0;i<8;i++) novaLinha();
-}
-if(dataSalva) document.getElementById('data').value=dataSalva;
-else document.getElementById('data').valueAsDate=new Date();
-calcular();
+ let salvos = JSON.parse(localStorage.getItem(CHAVE)||'[]');
+ let dataSalva = localStorage.getItem(CHAVE+'_DATA');
+ if(salvos.length>0){
+  salvos.forEach(d=>novaLinha(d));
+ }else{
+  for(let i=0;i<8;i++) novaLinha(null);
+ }
+ if(dataSalva) document.getElementById('data').value=dataSalva;
+ else document.getElementById('data').valueAsDate=new Date();
+ calcular();
 }
 
 function gerarPDF(){
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-let data = document.getElementById('data').value;
-let cheio = document.getElementById('qCheio').innerText;
-let vazio = document.getElementById('qVazio').innerText;
-let vendido = document.getElementById('qVend').innerText;
-let total = document.getElementById('tot').innerText;
-doc.setFontSize(14); doc.text('EL SHADAY - CONTROLE DE VENDAS',10,15);
-doc.setFontSize(10); doc.text(`Data: ${data} - Estoque: 200 Cheios`,10,22);
-doc.text(`Cheio: ${cheio} | Vazio: ${vazio} | Vendido: ${vendido}`,10,28);
-doc.text(total,10,34);
-let y=45;
-doc.text('Cliente / Qtd / Unit / Total / Desp / Resumo',10,y); y+=6;
-document.querySelectorAll('#corpo tr').forEach(r=>{
-let n=r.querySelectorAll('input')[0].value; let q=r.querySelector('.q').value;
-if(n && q!=0){
-doc.text(`${n} - ${q} x R$${r.querySelector('.vu').value} = ${r.querySelector('.vt').innerText} - Desp ${r.querySelector('.de').value} = ${r.querySelector('.rt').innerText}`,10,y);
-y+=6;
-}
-});
-doc.save(`EL-SHADAY-${data}.pdf`);
+ const { jsPDF } = window.jspdf;
+ const doc = new jsPDF();
+ let data = document.getElementById('data').value;
+ let tot = document.getElementById('tot').innerText;
+ doc.text('EL SHADAY - CONTROLE',10,15);
+ doc.text(`Data: ${data} - ${tot}`,10,22);
+ let y=30;
+ document.querySelectorAll('#corpo tr').forEach(r=>{
+  let n=r.querySelector('.cli').value; let q=r.querySelector('.q').value;
+  if(n && q){
+   doc.text(`${n} - ${q} un - ${r.querySelector('.rt').innerText}`,10,y);
+   y+=7;
+  }
+ });
+ doc.save(`vendas-${data}.pdf`);
 }
 
 carregar();
+setInterval(salvar, 2000); // salva a cada 2 segundos automaticamente
 document.getElementById('data').addEventListener('change', salvar);
 document.getElementById('inputSenha').addEventListener('keypress', e=>{ if(e.key==='Enter') verificarSenha() });
 </script>
