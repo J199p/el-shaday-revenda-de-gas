@@ -2,79 +2,97 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY FIADO</title>
+<title>EL SHADAY FINAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
 .top{background:#1e3a8a;color:#fff;padding:15px;text-align:center;border-radius:0 0 20px 20px}
-.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:10px;text-align:center}
-.est p{font-size:24px;font-weight:bold} .est input{width:100%;height:45px;border:2px dashed #16a34a;border-radius:10px;text-align:center;font-size:24px;font-weight:bold}
-.card{background:#fff;margin:12px;border-radius:15px;padding:8px;overflow-x:auto}
-table{width:100%;border-spacing:3px}th{padding:10px 2px;border-radius:8px;color:#fff;font-size:10px} 
-td input{width:100%;height:44px;border:1.5px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;font-size:14px}
-.calc{height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;font-size:11px}
+.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.est input{width:100%;height:50px;border:2px dashed #16a34a;border-radius:12px;text-align:center;font-size:26px;font-weight:bold;background:#f0fdf4}
+.card{background:#fff;margin:12px;border-radius:20px;padding:12px}
+table{width:100%;border-spacing:4px}th{padding:14px 2px;border-radius:12px;color:#fff;font-size:12px;text-align:center} td input{width:100%;height:58px;border:2px solid #ddd;border-radius:12px;text-align:center;font-weight:bold;font-size:16px}
+.calc{height:58px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-weight:bold;font-size:12px;border:2px solid #ddd;background:#fff}
 .c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#2563eb}.c6{background:#0f766e}.c7{background:#ea580c}
-select.status{width:100%;height:44px;border-radius:8px;border:2px solid #ddd;font-weight:bold;font-size:11px;text-align:center}
-.status-PAGO{background:#d1fae5;color:#065f46}.status-FIADO{background:#fee2e2;color:#991b1b}.status-AMANHA{background:#fef3c7;color:#92400e}
-.footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;font-weight:bold}
-.footer div{margin:2px 0}
-.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:bold;color:#fff;background:#16a34a}.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}
-.input-top{width:70px;height:30px;border-radius:8px;border:none;text-align:center;font-weight:bold}
-#telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff}
+select.status{width:100%;height:58px;border-radius:12px;border:2px solid #ddd;font-weight:bold;font-size:11px;text-align:center}
+.footer{background:#0f766e;margin:12px;border-radius:20px;padding:14px;color:#fff;font-weight:bold}
+.btn{border:none;padding:12px 16px;border-radius:12px;font-weight:bold;color:#fff;background:#16a34a;cursor:pointer}.btn-pdf{background:#fff;color:#0f766e}.btn-img{background:#facc15;color:#000}.btn-zerar{background:#ef4444;color:#fff;border:2px solid #fff}.btn-sair{background:#000;color:#fff}
+.input-top{width:75px;height:32px;border-radius:8px;border:none;text-align:center;font-weight:bold;font-size:16px}
+#telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;padding:20px}
+#telaSenha input{padding:16px;border-radius:12px;border:none;width:220px;text-align:center;font-size:20px;margin:12px;letter-spacing:4px}
 </style>
 </head>
 <body>
-<div id="telaSenha"><h1>🔒 EL SHADAY</h1><input type="password" id="inputSenha" placeholder="Senha" style="padding:14px;border-radius:10px;border:none;width:200px;text-align:center;margin:10px"><button onclick="verificarSenha()" style="padding:12px 30px;border-radius:12px;border:none;background:#16a34a;color:#fff;font-weight:bold">ENTRAR</button></div>
-
-<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE: <input type="number" id="estoqueInicial" class="input-top" value="200" onchange="salvar();calcular();"> - <span id="status">Auto</span></div></div>
-
-<div class="estoque">
-<div class="est" style="border-left:8px solid #16a34a"><small>🔵 CHEIO EDITÁVEL</small><input type="number" id="qCheio" value="200" oninput="manualCheio=true;salvar();calcular();"><button onclick="manualCheio=false;calcular();" style="font-size:9px;padding:2px 6px;border:none;background:#16a34a;color:#fff;border-radius:5px;margin-top:3px">Auto</button></div>
-<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio">0</p></div>
-<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend">0</p></div>
+<!-- SENHA OBRIGATÓRIA PRA TODO MUNDO -->
+<div id="telaSenha">
+<h1 style="font-size:32px">🔒 EL SHADAY</h1>
+<p style="margin:8px;opacity:.9">Digite a senha do escritório</p>
+<input type="password" id="inputSenha" placeholder="••••">
+<button onclick="verificarSenha()" style="padding:14px 40px;border-radius:12px;border:none;background:#16a34a;color:#fff;font-weight:bold;font-size:18px">ENTRAR</button>
+<p style="font-size:11px;margin-top:12px;opacity:.7">Senha padrão: 1999<br>Mestra: 9999 (reseta pra 1999)</p>
+<p id="erroSenha" style="color:#facc15;font-weight:bold;margin-top:10px;display:none">Senha errada!</p>
 </div>
 
-<div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Qtd</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th><th class="c7">PAG?</th></tr></thead><tbody id="corpo"></tbody></table></div>
+<div id="areaPrint">
+<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:10px;border-radius:12px;margin-top:10px">📅 <input type="date" id="data" style="border:none;font-weight:bold"> - ESTOQUE: <input type="number" id="estoqueInicial" class="input-top" value="200" onchange="salvar()"> - <span id="status">Auto</span></div></div>
 
-<div class="footer">
-<div id="totGeral">TOTAL: 0</div>
-<div id="totAmanha" style="background:#facc15;color:#000;padding:8px;border-radius:8px;margin-top:6px">⏰ PRA RECEBER AMANHÃ: R$ 0</div>
-<div id="totFiado" style="background:#ef4444;color:#fff;padding:8px;border-radius:8px">📝 FIADO TOTAL: R$ 0</div>
-<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button><button class="btn" onclick="novaLinha()">+ Venda</button><button class="btn btn-sair" onclick="sair()">Sair</button></div>
+<div class="estoque">
+<div class="est" style="border-left:8px solid #16a34a"><small>🔵 CHEIO EDITÁVEL</small><input type="number" id="qCheio" value="200" oninput="manualCheio=true;salvar()"><br><button onclick="manualCheio=false;calcular();salvar();" style="font-size:9px;padding:4px 8px;border:none;background:#16a34a;color:#fff;border-radius:6px;margin-top:4px">Voltar Auto</button></div>
+<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio" style="font-size:26px;font-weight:bold;margin-top:8px">0</p></div>
+<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend" style="font-size:26px;font-weight:bold;margin-top:8px">0</p></div>
+</div>
+
+<div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Qtd</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th><th class="c7">PAG?</th></tr></thead><tbody id="corpo"></tbody></table>
+<div id="totGeral" style="margin-top:12px;font-weight:bold;font-size:14px">TOTAL: 0</div>
+<div id="totAmanha" style="background:#facc15;color:#000;padding:10px;border-radius:12px;margin-top:8px;font-weight:bold">⏰ PRA RECEBER AMANHÃ: R$ 0</div>
+<div id="totFiado" style="background:#ef4444;color:#fff;padding:10px;border-radius:12px;margin-top:6px;font-weight:bold">📝 FIADO TOTAL: R$ 0</div>
+</div>
+</div>
+
+<div style="margin:12px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-pdf" onclick="gerarPDFBonito()">📄 PDF</button>
+<button class="btn btn-img" onclick="gerarImagem()">🖼️ FOTO Zap</button>
+<button class="btn" onclick="novaLinha()">+ Venda</button>
+<button class="btn btn-zerar" onclick="zerarDia()">🗑️ ZERAR DIA</button>
+<button class="btn btn-sair" onclick="sair()">Sair</button>
 </div>
 
 <script>
-const CHAVE="ELSHADAY_FIADO_V13", SENHA_KEY="ELSHADAY_SENHA";
+const CHAVE="ELSHADAY_FINAL_V15", SENHA_KEY="ELSHADAY_SENHA";
 let manualCheio=false;
+
+// SENHA - TODO MUNDO PRECISA DIGITAR AO ABRIR O LINK
 function getSenha(){return localStorage.getItem(SENHA_KEY)||"1999";}
-function verificarSenha(){let s=document.getElementById('inputSenha').value.trim(); if(s===getSenha()||s==="9999"){if(s==="9999")localStorage.setItem(SENHA_KEY,"1999"); document.getElementById('telaSenha').style.display='none'; localStorage.setItem('logado','1');}else alert('Senha: '+getSenha());}
+function verificarSenha(){
+ let s=document.getElementById('inputSenha').value.trim();
+ if(s===getSenha()||s==="9999"){
+   if(s==="9999") localStorage.setItem(SENHA_KEY,"1999");
+   document.getElementById('telaSenha').style.display='none';
+   localStorage.setItem('logado','1');
+   document.getElementById('erroSenha').style.display='none';
+   carregar();
+ }else{
+   document.getElementById('erroSenha').style.display='block';
+   document.getElementById('inputSenha').value='';
+ }
+}
 function sair(){localStorage.removeItem('logado');location.reload();}
-if(localStorage.getItem('logado')==='1') document.getElementById('telaSenha').style.display='none';
+if(localStorage.getItem('logado')==='1'){document.getElementById('telaSenha').style.display='none';}
 
 function novaLinha(d){
  let tr=document.createElement('tr');
- tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td>
- <td><input type="number" class="q" value="${d?d.q:''}"></td>
- <td><input type="number" class="vu" value="${d?d.vu:''}"></td>
- <td><div class="calc vt" style="background:#fef3c7">R$ 0</div></td>
- <td><input type="number" class="pix" value="${d?d.pix:''}"></td>
- <td><div class="calc dh" style="background:#d1fae5">R$ 0</div></td>
- <td><select class="status" onchange="mudarCor(this);calcular();salvar();">
- <option value="PAGO" ${d&&d.st==='PAGO'?'selected':''}>✅ PAGO</option>
- <option value="FIADO" ${d&&d.st==='FIADO'?'selected':''}>📝 FIADO</option>
- <option value="AMANHA" ${d&&d.st==='AMANHA'?'selected':''}>⏰ AMANHÃ</option>
- </select></td>`;
+ tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td><td><input type="number" class="q" value="${d?d.q:''}"></td><td><input type="number" class="vu" value="${d?d.vu:''}"></td><td><div class="calc vt" style="background:#fef3c7">R$ 0</div></td><td><input type="number" class="pix" value="${d?d.pix:''}"></td><td><div class="calc dh" style="background:#d1fae5">R$ 0</div></td><td><select class="status" onchange="mudarCor(this);calcular();salvar();"><option value="PAGO" ${d&&d.st==='PAGO'?'selected':''}>✅ PAGO</option><option value="FIADO" ${d&&d.st==='FIADO'?'selected':''}>📝 FIADO</option><option value="AMANHA" ${d&&d.st==='AMANHA'?'selected':''}>⏰ AMANHÃ</option></select></td>`;
  document.getElementById('corpo').appendChild(tr);
- tr.querySelectorAll('input').forEach(i=>{['input','keyup','change'].forEach(e=>i.addEventListener(e,()=>{calcular();salvar();}))});
+ tr.querySelectorAll('input').forEach(i=>{['input','change'].forEach(e=>i.addEventListener(e,()=>{calcular();salvar();}))});
  mudarCor(tr.querySelector('.status'));
 }
-function mudarCor(sel){ sel.className='status status-'+sel.value; }
+function mudarCor(sel){ if(!sel) return; sel.className='status status-'+sel.value; if(sel.value==='PAGO') sel.style.background='#d1fae5'; else if(sel.value==='FIADO') sel.style.background='#fee2e2'; else sel.style.background='#fef3c7'; }
 
 function calcular(){
- let vendido=0,totalGeral=0,totalPIX=0,totalDH=0, totalAmanha=0, totalFiado=0;
+ let vendido=0,totalGeral=0,totalPIX=0,totalDH=0,totalAmanha=0,totalFiado=0;
  document.querySelectorAll('#corpo tr').forEach(r=>{
   let q=parseFloat(r.querySelector('.q').value)||0, vu=parseFloat(r.querySelector('.vu').value)||0, pix=parseFloat(r.querySelector('.pix').value)||0;
-  let st=r.querySelector('.status').value;
+  let st=r.querySelector('.status')?.value||'PAGO';
   let total=q*vu, dh=total-pix; if(dh<0) dh=0;
   r.querySelector('.vt').innerHTML='R$<br>'+total.toFixed(0);
   r.querySelector('.dh').innerText='R$ '+dh.toFixed(0);
@@ -86,28 +104,65 @@ function calcular(){
  if(!manualCheio){ let rest=estoque-vendido; if(rest<0) rest=0; document.getElementById('qCheio').value=rest; }
  document.getElementById('qVend').innerText=vendido;
  document.getElementById('qVazio').innerText=vendido;
- document.getElementById('totGeral').innerText=`TOTAL: ${vendido} bot | FIXO R$ ${totalGeral} | PIX R$ ${totalPIX} | DH R$ ${totalDH} | CHEIO ${document.getElementById('qCheio').value}`;
+ document.getElementById('totGeral').innerText=`TOTAL: ${vendido} bot | FIXO R$ ${totalGeral.toFixed(0)} | PIX R$ ${totalPIX.toFixed(0)} | DH R$ ${totalDH.toFixed(0)} | CHEIO ${document.getElementById('qCheio').value}`;
  document.getElementById('totAmanha').innerText=`⏰ PRA RECEBER AMANHÃ: R$ ${totalAmanha.toFixed(0)}`;
  document.getElementById('totFiado').innerText=`📝 FIADO TOTAL: R$ ${totalFiado.toFixed(0)}`;
 }
 
+// BOTÃO ZERAR DIA - COM SENHA
+function zerarDia(){
+ let confirma=confirm("⚠️ TEM CERTEZA QUE QUER ZERAR TUDO PARA COMEÇAR O DIA DE AMANHÃ?\n\nIsso vai apagar todas as vendas de hoje.");
+ if(!confirma) return;
+ let senha=prompt("Digite a senha para confirmar ZERAR (senha: 1999):");
+ if(senha!==getSenha() && senha!=="9999"){ alert("Senha errada! Não zerou."); return; }
+ if(!confirm("Última confirmação: ZERAR tudo e começar do zero?")) return;
+ 
+ localStorage.removeItem(CHAVE);
+ document.getElementById('corpo').innerHTML='';
+ for(let i=0;i<10;i++) novaLinha(null);
+ document.getElementById('estoqueInicial').value=200;
+ document.getElementById('qCheio').value=200;
+ manualCheio=false;
+ document.getElementById('data').valueAsDate=new Date();
+ calcular(); salvar();
+ alert("✅ Dia zerado! Pronto pra vender amanhã.");
+}
+
 function salvar(){
- let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>arr.push({n:r.querySelector('.cli').value,q:r.querySelector('.q').value,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value,st:r.querySelector('.status').value}));
+ let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>arr.push({n:r.querySelector('.cli').value,q:r.querySelector('.q').value,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value,st:r.querySelector('.status')?.value||'PAGO'}));
  localStorage.setItem(CHAVE,JSON.stringify(arr));
  localStorage.setItem(CHAVE+'_DATA',document.getElementById('data').value);
  localStorage.setItem(CHAVE+'_ESTOQUE',document.getElementById('estoqueInicial').value);
  localStorage.setItem(CHAVE+'_CHEIO',document.getElementById('qCheio').value);
+ localStorage.setItem(CHAVE+'_MANUAL',manualCheio?'1':'0');
 }
 function carregar(){
  let s=JSON.parse(localStorage.getItem(CHAVE)||'[]');
  let est=localStorage.getItem(CHAVE+'_ESTOQUE'); if(est) document.getElementById('estoqueInicial').value=est;
  let cheio=localStorage.getItem(CHAVE+'_CHEIO'); if(cheio) document.getElementById('qCheio').value=cheio;
- if(s.length>0) s.forEach(x=>novaLinha(x)); else for(let i=0;i<10;i++) novaLinha(null);
+ let man=localStorage.getItem(CHAVE+'_MANUAL'); manualCheio=man==='1';
+ if(s.length>0){ document.getElementById('corpo').innerHTML=''; s.forEach(x=>novaLinha(x)); }
+ if(document.querySelectorAll('#corpo tr').length===0) for(let i=0;i<10;i++) novaLinha(null);
  let d=localStorage.getItem(CHAVE+'_DATA'); if(d) document.getElementById('data').value=d; else document.getElementById('data').valueAsDate=new Date();
  calcular();
 }
-function gerarPDF(){const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.text('EL SHADAY - FIADO - '+document.getElementById('data').value,10,12); doc.text(document.getElementById('totGeral').innerText,10,18); doc.text(document.getElementById('totAmanha').innerText,10,24); doc.text(document.getElementById('totFiado').innerText,10,30); let y=38; document.querySelectorAll('#corpo tr').forEach(r=>{let n=r.querySelector('.cli').value; if(n){doc.text(`${n} Q:${r.querySelector('.q').value} ${r.querySelector('.vt').innerText.replace('\n','')} DH:${r.querySelector('.dh').innerText} [${r.querySelector('.status').value}]`,10,y); y+=6;}}); doc.save('fiado.pdf');}
-carregar(); setInterval(()=>{calcular();salvar();},1000);
+
+async function gerarPDFBonito(){
+ const area=document.getElementById('areaPrint');
+ const canvas=await html2canvas(area,{scale:2,useCORS:true,backgroundColor:'#f5f7fb'});
+ const imgData=canvas.toDataURL('image/png');
+ const {jsPDF}=window.jspdf; const pdf=new jsPDF('p','mm','a4');
+ const pageW=pdf.internal.pageSize.getWidth(); const imgW=pageW-10;
+ const imgH=canvas.height * imgW / canvas.width;
+ pdf.addImage(imgData,'PNG',5,5,imgW,imgH);
+ pdf.save(`EL-SHADAY-${document.getElementById('data').value}.pdf`);
+}
+async function gerarImagem(){
+ const area=document.getElementById('areaPrint');
+ const canvas=await html2canvas(area,{scale:2,useCORS:true,backgroundColor:'#f5f7fb'});
+ const link=document.createElement('a'); link.download=`EL-SHADAY-${document.getElementById('data').value}.png`; link.href=canvas.toDataURL(); link.click();
+}
+setInterval(()=>{calcular();salvar();},1000);
 </script>
 </body>
-</html>
+                                                                              </html>
