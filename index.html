@@ -18,13 +18,12 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 .c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#ef4444}.c6{background:#0f766e}
 .footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;display:flex;justify-content:space-between;font-weight:bold}
 .btn{background:#16a34a;border:none;color:#fff;padding:8px 12px;border-radius:8px}
-.online{background:#16a34a;color:#fff;font-size:10px;padding:3px 8px;border-radius:10px}
 </style>
 </head>
 <body>
 <div class="top">
 <h1>🔥 EL SHADAY CONTROLE DE VENDAS</h1>
-<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS <span class="online">🟢 AO VIVO</span></div>
+<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS</div>
 </div>
 <div class="estoque">
 <div class="est cheio"><small>🔵 CHEIO RESTANTE</small><p id="qCheio">200</p></div>
@@ -35,11 +34,11 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 <div class="footer"><span id="tot">TOTAL: 0 • R$ 0,00</span><button class="btn" onclick="novaLinha()">+ Venda</button></div>
 
 <script>
-// COLOCA SEU LINK DO FIREBASE AQUI
-const firebaseConfig = { databaseURL: "https://SEU-PROJETO-AQUI-default-rtdb.firebaseio.com" };
+// JA CONFIGURADO PRA VOCÊ - NÃO PRECISA MEXER
+const firebaseConfig = { databaseURL: "https://elshaday-controle-2026-default-rtdb.firebaseio.com" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const ref = db.ref('vendas_elshaday_200');
+const ref = db.ref('vendas');
 
 const ESTOQUE_INICIAL = 200;
 
@@ -78,19 +77,23 @@ let arr=[];
 document.querySelectorAll('#corpo tr').forEach(r=>{
 arr.push({n:r.querySelectorAll('input')[0].value, q:r.querySelector('.q').value, vu:r.querySelector('.vu').value, de:r.querySelector('.de').value});
 });
-ref.set(arr); // SALVA NA NUVEM PRA TODO MUNDO
+ref.set(arr);
+localStorage.setItem('backup_elshaday', JSON.stringify(arr));
 }
 
 ref.on('value', snap=>{
 let dados=snap.val();
-if(!dados || document.activeElement.tagName==='INPUT') return;
+if(dados && dados.length>0 && document.activeElement.tagName!=='INPUT'){
 document.getElementById('corpo').innerHTML='';
-if(dados.length>0){dados.forEach(d=>novaLinha(d));} else {for(let i=0;i<8;i++) novaLinha();}
+dados.forEach(d=>novaLinha(d));
 calcular();
+}
 });
 
+let backup = JSON.parse(localStorage.getItem('backup_elshaday')||'[]');
+if(backup.length>0){ backup.forEach(d=>novaLinha(d)); } else { for(let i=0;i<8;i++) novaLinha(); }
+calcular();
 document.getElementById('data').valueAsDate=new Date();
-for(let i=0;i<8;i++) novaLinha();
 </script>
 </body>
 </html>
