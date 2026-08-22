@@ -2,85 +2,108 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY 200 GÁS</title>
+<title>EL SHADAY EDITÁVEL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
 .top{background:#1e3a8a;color:#fff;padding:15px;text-align:center;border-radius:0 0 20px 20px}
-.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1)} .est p{font-size:26px;font-weight:bold}
+.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.est p{font-size:22px;font-weight:bold} .est input{width:100%;height:50px;border:2px dashed #16a34a;border-radius:10px;text-align:center;font-size:26px;font-weight:bold;background:#f0fdf4}
 .card{background:#fff;margin:12px;border-radius:15px;padding:10px}
-table{width:100%;border-spacing:3px}th{padding:10px 2px;border-radius:8px;color:#fff;font-size:11px} 
-td input{width:100%;height:44px;border:2px solid #ddd;border-radius:10px;text-align:center;font-size:16px;font-weight:bold}
-.calc{height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:12px}
-.c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#ef4444}.c6{background:#0f766e}
-.footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:bold;color:#fff;background:#16a34a}.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}.btn-senha{background:#facc15;color:#000}
-#telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;padding:20px}
+table{width:100%;border-spacing:4px}th{padding:12px 2px;border-radius:10px;color:#fff;font-size:12px} td input{width:100%;height:48px;border:2px solid #ddd;border-radius:10px;text-align:center;font-weight:bold}
+.calc{height:48px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:12px}
+.c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#2563eb}.c6{background:#0f766e}
+.footer{background:#0f766e;margin:12px;border-radius:14px;padding:14px;color:#fff;font-weight:bold}
+.btn{border:none;padding:11px 15px;border-radius:10px;font-weight:bold;color:#fff;background:#16a34a}.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}
+.input-top{width:80px;height:32px;border-radius:8px;border:none;text-align:center;font-weight:bold;font-size:16px}
+#telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff}
 </style>
 </head>
 <body>
-<div id="telaSenha"><h1>🔒 EL SHADAY</h1><input type="password" id="inputSenha" placeholder="Senha 1999"><button onclick="verificarSenha()" style="padding:12px 30px;border-radius:12px;border:none;background:#16a34a;color:#fff;font-weight:bold">ENTRAR</button><p style="font-size:11px;margin-top:10px">Mestra 9999</p></div>
+<div id="telaSenha"><h1>🔒 EL SHADAY</h1><input type="password" id="inputSenha" placeholder="Senha" style="padding:14px;border-radius:10px;border:none;width:200px;text-align:center;margin:10px"><button onclick="verificarSenha()" style="padding:12px 30px;border-radius:12px;border:none;background:#16a34a;color:#fff;font-weight:bold">ENTRAR</button><p style="font-size:11px;margin-top:8px">1999 | Mestra 9999</p></div>
 
-<div class="top"><h1>🔥 EL SHADAY - 200 GÁS</h1><div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS - <span id="status">● Automático</span></div></div>
+<div class="top">
+<h1>🔥 EL SHADAY - 200 GÁS</h1>
+<div style="background:#fff;color:#000;padding:10px;border-radius:12px;margin-top:10px;font-size:14px">
+📅 <input type="date" id="data"> - ESTOQUE INICIAL: <input type="number" id="estoqueInicial" class="input-top" value="200" onchange="salvar();calcular();"> CHEIOS • <span id="status">Auto</span><br>
+<small style="color:green">↑ Você pode editar o 200 aqui para a quantidade certa</small>
+</div>
+</div>
 
 <div class="estoque">
-<div class="est" style="border-left:8px solid #16a34a"><small>🔵 RESTANTE CHEIO</small><p id="qCheio">200</p><small style="font-size:10px">200 - vendido</small></div>
-<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio">0</p><small style="font-size:10px">igual ao vendido</small></div>
-<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend">0</p><small style="font-size:10px">soma Quant</small></div>
+<div class="est" style="border-left:8px solid #16a34a">
+<small>🔵 RESTANTE CHEIO<br><b style="color:#16a34a">EDITÁVEL - TOQUE</b></small>
+<input type="number" id="qCheio" value="200" oninput="ativarManualCheio();salvar();calcular();">
+<small>200 - vendido (ou manual)</small><br><button onclick="voltarAuto()" style="font-size:10px;padding:3px 8px;border-radius:5px;border:none;background:#16a34a;color:#fff;margin-top:4px">Voltar Auto</button>
+</div>
+<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio">0</p><small>igual ao vendido</small><br><input type="number" id="qVazioManual" placeholder="Editar vazio" style="width:100%;height:30px;margin-top:5px;border-radius:8px;border:1px dashed #ef4444;text-align:center" oninput="salvar()"></div>
+<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend">0</p><small>soma Quant</small></div>
 </div>
 
 <div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Quant</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th></tr></thead><tbody id="corpo"></tbody></table></div>
-<div class="footer"><span id="tot">TOTAL: 0</span><div style="display:flex;gap:6px"><button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button><button class="btn" onclick="novaLinha()">+ Venda</button><button class="btn btn-senha" onclick="trocarSenha()">🔑</button><button class="btn btn-sair" onclick="sair()">Sair</button></div></div>
+
+<div class="footer"><div id="tot">TOTAL: 0</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button><button class="btn" onclick="novaLinha()">+ Venda</button><button class="btn btn-sair" onclick="sair()">Sair</button></div></div>
 
 <script>
-const ESTOQUE_INICIAL=200;
-const CHAVE="ELSHADAY_200_FINAL", CHAVE_SENHA="ELSHADAY_SENHA";
-function getSenha(){return localStorage.getItem(CHAVE_SENHA)||"1999";}
-function verificarSenha(){let s=document.getElementById('inputSenha').value.trim(); if(s===getSenha()||s==="9999"){if(s==="9999")localStorage.setItem(CHAVE_SENHA,"1999"); document.getElementById('telaSenha').style.display='none'; localStorage.setItem('logado','1');}else alert('Senha errada! Atual: '+getSenha());}
+const CHAVE="ELSHADAY_EDITAVEL_V12", SENHA_KEY="ELSHADAY_SENHA";
+let manualCheio=false;
+function getSenha(){return localStorage.getItem(SENHA_KEY)||"1999";}
+function verificarSenha(){let s=document.getElementById('inputSenha').value.trim(); if(s===getSenha()||s==="9999"){if(s==="9999")localStorage.setItem(SENHA_KEY,"1999"); document.getElementById('telaSenha').style.display='none'; localStorage.setItem('logado','1');}else alert('Senha: '+getSenha());}
 function sair(){localStorage.removeItem('logado');location.reload();}
-function trocarSenha(){let a=prompt('Senha atual:'); if(a!==getSenha()&&a!=="9999")return; let n=prompt('Nova senha:'); if(n) localStorage.setItem(CHAVE_SENHA,n);}
 if(localStorage.getItem('logado')==='1') document.getElementById('telaSenha').style.display='none';
+
+function ativarManualCheio(){ manualCheio=true; localStorage.setItem(CHAVE+'_MANUAL','1'); document.getElementById('status').innerText='Manual'; document.getElementById('status').style.color='orange'; }
+function voltarAuto(){ manualCheio=false; localStorage.removeItem(CHAVE+'_MANUAL'); document.getElementById('status').innerText='Auto'; calcular(); salvar(); }
 
 function novaLinha(d){
  let tr=document.createElement('tr');
- tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td>
- <td><input type="number" class="q" value="${d?d.q:''}" placeholder="0"></td>
- <td><input type="number" class="vu" value="${d?d.vu:''}" placeholder="R$"></td>
- <td><div class="calc vt" style="background:#fef3c7">R$ 0</div></td>
- <td><input type="number" class="pix" value="${d?d.pix:''}" placeholder="PIX"></td>
- <td><div class="calc dh" style="background:#d1fae5">R$ 0</div></td>`;
+ tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td><td><input type="number" class="q" value="${d?d.q:''}"></td><td><input type="number" class="vu" value="${d?d.vu:''}"></td><td><div class="calc vt" style="background:#fef3c7">R$ 0</div></td><td><input type="number" class="pix" value="${d?d.pix:''}"></td><td><div class="calc dh" style="background:#d1fae5">R$ 0</div></td>`;
  document.getElementById('corpo').appendChild(tr);
- tr.querySelectorAll('input').forEach(i=>{['input','keyup','change'].forEach(ev=>i.addEventListener(ev,()=>{calcular();salvar();}))});
+ tr.querySelectorAll('input').forEach(i=>{['input','keyup','change'].forEach(e=>i.addEventListener(e,()=>{calcular();salvar();}))});
 }
 
 function calcular(){
- let vendido=0, totalDH=0;
+ let vendido=0,totalGeral=0,totalPIX=0,totalDH=0;
  document.querySelectorAll('#corpo tr').forEach(r=>{
-  let q=parseFloat(r.querySelector('.q').value)||0;
-  let vu=parseFloat(r.querySelector('.vu').value)||0;
-  let pix=parseFloat(r.querySelector('.pix').value)||0;
-  let total = q * vu;        // TOTAL = QUANT X UNIT
-  let dh = total - pix;      // DH = TOTAL - PIX
-  r.querySelector('.vt').innerText='R$ '+total.toFixed(0);
+  let q=parseFloat(r.querySelector('.q').value)||0, vu=parseFloat(r.querySelector('.vu').value)||0, pix=parseFloat(r.querySelector('.pix').value)||0;
+  let total=q*vu, dh=total-pix; if(dh<0) dh=0;
+  r.querySelector('.vt').innerHTML='R$<br>'+total.toFixed(0);
   r.querySelector('.dh').innerText='R$ '+dh.toFixed(0);
-  vendido+=q; totalDH+=dh;
+  vendido+=q; totalGeral+=total; totalPIX+=pix; totalDH+=dh;
  });
- // LÓGICA DO ESTOQUE 200 GÁS QUE VOCÊ PEDIU
- let restante = ESTOQUE_INICIAL - vendido;
- if(restante<0) restante=0;
- let vazio = vendido; // vazio é igual ao que vendeu
+ let estoqueInicial=parseFloat(document.getElementById('estoqueInicial').value)||200;
  
- document.getElementById('qCheio').innerText=restante;
- document.getElementById('qVazio').innerText=vazio;
+ if(!manualCheio){
+   let restante=estoqueInicial - vendido;
+   if(restante<0) restante=0;
+   document.getElementById('qCheio').value=restante;
+ }
+ 
  document.getElementById('qVend').innerText=vendido;
- document.getElementById('tot').innerText=`TOTAL: ${vendido} bot • DH R$ ${totalDH.toFixed(0)} • RESTANTE ${restante} CHEIOS`;
- document.getElementById('status').innerText=`● ${restante} cheios restantes`;
+ let vazioManual=document.getElementById('qVazioManual').value;
+ document.getElementById('qVazio').innerText=vazioManual ? vazioManual : vendido;
+ document.getElementById('tot').innerText=`TOTAL: ${vendido} bot • TOTAL FIXO R$ ${totalGeral} • PIX R$ ${totalPIX} • DH R$ ${totalDH} • RESTANTE ${document.getElementById('qCheio').value} CHEIOS`;
 }
 
-function salvar(){let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>arr.push({n:r.querySelector('.cli').value,q:r.querySelector('.q').value,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value})); localStorage.setItem(CHAVE,JSON.stringify(arr)); localStorage.setItem(CHAVE+'_DATA',document.getElementById('data').value);}
-function carregar(){let s=JSON.parse(localStorage.getItem(CHAVE)||'[]'); if(s.length>0) s.forEach(x=>novaLinha(x)); else for(let i=0;i<9;i++) novaLinha(null); let d=localStorage.getItem(CHAVE+'_DATA'); if(d) document.getElementById('data').value=d; else document.getElementById('data').valueAsDate=new Date(); calcular();}
-function gerarPDF(){const { jsPDF }=window.jspdf; const doc=new jsPDF(); doc.text('EL SHADAY 200 GAS - '+document.getElementById('data').value,10,15); doc.text(document.getElementById('tot').innerText,10,22); let y=30; document.querySelectorAll('#corpo tr').forEach(r=>{let n=r.querySelector('.cli').value; if(n){doc.text(`${n} Q:${r.querySelector('.q').value} ${r.querySelector('.vt').innerText} PIX:${r.querySelector('.pix').value} DH:${r.querySelector('.dh').innerText}`,10,y); y+=6;}}); doc.save('vendas.pdf');}
-
+function salvar(){
+ let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>arr.push({n:r.querySelector('.cli').value,q:r.querySelector('.q').value,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value}));
+ localStorage.setItem(CHAVE,JSON.stringify(arr));
+ localStorage.setItem(CHAVE+'_DATA',document.getElementById('data').value);
+ localStorage.setItem(CHAVE+'_ESTOQUE',document.getElementById('estoqueInicial').value);
+ localStorage.setItem(CHAVE+'_CHEIO',document.getElementById('qCheio').value);
+ localStorage.setItem(CHAVE+'_VAZIO_MANUAL',document.getElementById('qVazioManual').value);
+}
+function carregar(){
+ let s=JSON.parse(localStorage.getItem(CHAVE)||'[]');
+ let est=localStorage.getItem(CHAVE+'_ESTOQUE'); if(est) document.getElementById('estoqueInicial').value=est;
+ let cheio=localStorage.getItem(CHAVE+'_CHEIO'); if(cheio) document.getElementById('qCheio').value=cheio;
+ let vazioM=localStorage.getItem(CHAVE+'_VAZIO_MANUAL'); if(vazioM) document.getElementById('qVazioManual').value=vazioM;
+ if(localStorage.getItem(CHAVE+'_MANUAL')){ manualCheio=true; document.getElementById('status').innerText='Manual'; }
+ if(s.length>0) s.forEach(x=>novaLinha(x)); else for(let i=0;i<11;i++) novaLinha(null);
+ let d=localStorage.getItem(CHAVE+'_DATA'); if(d) document.getElementById('data').value=d; else document.getElementById('data').valueAsDate=new Date();
+ calcular();
+}
+function gerarPDF(){const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.text('EL SHADAY - '+document.getElementById('data').value,10,12); doc.text(document.getElementById('tot').innerText,10,18); let y=26; document.querySelectorAll('#corpo tr').forEach(r=>{let n=r.querySelector('.cli').value; if(n){doc.text(`${n} Q:${r.querySelector('.q').value} ${r.querySelector('.vt').innerText.replace('\n','')} PIX:${r.querySelector('.pix').value} ${r.querySelector('.dh').innerText}`,10,y); y+=6;}}); doc.save('el-shaday.pdf');}
 carregar(); setInterval(()=>{calcular();salvar();},1000);
 </script>
 </body>
