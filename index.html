@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY - GRAVANDO SOMA</title>
+<title>EL SHADAY</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
@@ -16,8 +16,8 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 .calc{height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;font-size:9px;background:#eef2ff}
 .c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#ef4444}.c6{background:#0f766e}
 .footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:bold;flex-wrap:wrap;gap:8px}
-.btn{background:#16a34a;border:none;color:#fff;padding:10px 14px;border-radius:8px;font-weight:bold}
-.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}
+.btn{background:#16a34a;border:none;color:#fff;padding:10px 14px;border-radius:8px;font-weight:bold;font-size:12px}
+.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}.btn-senha{background:#facc15;color:#000}
 #telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;padding:20px}
 #telaSenha input{padding:15px;border-radius:10px;border:none;width:200px;text-align:center;font-size:20px;margin:15px 0}
 #telaSenha button{padding:12px 30px;border-radius:10px;border:none;background:#16a34a;color:#fff;font-weight:bold;font-size:16px}
@@ -30,12 +30,12 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 <p>Digite a senha</p>
 <input type="password" id="inputSenha" placeholder="Senha">
 <button onclick="verificarSenha()">ENTRAR</button>
-<p style="font-size:12px;margin-top:10px">Senha: 1999</p>
+<p id="dicaSenha" style="font-size:12px;margin-top:10px;opacity:.7"></p>
 </div>
 
 <div class="top">
 <h1>🔥 EL SHADAY CONTROLE DE VENDAS</h1>
-<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE INICIAL: 200 CHEIOS - <span id="statusSave" style="color:green">● Gravando</span></div>
+<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE: 200 - <span id="statusSave" style="color:green">● Gravando a soma</span></div>
 </div>
 <div class="estoque">
 <div class="est cheio"><small>🔵 CHEIO RESTANTE</small><p id="qCheio">200</p></div>
@@ -44,108 +44,13 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 </div>
 <div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Quant</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">Desp</th><th class="c6">Resumo</th></tr></thead><tbody id="corpo"></tbody></table></div>
 <div class="footer">
-<span id="tot">TOTAL: 0 • R$ 0,00</span>
-<div style="display:flex;gap:6px">
+<span id="tot">TOTAL: 0</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
 <button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button>
 <button class="btn" onclick="novaLinha()">+ Venda</button>
+<button class="btn btn-senha" onclick="trocarSenha()">🔑 Trocar Senha</button>
 <button class="btn btn-sair" onclick="sair()">Sair</button>
 </div>
 </div>
 
-<script>
-const SENHA = "1999";
-const ESTOQUE = 200;
-const CHAVE = "ELSHADAY_VENDAS_FINAL_V5"; // chave única que nunca muda
-
-function verificarSenha(){
- if(document.getElementById('inputSenha').value===SENHA){
-  document.getElementById('telaSenha').style.display='none';
-  localStorage.setItem('logado','1');
- }else alert('Senha errada!');
-}
-function sair(){ localStorage.removeItem('logado'); location.reload(); }
-if(localStorage.getItem('logado')==='1') document.getElementById('telaSenha').style.display='none';
-
-function novaLinha(d){
- let tr=document.createElement('tr');
- tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td>
- <td><input type="number" class="q" value="${d?d.q:''}" placeholder="0"></td>
- <td><input type="number" class="vu" value="${d?d.vu:''}" placeholder="0"></td>
- <td><div class="calc vt">R$ 0</div></td>
- <td><input type="number" class="de" value="${d?d.de:''}" placeholder="0"></td>
- <td><div class="calc rt">R$ 0</div></td>`;
- document.getElementById('corpo').appendChild(tr);
- tr.querySelectorAll('input').forEach(i=>{
-  i.addEventListener('input', ()=>{ calcular(); salvar(); });
-  i.addEventListener('change', ()=>{ calcular(); salvar(); });
- });
-}
-
-function calcular(){
- let vend=0, din=0;
- document.querySelectorAll('#corpo tr').forEach(r=>{
-  let q=parseFloat(r.querySelector('.q').value)||0;
-  let vu=parseFloat(r.querySelector('.vu').value)||0;
-  let de=parseFloat(r.querySelector('.de').value)||0;
-  let vt=q*vu; let rt=vt-de;
-  r.querySelector('.vt').innerText='R$ '+vt;
-  r.querySelector('.rt').innerText='R$ '+rt;
-  vend+=q; din+=rt;
- });
- let cheio=ESTOQUE-vend; if(cheio<0) cheio=0;
- document.getElementById('qCheio').innerText=cheio;
- document.getElementById('qVazio').innerText=vend;
- document.getElementById('qVend').innerText=vend;
- document.getElementById('tot').innerText=`TOTAL: ${vend} botijões • R$ ${din.toFixed(2).replace('.',',')}`;
-}
-
-function salvar(){
- let arr=[];
- document.querySelectorAll('#corpo tr').forEach(r=>{
-  arr.push({n:r.querySelector('.cli').value, q:r.querySelector('.q').value, vu:r.querySelector('.vu').value, de:r.querySelector('.de').value});
- });
- localStorage.setItem(CHAVE, JSON.stringify(arr));
- localStorage.setItem(CHAVE+'_DATA', document.getElementById('data').value);
- document.getElementById('statusSave').innerText='● Gravado!';
- setTimeout(()=>{ document.getElementById('statusSave').innerText='● Gravando'; },1000);
- console.log('SALVOU', arr);
-}
-
-function carregar(){
- let salvos = JSON.parse(localStorage.getItem(CHAVE)||'[]');
- let dataSalva = localStorage.getItem(CHAVE+'_DATA');
- if(salvos.length>0){
-  salvos.forEach(d=>novaLinha(d));
- }else{
-  for(let i=0;i<8;i++) novaLinha(null);
- }
- if(dataSalva) document.getElementById('data').value=dataSalva;
- else document.getElementById('data').valueAsDate=new Date();
- calcular();
-}
-
-function gerarPDF(){
- const { jsPDF } = window.jspdf;
- const doc = new jsPDF();
- let data = document.getElementById('data').value;
- let tot = document.getElementById('tot').innerText;
- doc.text('EL SHADAY - CONTROLE',10,15);
- doc.text(`Data: ${data} - ${tot}`,10,22);
- let y=30;
- document.querySelectorAll('#corpo tr').forEach(r=>{
-  let n=r.querySelector('.cli').value; let q=r.querySelector('.q').value;
-  if(n && q){
-   doc.text(`${n} - ${q} un - ${r.querySelector('.rt').innerText}`,10,y);
-   y+=7;
-  }
- });
- doc.save(`vendas-${data}.pdf`);
-}
-
-carregar();
-setInterval(salvar, 2000); // salva a cada 2 segundos automaticamente
-document.getElementById('data').addEventListener('change', salvar);
-document.getElementById('inputSenha').addEventListener('keypress', e=>{ if(e.key==='Enter') verificarSenha() });
-</script>
-</body>
-</html>
+<script
