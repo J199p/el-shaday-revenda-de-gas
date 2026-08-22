@@ -7,20 +7,19 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
 .top{background:#1e3a8a;color:#fff;padding:15px;text-align:center;border-radius:0 0 20px 20px}
-.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.est.cheio{border-left:5px solid #16a34a}.est.vazio{border-left:5px solid #ef4444}.est.vend{border-left:5px solid #facc15}
+.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:12px;text-align:center}
 .est p{font-size:22px;font-weight:bold}
 .card{background:#fff;margin:12px;border-radius:15px;padding:10px}
 table{width:100%;border-spacing:3px}th{padding:8px 2px;border-radius:8px;color:#fff;font-size:9px}
 td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-align:center}
 .calc{height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;font-size:9px;background:#eef2ff}
 .c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#ef4444}.c6{background:#0f766e}
-.footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:bold;flex-wrap:wrap;gap:8px}
-.btn{background:#16a34a;border:none;color:#fff;padding:10px 14px;border-radius:8px;font-weight:bold;font-size:12px}
-.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}.btn-senha{background:#facc15;color:#000}
+.footer{background:#0f766e;margin:12px;border-radius:12px;padding:12px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.btn{border:none;padding:10px 14px;border-radius:8px;font-weight:bold;color:#fff}
+.btn{background:#16a34a}.btn-pdf{background:#fff;color:#0f766e}.btn-sair{background:#ef4444}.btn-senha{background:#facc15;color:#000}
 #telaSenha{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;padding:20px}
-#telaSenha input{padding:15px;border-radius:10px;border:none;width:200px;text-align:center;font-size:20px;margin:15px 0}
-#telaSenha button{padding:12px 30px;border-radius:10px;border:none;background:#16a34a;color:#fff;font-weight:bold;font-size:16px}
+#telaSenha input{padding:15px;border-radius:15px;border:none;width:220px;text-align:center;font-size:20px;margin:15px 0}
+#telaSenha button{padding:12px 30px;border-radius:12px;border:none;background:#16a34a;color:#fff;font-weight:bold;font-size:16px}
 </style>
 </head>
 <body>
@@ -30,27 +29,62 @@ td input{width:100%;height:38px;border:1px solid #ddd;border-radius:8px;text-ali
 <p>Digite a senha</p>
 <input type="password" id="inputSenha" placeholder="Senha">
 <button onclick="verificarSenha()">ENTRAR</button>
-<p id="dicaSenha" style="font-size:12px;margin-top:10px;opacity:.7"></p>
+<p id="dicaSenha" style="margin-top:15px;font-size:13px;opacity:.9"></p>
+<p style="margin-top:10px;font-size:11px;opacity:.6">Mestra: 9999 (reseta pra 1999)</p>
 </div>
 
-<div class="top">
-<h1>🔥 EL SHADAY CONTROLE DE VENDAS</h1>
-<div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - ESTOQUE: 200 - <span id="statusSave" style="color:green">● Gravando a soma</span></div>
-</div>
+<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:8px;border-radius:10px;margin-top:8px">📅 <input type="date" id="data"> - <span id="statusSave">● Gravando soma</span></div></div>
 <div class="estoque">
-<div class="est cheio"><small>🔵 CHEIO RESTANTE</small><p id="qCheio">200</p></div>
-<div class="est vazio"><small>🔴 VAZIO</small><p id="qVazio">0</p></div>
-<div class="est vend"><small>📦 VENDIDO</small><p id="qVend">0</p></div>
+<div class="est" style="border-left:5px solid #16a34a"><small>🔵 RESTANTE</small><p id="qCheio">200</p></div>
+<div class="est" style="border-left:5px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio">0</p></div>
+<div class="est" style="border-left:5px solid #facc15"><small>📦 VENDIDO</small><p id="qVend">0</p></div>
 </div>
 <div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Quant</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">Desp</th><th class="c6">Resumo</th></tr></thead><tbody id="corpo"></tbody></table></div>
-<div class="footer">
-<span id="tot">TOTAL: 0</span>
-<div style="display:flex;gap:6px;flex-wrap:wrap">
-<button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button>
-<button class="btn" onclick="novaLinha()">+ Venda</button>
-<button class="btn btn-senha" onclick="trocarSenha()">🔑 Trocar Senha</button>
-<button class="btn btn-sair" onclick="sair()">Sair</button>
-</div>
-</div>
+<div class="footer"><span id="tot">TOTAL: 0</span><div style="display:flex;gap:6px"><button class="btn btn-pdf" onclick="gerarPDF()">📄 PDF</button><button class="btn" onclick="novaLinha()">+ Venda</button><button class="btn btn-senha" onclick="trocarSenha()">🔑 Trocar Senha</button><button class="btn btn-sair" onclick="sair()">Sair</button></div></div>
 
-<script
+<script>
+const ESTOQUE = 200;
+const CHAVE_DADOS = "ELSHADAY_VENDAS_FINAL_V7";
+const CHAVE_SENHA = "ELSHADAY_SENHA";
+function getSenha(){ return localStorage.getItem(CHAVE_SENHA) || "1999"; }
+
+function verificarSenha(){
+ let s=document.getElementById('inputSenha').value.trim();
+ if(s===getSenha() || s==="9999"){
+  if(s==="9999"){
+   localStorage.setItem(CHAVE_SENHA,"1999");
+   alert("SENHA RESETADA! Agora sua senha é 1999");
+  }
+  document.getElementById('telaSenha').style.display='none';
+  localStorage.setItem('logado','1');
+  document.getElementById('dicaSenha').innerText='Senha atual: ' + getSenha();
+ }else{
+  alert('Senha incorreta! Sua senha atual é: ' + getSenha() + '\nUse 9999 para resetar');
+ }
+}
+function sair(){ localStorage.removeItem('logado'); location.reload(); }
+function trocarSenha(){
+ let atual=prompt('Digite a senha ATUAL:');
+ if(atual!==getSenha() && atual!=="9999"){ alert('Senha atual errada! Dica: '+getSenha()); return; }
+ let nova=prompt('Digite a NOVA senha (mínimo 3 números):');
+ if(nova && nova.length>=3){
+  localStorage.setItem(CHAVE_SENHA,nova);
+  alert('Pronto! Nova senha: ' + nova);
+  document.getElementById('dicaSenha').innerText='Senha atual: ' + nova;
+ }else alert('Senha muito curta!');
+}
+if(localStorage.getItem('logado')==='1') document.getElementById('telaSenha').style.display='none';
+document.getElementById('dicaSenha').innerText='Senha atual: ' + getSenha();
+
+// vendas
+function novaLinha(d){ let tr=document.createElement('tr'); tr.innerHTML=`<td><input class="cli" value="${d?d.n:''}" placeholder="Nome"></td><td><input type="number" class="q" value="${d?d.q:''}"></td><td><input type="number" class="vu" value="${d?d.vu:''}"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="de" value="${d?d.de:''}"></td><td><div class="calc rt">R$ 0</div></td>`; document.getElementById('corpo').appendChild(tr); tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{calcular();salvar();})); }
+function calcular(){ let v=0,din=0; document.querySelectorAll('#corpo tr').forEach(r=>{ let q=parseFloat(r.querySelector('.q').value)||0; let vu=parseFloat(r.querySelector('.vu').value)||0; let de=parseFloat(r.querySelector('.de').value)||0; let vt=q*vu; let rt=vt-de; r.querySelector('.vt').innerText='R$ '+vt; r.querySelector('.rt').innerText='R$ '+rt; v+=q; din+=rt; }); document.getElementById('qCheio').innerText=ESTOQUE-v; document.getElementById('qVazio').innerText=v; document.getElementById('qVend').innerText=v; document.getElementById('tot').innerText=`TOTAL: ${v} • R$ ${din.toFixed(2)}`; }
+function salvar(){ let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>arr.push({n:r.querySelector('.cli').value,q:r.querySelector('.q').value,vu:r.querySelector('.vu').value,de:r.querySelector('.de').value})); localStorage.setItem(CHAVE_DADOS,JSON.stringify(arr)); localStorage.setItem(CHAVE_DADOS+'_DATA',document.getElementById('data').value); document.getElementById('statusSave').innerText='● Gravado na soma!'; setTimeout(()=>document.getElementById('statusSave').innerText='● Gravando soma',1000); }
+function carregar(){ let s=JSON.parse(localStorage.getItem(CHAVE_DADOS)||'[]'); let d=localStorage.getItem(CHAVE_DADOS+'_DATA'); if(s.length>0) s.forEach(x=>novaLinha(x)); else for(let i=0;i<8;i++) novaLinha(null); if(d) document.getElementById('data').value=d; else document.getElementById('data').valueAsDate=new Date(); calcular(); }
+function gerarPDF(){ const { jsPDF }=window.jspdf; const doc=new jsPDF(); let data=document.getElementById('data').value; doc.text('EL SHADAY - '+data,10,15); doc.text(document.getElementById('tot').innerText,10,22); let y=30; document.querySelectorAll('#corpo tr').forEach(r=>{ let n=r.querySelector('.cli').value; let q=r.querySelector('.q').value; if(n&&q){ doc.text(`${n} - ${q} un - ${r.querySelector('.rt').innerText}`,10,y); y+=7; } }); doc.save(`vendas-${data}.pdf`); }
+carregar(); setInterval(salvar,2000);
+document.getElementById('data').addEventListener('change',salvar);
+document.getElementById('inputSenha').addEventListener('keypress',e=>{ if(e.key==='Enter') verificarSenha(); });
+</script>
+</body>
+</html>
