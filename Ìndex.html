@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>El Shaday revenda de gás</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0d1b2a;color:#fff}
+#login{position:fixed;inset:0;background:#0d1b2a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;padding:20px;text-align:center}
+#login input{padding:16px;border-radius:10px;border:none;width:280px;text-align:center;font-size:18px;margin:12px}
+#login button{padding:14px 30px;border:none;border-radius:10px;background:#4CAF50;color:#fff;font-weight:bold;font-size:17px}
+.h{background:#132f4c;text-align:center;padding:16px;font-weight:bold}
+.c{background:#fff;overflow-x:auto}
+table{width:850px;border-collapse:collapse}th{color:#fff;padding:10px 5px;text-align:center;border:1px solid #333;font-size:11px;position:sticky;top:0}
+th:nth-child(1){background:#1976D2}th:nth-child(2){background:#FBC02D;color:#000}th:nth-child(3){background:#2E7D32}th:nth-child(4){background:#000}th:nth-child(5){background:#FBC02D;color:#000}th:nth-child(6){background:#6A1B9A}th:nth-child(7){background:#C62828}th:nth-child(8){background:#00796B}
+td{border:1px solid #bbb;height:38px;background:#fff}input{width:100%;border:none;padding:10px;text-align:center;color:#000}
+.vt{background:#FFF9C4!important;font-weight:bold}.rt{background:#E8F5E9!important;font-weight:bold}
+.tr td{background:#FFEB00!important;border:2px solid #000!important;font-weight:bold!important;color:#000!important}
+.bt{display:flex;gap:8px;justify-content:center;padding:14px;background:#f5f5f5}.b{padding:14px 18px;border:none;border-radius:10px;color:#fff;font-weight:bold}
+</style>
+</head>
+<body>
+<div id="login"><div style="font-size:60px">🔒</div><h2>El Shaday revenda de gás</h2><p>Acesso privado<br>Só quem tem o link + senha</p><input type="password" id="s" placeholder="Digite a senha"><button onclick="if(s.value==='199p'){login.style.display='none';localStorage.setItem('ok','1')}else alert('Senha errada! Use 199p')">Entrar</button><p style="margin-top:15px;font-size:13px">Senha: 199p</p></div>
+<div class="h">EL SHADAY REVENDA DE GÁS - 25 LINHAS</div>
+<div class="c"><table><thead><tr><th>Data</th><th>Cliente</th><th>Quant Vendida</th><th>Valor Unitário</th><th>Valor Total</th><th>Forma Pagamento PIX</th><th>despesa</th><th>Resumo Total</th></tr></thead><tbody id="tb"></tbody><tfoot><tr class="tr"><td colspan="2" style="text-align:right">VALOR GERAL TOTAL:</td><td><input id="tQ" readonly></td><td></td><td><input id="tG" readonly></td><td></td><td><input id="tD" readonly></td><td><input id="tR" readonly></td></tr></tfoot></table></div>
+<div class="bt"><button class="b" style="background:#4CAF50" onclick="add()">+ Nova Venda</button><button class="b" style="background:#1976D2" onclick="window.print()">Imprimir</button></div>
+<script>
+function add(){let tr=document.createElement('tr');tr.innerHTML=`<td><input type="date"></td><td><input placeholder="Cliente"></td><td><input type="number" class="q" oninput="calc()"></td><td><input type="number" class="u" oninput="calc()"></td><td><input class="vt" readonly></td><td><input placeholder="PIX"></td><td><input type="number" class="d" oninput="calc()"></td><td><input class="rt" readonly></td>`;tb.appendChild(tr)}
+function calc(){let g=0,d=0,q=0;document.querySelectorAll('#tb tr').forEach(tr=>{let qq=parseFloat(tr.querySelector('.q')?.value)||0,uu=parseFloat(tr.querySelector('.u')?.value)||0,dd=parseFloat(tr.querySelector('.d')?.value)||0,vt=qq*uu;tr.querySelector('.vt').value=vt?vt.toFixed(2):'';tr.querySelector('.rt').value=(vt||dd)?(vt-dd).toFixed(2):'';g+=vt;d+=dd;q+=qq});tG.value=g.toFixed(2);tD.value=d.toFixed(2);tR.value=(g-d).toFixed(2);tQ.value=q}
+for(let i=0;i<25;i++)add();
+if(localStorage.getItem('ok'))login.style.display='none';
+</script>
+</body>
+</html>
