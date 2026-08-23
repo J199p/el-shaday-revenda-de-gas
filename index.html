@@ -1,100 +1,82 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY FINAL</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
-.top{background:#1e3a8a;color:#fff;padding:15px;text-align:center;border-radius:0 0 20px 20px}
-.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:10px;text-align:center}
-.card{background:#fff;margin:12px;border-radius:16px;padding:10px;overflow-x:auto}
-table{width:100%;border-spacing:4px}th{padding:10px 2px;border-radius:10px;color:#fff;font-size:11px;text-align:center} td input{width:100%;height:50px;border:2px solid #ddd;border-radius:10px;text-align:center;font-weight:bold}
-.calc{height:50px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:12px;border:2px solid #ddd;background:#fff}
-.c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#2563eb}.c6{background:#0f766e}.c7{background:#ea580c}
-select.status{width:100%;height:50px;border-radius:10px;border:2px solid #ddd;font-weight:bold;font-size:10px}
-.btn{border:none;padding:12px 16px;border-radius:12px;font-weight:bold;color:#fff;background:#16a34a;font-size:13px}.btn-img{background:#facc15;color:#000}.btn-zerar{background:#ef4444}
-.final{background:#fff;margin:12px;border-radius:16px;padding:12px;border:2px solid #1e3a8a}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Shaday - Revenda</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div id="areaPrint">
-<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:10px;border-radius:12px;margin-top:10px">📅 <input type="date" id="data"> - ESTOQUE: <input type="number" id="estoqueInicial" value="200" style="width:70px;border-radius:8px;text-align:center;font-weight:bold;border:1px solid #ccc" oninput="salvar()"> - <span id="status">✓</span></div></div>
-<div class="estoque">
-<div class="est" style="border-left:8px solid #16a34a"><small>🔵 CHEIO</small><input type="number" id="qCheio" value="200" oninput="manualCheio=true;salvar()"></div>
-<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio" style="font-size:26px;font-weight:bold">0</p></div>
-<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend" style="font-size:26px;font-weight:bold">0</p></div>
-</div>
-<div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Qtd</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th><th class="c7">PAG?</th></tr></thead><tbody id="corpo"></tbody></table></div>
+<body class="bg-gray-100 p-2">
+<div class="max-w-[500px] mx-auto">
 
-<!-- AQUI É O FINAL QUE VOCÊ PERGUNTOU -->
-<div class="final">
-<div id="totGeral" style="font-weight:bold;font-size:14px;margin-bottom:8px">TOTAL: 0 botijas</div>
-<div id="totAmanha" style="background:#facc15;padding:10px;border-radius:10px;font-weight:bold;margin-bottom:6px">⏰ PRA RECEBER AMANHÃ: R$ 0</div>
-<div id="totFiado" style="background:#ef4444;color:#fff;padding:10px;border-radius:10px;font-weight:bold">📝 FIADO TOTAL: R$ 0</div>
-<div id="totResumo" style="margin-top:10px;background:#1e3a8a;color:#fff;padding:10px;border-radius:10px;font-weight:bold">💰 RESUMO DO DIA: R$ 0 recebido</div>
-</div>
+<!-- ESTOQUE AUTOMÁTICO - 100% AUTO -->
+<div class="bg-black text-white p-3 rounded-xl mb-3 flex justify-between">
+  <div>CHEIO: <span id="cheioTxt" class="text-green-400 font-bold text-xl">200</span>
+  <button onclick="editarEstoque()" class="text-[10px] bg-zinc-700 px-2 py-1 rounded">EDITAR</button></div>
+  <div class="text-xs">VAZIO: <span id="vazioTxt">0</span> | VENDIDO: <span id="vendidoTxt">0</span>
+  <button onclick="voltarAuto()" class="bg-green-600 px-2 py-1 rounded ml-2">AUTO</button></div>
 </div>
 
-<div style="margin:12px;display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-img" onclick="gerarImagem()">🖼️ FOTO Zap</button>
-<button class="btn" onclick="addLinha()">+ Venda</button>
-<button class="btn btn-zerar" onclick="zerarDia()">🗑️ ZERAR DIA</button>
+<div id="lista"></div>
+
+<div class="bg-white border-2 border-blue-800 rounded-xl p-3 mt-3 text-sm font-bold">
+  <div id="totalGeral"></div>
+  <div class="bg-yellow-400 p-2 rounded-lg mt-2">⏰ PRA RECEBER AMANHÃ: R$ <span id="praReceber">0</span></div>
+  <div class="bg-red-500 text-white p-2 rounded-lg mt-2">📝 FIADO TOTAL: R$ <span id="fiadoTotal">0</span></div>
+</div>
+
+<div class="grid grid-cols-3 gap-2 mt-3">
+  <button onclick="fotoZap()" class="bg-yellow-400 p-3 rounded-xl font-bold">FOTO Zap</button>
+  <button onclick="novaVenda()" class="bg-green-600 text-white p-3 rounded-xl font-bold">+ Venda</button>
+  <button onclick="zerarDia()" class="bg-red-600 text-white p-3 rounded-xl font-bold">ZERAR DIA</button>
+</div>
 </div>
 
 <script>
-const CHAVE="ELSHADAY_SEM_SENHA_FINAL"; let manualCheio=false;
-function criarLinhaHTML(d){
- return `<td><input class="cli" value="${d?.n||''}" placeholder="Nome" oninput="salvar()"></td><td><input type="number" class="q" value="${d?.q||''}" oninput="calcular();salvar()"></td><td><input type="number" class="vu" value="${d?.vu||''}" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" value="${d?.pix||''}" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO" ${d?.st==='PAGO'?'selected':''}>✅ PAGO</option><option value="FIADO" ${d?.st==='FIADO'?'selected':''}>📝 FIADO</option><option value="AMANHA" ${d?.st==='AMANHA'?'selected':''}>⏰ AMANHÃ</option></select></td>`;
+let dados = JSON.parse(localStorage.getItem('elshaday_v2')) || [
+  {nome:'Neto', qtd:33, valor:82, pago:0, fiado:0},
+  {nome:'Rebeca', qtd:11, valor:84, pago:924, fiado:0},
+  {nome:'GiL', qtd:21, valor:84, pago:764, fiado:1000},
+  {nome:'Melk', qtd:70, valor:82, pago:5740, fiado:0},
+  {nome:'Sérgio', qtd:52, valor:85, pago:0, fiado:4420},
+  {nome:'Severino', qtd:52, valor:83, pago:4316, fiado:0},
+];
+let estoqueInicial = parseInt(localStorage.getItem('estoque_inicial')) || 263;
+let modoAuto = localStorage.getItem('modo_auto')!== 'false';
+
+function render() {
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+  let totalBot=0, totalFixo=0, totalPix=0, totalDH=0, totalFiado=0;
+  dados.forEach((d,i)=>{
+    let total = d.qtd * d.valor;
+    totalBot+=d.qtd; totalFixo+=total; totalFiado+=d.fiado;
+    if(d.nome=='GiL' || d.nome=='Sérgio') totalDH+=d.pago; else totalPix+=d.pago;
+    lista.innerHTML+=`<div class="bg-white rounded-xl p-2 mb-1 grid grid-cols-7 gap-1 items-center">
+      <input class="border rounded p-1 font-bold" value="${d.nome}" onchange="dados[${i}].nome=this.value; salvar()">
+      <input class="border rounded p-1 text-center" type="number" value="${d.qtd}" onchange="dados[${i}].qtd=parseInt(this.value)||0; salvar()">
+      <input class="border rounded p-1 text-center" type="number" value="${d.valor}" onchange="dados[${i}].valor=parseInt(this.value)||0; salvar()">
+      <div class="text-[11px]">R$ ${total}</div>
+      <input class="border rounded p-1 text-center" type="number" value="${d.pago}" onchange="dados[${i}].pago=parseInt(this.value)||0; salvar()">
+      <div class="text-[11px]">R$ ${total-d.pago}</div>
+      <div>✅</div></div>`;
+  });
+  let cheioAtual = modoAuto? estoqueInicial - totalBot : estoqueInicial;
+  document.getElementById('cheioTxt').innerText=cheioAtual;
+  document.getElementById('vazioTxt').innerText=totalBot;
+  document.getElementById('vendidoTxt').innerText=totalBot;
+  document.getElementById('totalGeral').innerText=`TOTAL: ${totalBot} bot | FIXO R$ ${totalFixo} | PIX R$ ${totalPix} | DH R$ ${totalDH} | CHEIO ${cheioAtual}`;
+  document.getElementById('praReceber').innerText= totalFiado>0?totalFiado:(totalFixo-totalPix-totalDH);
+  document.getElementById('fiadoTotal').innerText=totalFiado;
 }
-function addLinha(d){
- let tr=document.createElement('tr'); tr.innerHTML=criarLinhaHTML(d); document.getElementById('corpo').appendChild(tr); if(d==null) salvar();
-}
-function calcular(){
- let v=0,tG=0,tP=0,tD=0,tA=0,tF=0;
- document.querySelectorAll('#corpo tr').forEach(r=>{
-  let q=parseFloat(r.querySelector('.q').value)||0, vu=parseFloat(r.querySelector('.vu').value)||0, pix=parseFloat(r.querySelector('.pix').value)||0, st=r.querySelector('.status').value;
-  let total=q*vu, dh=total-pix; if(dh<0) dh=0;
-  r.querySelector('.vt').innerText='R$ '+total.toFixed(0);
-  r.querySelector('.dh').innerText='R$ '+dh.toFixed(0);
-  v+=q; tG+=total; tP+=pix; tD+=dh;
-  if(st==='AMANHA') tA+=dh; if(st==='FIADO') tF+=dh;
- });
- if(!manualCheio){ let est=parseFloat(document.getElementById('estoqueInicial').value)||200; document.getElementById('qCheio').value=Math.max(0,est-v); }
- document.getElementById('qVend').innerText=v; document.getElementById('qVazio').innerText=v;
- document.getElementById('totGeral').innerText=`TOTAL: ${v} bot | FIXO R$ ${tG} | PIX R$ ${tP} | DH R$ ${tD} | CHEIO ${document.getElementById('qCheio').value}`;
- document.getElementById('totAmanha').innerText=`⏰ PRA RECEBER AMANHÃ: R$ ${tA}`;
- document.getElementById('totFiado').innerText=`📝 FIADO TOTAL: R$ ${tF}`;
- document.getElementById('totResumo').innerText=`💰 RESUMO DO DIA: R$ ${tP} recebido de R$ ${tG} | FALTA R$ ${tD}`;
-}
-function salvar(){
- calcular();
- let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>{
-  let n=r.querySelector('.cli').value, q=r.querySelector('.q').value, vu=r.querySelector('.vu').value, pix=r.querySelector('.pix').value;
-  if(n||q||vu||pix) arr.push({n,q,vu,pix,st:r.querySelector('.status').value});
- });
- localStorage.setItem(CHAVE, JSON.stringify({vendas:arr,data:document.getElementById('data').value,estoque:document.getElementById('estoqueInicial').value,cheio:document.getElementById('qCheio').value,manual:manualCheio}));
- document.getElementById('status').innerText='Salvo ✓';
-}
-function carregar(){
- let d=null; try{d=JSON.parse(localStorage.getItem(CHAVE)||'null');}catch(e){}
- let tbody=document.getElementById('corpo'); tbody.innerHTML='';
- if(d && d.vendas && d.vendas.length>0){
-   d.vendas.forEach(v=>addLinha(v));
-   if(d.data) document.getElementById('data').value=d.data;
-   if(d.estoque) document.getElementById('estoqueInicial').value=d.estoque;
-   if(d.cheio) document.getElementById('qCheio').value=d.cheio;
-   manualCheio=!!d.manual;
- }else{
-   for(let i=0;i<10;i++) addLinha(null);
- }
- while(tbody.children.length<10) addLinha(null);
- if(!document.getElementById('data').value) document.getElementById('data').valueAsDate=new Date();
- calcular();
-}
-function zerarDia(){ if(confirm("Zerar o dia?")){localStorage.removeItem(CHAVE); location.reload();} }
-async function gerarImagem(){ const area=document.getElementById('areaPrint'); const canvas=await html2canvas(area,{scale:2,backgroundColor:'#f5f7fb'}); const a=document.createElement('a'); a.download=`EL-SHADAY.png`; a.href=canvas.toDataURL(); a.click(); }
-carregar();
+function salvar(){localStorage.setItem('elshaday_v2',JSON.stringify(dados)); render();}
+function editarEstoque(){let n=prompt('Quantos CHEIOS agora?',estoqueInicial); if(n){estoqueInicial=parseInt(n); localStorage.setItem('estoque_inicial',estoqueInicial); modoAuto=false; localStorage.setItem('modo_auto','false'); render();}}
+function voltarAuto(){modoAuto=true; localStorage.setItem('modo_auto','true'); render();}
+function novaVenda(){let nome=prompt('Nome?')||'Nome'; dados.push({nome:nome,qtd:1,valor:84,pago:0,fiado:0}); salvar();}
+function zerarDia(){if(confirm('Zerar?')){dados.forEach(d=>{d.qtd=0;d.pago=0;d.fiado=0;}); salvar();}}
+function fotoZap(){alert('Print sem resumo azul!');}
+render();
+setInterval(()=>{document.querySelectorAll('div').forEach(el=>{if(el.innerText.includes('RESUMO DO DIA')) el.style.display='none';});},500);
 </script>
 </body>
 </html>
