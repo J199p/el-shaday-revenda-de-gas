@@ -10,8 +10,8 @@
 <div id="printArea">
 <div class="bg-[#1e3a8a] rounded-b-[24px] p-3 pb-4 text-center">
   <h1 class="text-white font-black text-[24px]">🔥 EL SHADAY - 200 GÁS</h1>
-  <div class="bg-white rounded-xl p-2 mt-2 font-bold text-[12px]">
-    📅 22/08/2026 - ESTOQUE INICIAL: <span id="estIni">200</span> - ● <span id="restTop">200</span> restantes
+  <div class="bg-white rounded-xl p-2 mt-2 font-bold text-[11px]">
+    📅 <span id="dataHoje"></span> - ESTOQUE INICIAL: <span id="estIni">200</span> - ● <span id="restTop">200</span> restantes
   </div>
 </div>
 
@@ -41,19 +41,25 @@
     <div class="bg-teal-800 text-white rounded-xl p-2 text-center font-black text-[9px]">DH</div>
   </div>
   <div id="linhas"></div>
+
+  <!-- DINHEIRO PRA RECEBER -->
+  <div class="mt-3 grid grid-cols-1 gap-2">
+    <div class="bg-blue-600 text-white rounded-xl p-3 font-black text-center text-[13px]">💰 DINHEIRO PRA RECEBER NO PIX: R$ <span id="totalPixReceber">0</span></div>
+    <div class="bg-teal-700 text-white rounded-xl p-3 font-black text-center text-[13px]">💵 DINHEIRO PRA RECEBER EM MÃOS (DH): R$ <span id="totalDHReceber">0</span></div>
+    <div class="bg-yellow-400 rounded-xl p-2 font-black text-center text-[12px]">TOTAL GERAL PRA RECEBER: R$ <span id="totalGeral">0</span></div>
+  </div>
 </div>
 </div>
 
-<div class="grid grid-cols-3 gap-2 p-2">
+<div class="grid grid-cols-3 gap-2 p-2 pb-6">
   <button onclick="addLinha()" class="bg-green-600 text-white p-3 rounded-xl font-bold text-[13px]">+ Venda</button>
   <button onclick="zerarTudo()" class="bg-red-600 text-white p-3 rounded-xl font-bold text-[13px]">🗑️ ZERAR TUDO</button>
-  <button onclick="gerarPDF()" class="bg-blue-600 text-white p-3 rounded-xl font-bold text-[13px]">📄 PDF</button>
+  <button onclick="gerarPDF()" class="bg-blue-800 text-white p-3 rounded-xl font-bold text-[13px]">📄 PDF</button>
 </div>
 
 <script>
-// AGORA COMEÇA TUDO ZERADO 0 - INCLUSIVE UNIT
-let estoque = 200;
-let dados = [
+let estoque = parseInt(localStorage.getItem('estoqueIni'))||200;
+let dados = JSON.parse(localStorage.getItem('elshaday_pix')) || [
  {c:'Paulo',q:0,u:0,pix:0},
  {c:'Wellin',q:0,u:0,pix:0},
  {c:'Beto',q:0,u:0,pix:0},
@@ -62,18 +68,23 @@ let dados = [
  {c:'GiL',q:0,u:0,pix:0},
 ];
 
+document.getElementById('dataHoje').innerText = new Date().toLocaleDateString('pt-BR');
+
+function salvar(){localStorage.setItem('elshaday_pix',JSON.stringify(dados)); localStorage.setItem('estoqueIni',estoque);}
+
 function render(){
- let html='',sQ=0;
+ let html='',sQ=0, sPix=0, sDH=0, sTotal=0;
  dados.forEach((d,i)=>{
-  let tot=d.q*d.u;
-  sQ+=d.q;
+  let tot = (d.q||0)*(d.u||0);
+  let dh = tot - (d.pix||0);
+  sQ+=d.q||0; sTotal+=tot; sPix+=d.pix||0; sDH+=dh;
   html+=`<div class="grid grid-cols-6 gap-1 mb-1">
-   <input class="border-2 rounded-xl p-2 text-center font-bold text-[12px]" value="${d.c}" oninput="dados[${i}].c=this.value">
-   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0;render()">
-   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0;render()">
+   <input class="border-2 rounded-xl p-2 text-center font-bold text-[12px]" value="${d.c}" oninput="dados[${i}].c=this.value; salvar()">
+   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; salvar(); render()">
+   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; salvar(); render()">
    <div class="bg-yellow-100 rounded-xl p-2 text-center font-bold text-[10px]">R$ ${tot}</div>
-   <input class="border-2 border-blue-500 bg-blue-50 text-blue-700 rounded-xl p-2 text-center font-bold" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0;render()">
-   <div class="bg-teal-50 rounded-xl p-2 text-center font-bold text-[10px]">R$ ${tot-d.pix}</div>
+   <input class="border-2 border-blue-500 bg-blue-50 text-blue-700 rounded-xl p-2 text-center font-bold" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; salvar(); render()">
+   <div class="bg-teal-50 rounded-xl p-2 text-center font-bold text-[10px]">R$ ${dh}</div>
   </div>`;
  });
  document.getElementById('linhas').innerHTML=html;
@@ -82,28 +93,14 @@ function render(){
  document.getElementById('estIni').innerText=estoque;
  document.getElementById('vazio').innerText=sQ;
  document.getElementById('vendido').innerText=sQ;
+ document.getElementById('totalPixReceber').innerText=sPix;
+ document.getElementById('totalDHReceber').innerText=sDH;
+ document.getElementById('totalGeral').innerText=sTotal;
 }
-
-function editarEstoque(){
- let n=prompt('Quantos CHEIOS?',estoque);
- if(n){estoque=parseInt(n); render();}
-}
-
-function zerarTudo(){
- if(confirm('Zerar TUDO? Vai deixar UNIT, QUANT e PIX tudo 0!')){
-  estoque=200;
-  dados.forEach(d=>{d.q=0; d.u=0; d.pix=0;});
-  render();
- }
-}
-
-function addLinha(){dados.push({c:'Nome',q:0,u:0,pix:0}); render();}
-
-function gerarPDF(){
- // Esconde botões e imprime
- window.print();
-}
-
+function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n){estoque=parseInt(n); salvar(); render();}}
+function zerarTudo(){if(confirm('Zerar TUDO?')){estoque=200; dados.forEach(d=>{d.q=0; d.u=0; d.pix=0;}); salvar(); render();}}
+function addLinha(){dados.push({c:'Nome',q:0,u:0,pix:0}); salvar(); render();}
+function gerarPDF(){window.print();}
 render();
 </script>
 </body>
