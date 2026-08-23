@@ -5,15 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EL SHADAY - 200 GÁS</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+@media print{.no-print{display:none}.fixo-totais{position:static!important}}
+.fixo-totais{position:sticky; bottom:0; z-index:50}
+</style>
 </head>
-<body class="bg-[#eef2f7]">
+<body class="bg-[#eef2f7] pb-[190px]">
 <div class="bg-[#1e3a8a] rounded-b-[24px] p-3 text-center">
   <h1 class="text-white font-black text-[22px]">🔥 EL SHADAY - 200 GÁS</h1>
-  <div class="bg-white rounded-xl p-2 mt-2 font-bold text-[11px]">ESTOQUE: <span id="estIni">200</span> - Restantes: <span id="restTop">200</span></div>
+  <!-- DATA AQUI -->
+  <div class="bg-white rounded-xl p-2 mt-2 flex justify-between items-center font-bold text-[12px]">
+    <div>📅 DATA: <input type="date" id="dataPlanilha" class="border rounded-lg p-1 font-black" onchange="salvar()"></div>
+    <div>ESTOQUE: <span id="estIni">200</span> - Rest: <span id="restTop">200</span></div>
+  </div>
 </div>
 
 <div class="grid grid-cols-3 gap-2 p-2">
-  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500 cursor-pointer">
+  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500">
     <div class="text-[9px] font-bold">🔵 CHEIO EDITÁVEL</div>
     <div id="restanteCheio" class="text-[28px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">200</div>
   </div>
@@ -35,54 +43,63 @@
     <div class="bg-green-700 rounded-lg p-2 text-center">DH</div>
   </div>
   <div id="linhas"></div>
+</div>
 
-  <!-- 4 CAMPOS QUE VOCÊ PEDIU NO ÁUDIO -->
-  <div class="mt-4 space-y-2">
-    <div class="bg-blue-600 text-white rounded-xl p-3 font-black text-[13px] flex justify-between">
-      <span>💰 RECEBIMENTO NO PIX:</span><span>R$ <span id="totalPix">0</span></span>
-    </div>
-    <div class="bg-green-600 text-white rounded-xl p-3 font-black text-[13px] flex justify-between">
-      <span>💵 RECEBIMENTO EM DINHEIRO:</span><span>R$ <span id="totalDH">0</span></span>
-    </div>
-    <div class="bg-[#1e3a8a] text-white rounded-xl p-3 font-black text-[13px] flex justify-between">
-      <span>📦 TOTAL GERAL:</span><span>R$ <span id="totalGeral">0</span></span>
-    </div>
-    <div class="bg-red-600 text-white rounded-xl p-3 font-black text-[14px] flex justify-between border-2 border-black">
-      <span>⚠️ FALTA RECEBER:</span><span>R$ <span id="faltaReceber">0</span></span>
-    </div>
+<div class="fixo-totais bg-white border-t-2 border-black p-2 shadow-[0_-4px_10px_rgba(0,0,0,0.2)] space-y-1">
+  <div class="text-center font-bold text-[10px]">📅 Data da planilha: <span id="dataExibe">--/--/----</span></div>
+  <div class="grid grid-cols-2 gap-1">
+    <div class="bg-blue-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💰 PIX:</span><span>R$ <span id="totalPix">0</span></span></div>
+    <div class="bg-green-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💵 DH:</span><span>R$ <span id="totalDH">0</span></span></div>
+  </div>
+  <div class="bg-[#1e3a8a] text-white rounded-lg p-2 font-black text-[12px] flex justify-between"><span>📦 TOTAL GERAL:</span><span>R$ <span id="totalGeral">0</span></span></div>
+  <div class="bg-red-600 text-white rounded-lg p-2 font-black text-[13px] flex justify-between border-2 border-black"><span>⚠️ FALTA RECEBER:</span><span>R$ <span id="faltaReceber">0</span></span></div>
+  <div class="grid grid-cols-3 gap-2 pt-1 no-print">
+    <button onclick="addLinha()" class="bg-green-600 text-white p-2 rounded-xl font-bold text-[11px]">+ Venda</button>
+    <button onclick="zerarTudo()" class="bg-red-600 text-white p-2 rounded-xl font-bold text-[11px]">🗑️ ZERAR</button>
+    <button onclick="window.print()" class="bg-blue-800 text-white p-2 rounded-xl font-bold text-[11px]">📄 PDF</button>
   </div>
 </div>
 
-<div class="grid grid-cols-3 gap-2 p-2">
-  <button onclick="addLinha()" class="bg-green-600 text-white p-3 rounded-xl font-bold text-[12px]">+ Venda</button>
-  <button onclick="zerarTudo()" class="bg-red-600 text-white p-3 rounded-xl font-bold text-[12px]">🗑️ ZERAR TUDO</button>
-  <button onclick="window.print()" class="bg-blue-800 text-white p-3 rounded-xl font-bold text-[12px]">📄 PDF</button>
-</div>
-
 <script>
-let estoque = 200;
-let dados = [
- {c:'Paulo',q:0,u:0,pix:0,dh:0},
- {c:'Wellin',q:0,u:0,pix:0,dh:0},
- {c:'Beto',q:0,u:0,pix:0,dh:0},
- {c:'Neto',q:0,u:0,pix:0,dh:0},
-];
+let hoje = new Date().toISOString().split('T')[0];
+let estoque = parseInt(localStorage.getItem('estoque_gas')||'200');
+let dataSalva = localStorage.getItem('data_gas')||hoje;
+let dados = JSON.parse(localStorage.getItem('dados_gas_v3')||'[{"c":"Paulo","q":0,"u":86,"pix":0,"dh":0},{"c":"Wellin","q":0,"u":0,"pix":0,"dh":0},{"c":"Beto","q":0,"u":0,"pix":0,"dh":0},{"c":"Neto","q":0,"u":0,"pix":0,"dh":0}]');
 
-function render(){
- let html='', sQ=0, sTotal=0, sPix=0, sDH=0;
+document.getElementById('dataPlanilha').value = dataSalva;
+
+function salvar(){
+  localStorage.setItem('dados_gas_v3', JSON.stringify(dados));
+  localStorage.setItem('estoque_gas', estoque);
+  let d = document.getElementById('dataPlanilha').value;
+  localStorage.setItem('data_gas', d);
+  let partes = d.split('-');
+  document.getElementById('dataExibe').innerText = partes[2]+'/'+partes[1]+'/'+partes[0];
+}
+
+function renderLinhas(){
+ let html='';
  dados.forEach((d,i)=>{
-  let tot=d.q*d.u;
-  sQ+=d.q; sTotal+=tot; sPix+=d.pix; sDH+=d.dh;
   html+=`<div class="grid grid-cols-6 gap-1 mb-1">
-   <input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c}" onchange="dados[${i}].c=this.value">
-   <input class="border rounded-lg p-1 text-center font-bold" type="number" value="${d.q}" onchange="dados[${i}].q=parseInt(this.value)||0; render()">
-   <input class="border rounded-lg p-1 text-center font-bold" type="number" value="${d.u}" onchange="dados[${i}].u=parseInt(this.value)||0; render()">
-   <div class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px]">R$ ${tot}</div>
-   <input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix}" onchange="dados[${i}].pix=parseInt(this.value)||0; render()">
-   <input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh}" onchange="dados[${i}].dh=parseInt(this.value)||0; render()">
+   <input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c}" oninput="dados[${i}].c=this.value; salvar()">
+   <input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()">
+   <input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()">
+   <div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px]">R$ 0</div>
+   <input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()">
+   <input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()">
   </div>`;
  });
  document.getElementById('linhas').innerHTML=html;
+ calc(); salvar();
+}
+
+function calc(){
+ let sQ=0, sTotal=0, sPix=0, sDH=0;
+ dados.forEach((d,i)=>{
+  let tot=(d.q||0)*(d.u||0);
+  sQ+=d.q||0; sTotal+=tot; sPix+=d.pix||0; sDH+=d.dh||0;
+  let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+tot;
+ });
  document.getElementById('restanteCheio').innerText=estoque-sQ;
  document.getElementById('restTop').innerText=estoque-sQ;
  document.getElementById('estIni').innerText=estoque;
@@ -93,10 +110,11 @@ function render(){
  document.getElementById('totalGeral').innerText=sTotal;
  document.getElementById('faltaReceber').innerText=sTotal-(sPix+sDH);
 }
-function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n){estoque=parseInt(n); render();}}
-function zerarTudo(){if(confirm('Zerar tudo?')){estoque=200; dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;}); render();}}
-function addLinha(){dados.push({c:'Nome',q:0,u:0,pix:0,dh:0}); render();}
-render();
+
+function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n){estoque=parseInt(n)||estoque; salvar(); calc();}}
+function zerarTudo(){if(confirm('Zerar tudo?')){dados.forEach(d=>{d.q=0; d.pix=0; d.dh=0;}); salvar(); renderLinhas();}}
+function addLinha(){dados.push({c:'Novo',q:0,u:86,pix:0,dh:0}); salvar(); renderLinhas();}
+renderLinhas();
 </script>
 </body>
 </html>
