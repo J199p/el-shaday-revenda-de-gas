@@ -5,127 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EL SHADAY - 200 GÁS</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-  input{outline:none}
- .col{border-radius:12px; text-align:center; font-weight:bold; padding:10px 2px; border:2px solid #e5e7eb;}
- .col:focus{border-color:#3b82f6}
-</style>
 </head>
 <body class="bg-[#eef2f7]">
-
-<!-- TOPO AZUL IGUAL A SUA FOTO -->
 <div class="bg-[#1e3a8a] rounded-b-[24px] p-3 pb-5 text-center">
-  <h1 class="text-white font-black text-[32px]">🔥 EL SHADAY - 200 GÁS</h1>
-  <div class="bg-white rounded-xl p-2 mt-2 flex justify-center items-center gap-2 flex-wrap text-[15px] font-bold">
-    <span>📅</span>
-    <input type="date" id="data" value="2026-08-22" class="border rounded px-2">
-    <span>- ESTOQUE INICIAL: <span id="estInicialTxt">200</span> CHEIOS - ● <span id="cheioRestanteTop">0</span> cheios restantes</span>
-    <button onclick="editarEstoque()" class="bg-gray-100 border px-2 rounded text-[12px]">EDITAR</button>
+  <h1 class="text-white font-black text-[26px]">🔥 EL SHADAY - 200 GÁS</h1>
+  <div class="bg-white rounded-xl p-2 mt-2 font-bold text-[13px]">
+    📅 <input type="date" value="2026-08-22" class="border rounded px-1">
+    - ESTOQUE INICIAL: <span id="estIni">200</span> - ● <span id="restTop">200</span> restantes
   </div>
-</div>
-
-<!-- 3 CARDS - 100% AUTOMÁTICO -->
-<div class="grid grid-cols-3 gap-2 p-2 -mt-2">
-  <!-- CHEIO -->
-  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-green-500">
-    <div class="text-[13px]">🔵 RESTANTE CHEIO</div>
-    <div id="restanteCheio" class="text-[36px] font-black">0</div>
-    <div class="text-[11px]">200 - vendido</div>
-  </div>
-  <!-- VAZIO -->
-  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-red-500">
-    <div class="text-[13px]">🔴 VAZIO</div>
-    <div id="vazio" class="text-[36px] font-black">0</div>
-    <div class="text-[11px]">igual ao vendido</div>
-  </div>
-  <!-- VENDIDO -->
-  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-yellow-400">
-    <div class="text-[13px]">📦 VENDIDO</div>
-    <div id="vendido" class="text-[36px] font-black">0</div>
-    <div class="text-[11px]">soma Quant</div>
-  </div>
-</div>
-
-<!-- TABELA IGUAL SUA FOTO - 100% AUTO -->
-<div class="bg-white m-2 rounded-2xl p-2 shadow">
-  <div class="grid grid-cols-6 gap-1 mb-2">
-    <div class="bg-yellow-400 rounded-xl p-2 text-center font-black text-[12px]">Cliente</div>
-    <div class="bg-green-600 text-white rounded-xl p-2 text-center font-black text-[12px]">Quant</div>
-    <div class="bg-black text-white rounded-xl p-2 text-center font-black text-[12px]">Unit</div>
-    <div class="bg-yellow-200 rounded-xl p-2 text-center font-black text-[12px]">Total</div>
-    <div class="bg-red-500 text-white rounded-xl p-2 text-center font-black text-[12px]">PIX</div>
-    <div class="bg-teal-800 text-white rounded-xl p-2 text-center font-black text-[12px]">DH</div>
-  </div>
-  <div id="linhas"></div>
-
-  <div class="mt-3 font-bold text-[13px]">TOTAL: <span id="totalBot">0</span> bot | FIXO R$ <span id="totalFixo">0</span></div>
-  <div class="bg-yellow-400 rounded-xl p-3 mt-2 font-black text-center">⏰ PRA RECEBER AMANHÃ: R$ <span id="praReceber">0</span></div>
-  <div class="bg-red-500 text-white rounded-xl p-3 mt-2 font-black text-center">📝 FIADO TOTAL: R$ <span id="fiado">0</span></div>
 </div>
 
 <div class="grid grid-cols-3 gap-2 p-2">
-  <button onclick="gerarPDF()" class="bg-white p-3 rounded-xl font-bold shadow">📄 PDF</button>
-  <button onclick="fotoZap()" class="bg-yellow-400 p-3 rounded-xl font-bold shadow">🖼️ FOTO Zap</button>
-  <button onclick="addVenda()" class="bg-green-600 text-white p-3 rounded-xl font-bold shadow">+ Venda</button>
+  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[8px] border-green-500 cursor-pointer">
+    <div class="text-[11px] font-bold">🔵 CHEIO EDITÁVEL</div>
+    <div id="restanteCheio" class="text-[32px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">200</div>
+    <div class="text-[8px] text-green-600 font-bold">TOQUE P/ EDITAR</div>
+  </div>
+  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[8px] border-red-500">
+    <div class="text-[11px] font-bold">🔴 VAZIO</div>
+    <div id="vazio" class="text-[32px] font-black">0</div>
+    <div class="text-[9px]">igual ao vendido</div>
+  </div>
+  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[8px] border-yellow-400">
+    <div class="text-[11px] font-bold">📦 VENDIDO</div>
+    <div id="vendido" class="text-[32px] font-black">0</div>
+    <div class="text-[9px]">soma Quant</div>
+  </div>
 </div>
-<div class="grid grid-cols-2 gap-2 p-2">
-  <button onclick="zerar()" class="bg-red-500 text-white p-3 rounded-xl font-bold">🗑️ ZERAR DIA</button>
-  <button onclick="location.reload()" class="bg-black text-white p-3 rounded-xl font-bold">Sair</button>
+
+<div class="bg-white m-2 rounded-2xl p-2 shadow">
+  <div class="grid grid-cols-6 gap-1 mb-2">
+    <div class="bg-yellow-400 rounded-xl p-2 text-center font-black text-[10px]">Cliente</div>
+    <div class="bg-green-600 text-white rounded-xl p-2 text-center font-black text-[10px]">Quant</div>
+    <div class="bg-black text-white rounded-xl p-2 text-center font-black text-[10px]">Unit</div>
+    <div class="bg-yellow-200 rounded-xl p-2 text-center font-black text-[10px]">Total</div>
+    <div class="bg-blue-600 text-white rounded-xl p-2 text-center font-black text-[10px]">PIX</div>
+    <div class="bg-teal-800 text-white rounded-xl p-2 text-center font-black text-[10px]">DH</div>
+  </div>
+  <div id="linhas"></div>
+  <div class="mt-3 font-bold text-[12px]">TOTAL: <span id="totalBot">0</span> bot | FIXO R$ <span id="totalFixo">0</span></div>
+  <div class="bg-yellow-400 rounded-xl p-2 mt-2 font-black text-[12px] text-center">⏰ PRA RECEBER AMANHÃ: R$ <span id="praReceber">0</span></div>
+  <div class="bg-red-500 text-white rounded-xl p-2 mt-1 font-black text-[12px] text-center">📝 FIADO TOTAL: R$ <span id="fiado">0</span></div>
+</div>
+
+<div class="grid grid-cols-2 gap-2 p-2 pb-6">
+  <button onclick="addLinha()" class="bg-green-600 text-white p-3 rounded-xl font-bold">+ Venda</button>
+  <button onclick="zerarTudo()" class="bg-red-600 text-white p-3 rounded-xl font-bold">🗑️ ZERAR TUDO</button>
 </div>
 
 <script>
-let estoqueInicial = parseInt(localStorage.getItem('estoqueIni')) || 200;
-let dados = JSON.parse(localStorage.getItem('elshaday_auto')) || [
- {c:'Paulo', q:10, u:86, pix:860},
- {c:'Wellingto', q:6, u:85, pix:410},
- {c:'Beto', q:8, u:83, pix:664},
- {c:'Neto', q:33, u:82, pix:2706},
- {c:'Rebeca', q:11, u:84, pix:924},
- {c:'GiL', q:21, u:84, pix:764},
- {c:'Melk', q:70, u:82, pix:5740},
- {c:'Sérgio', q:52, u:85, pix:0},
- {c:'Severino', q:52, u:83, pix:4316},
+// COMEÇA ZERADO COMO VOCÊ PEDIU
+let estoque = 200;
+let dados = [
+ {c:'Paulo',q:0,u:86,pix:0},
+ {c:'Wellin',q:0,u:85,pix:0},
+ {c:'Beto',q:0,u:83,pix:0},
+ {c:'Neto',q:0,u:82,pix:0},
+ {c:'Rebeca',q:0,u:84,pix:0},
+ {c:'GiL',q:0,u:84,pix:0},
 ];
 
-function salvar(){localStorage.setItem('elshaday_auto', JSON.stringify(dados)); localStorage.setItem('estoqueIni', estoqueInicial);}
-
 function render(){
-  let html=''; let somaQ=0, somaTotal=0, somaPix=0, somaDH=0;
-  dados.forEach((d,i)=>{
-    let total = (d.q||0)*(d.u||0);
-    let dh = total - (d.pix||0);
-    somaQ+=d.q||0; somaTotal+=total; somaPix+=d.pix||0; somaDH+=dh;
-    html+=`<div class="grid grid-cols-6 gap-1 mb-1">
-      <input class="col" value="${d.c}" oninput="dados[${i}].c=this.value; salvar(); render()">
-      <input class="col" type="number" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; salvar(); render()">
-      <input class="col" type="number" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; salvar(); render()">
-      <div class="col bg-yellow-100">R$ ${total}</div>
-      <input class="col" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; salvar(); render()">
-      <div class="col bg-teal-100">R$ ${dh}</div>
-    </div>`;
-  });
-  document.getElementById('linhas').innerHTML=html;
-
-  // FORMULAS 100% AUTOMÁTICAS
-  let restante = estoqueInicial - somaQ;
-  let vazio = somaQ;
-  let vendido = somaQ;
-
-  document.getElementById('restanteCheio').innerText=restante;
-  document.getElementById('cheioRestanteTop').innerText=restante;
-  document.getElementById('estInicialTxt').innerText=estoqueInicial;
-  document.getElementById('vazio').innerText=vazio;
-  document.getElementById('vendido').innerText=vendido;
-  document.getElementById('totalBot').innerText=somaQ;
-  document.getElementById('totalFixo').innerText=somaTotal;
-  document.getElementById('praReceber').innerText=somaDH;
-  document.getElementById('fiado').innerText=somaDH;
+ let html='', sQ=0, sTotal=0, sPix=0;
+ dados.forEach((d,i)=>{
+  let tot=d.q*d.u; sQ+=d.q; sTotal+=tot; sPix+=d.pix;
+  html+=`<div class="grid grid-cols-6 gap-1 mb-1">
+   <input class="border-2 rounded-xl p-2 text-center font-bold text-[13px]" value="${d.c}" oninput="dados[${i}].c=this.value">
+   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0;render()">
+   <input class="border-2 rounded-xl p-2 text-center font-bold" type="number" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0;render()">
+   <div class="bg-yellow-100 rounded-xl p-2 text-center font-bold text-[11px]">R$ ${tot}</div>
+   <input class="border-2 border-blue-500 bg-blue-50 text-blue-700 rounded-xl p-2 text-center font-bold" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0;render()">
+   <div class="bg-teal-50 rounded-xl p-2 text-center font-bold text-[11px]">R$ ${tot-d.pix}</div>
+  </div>`;
+ });
+ document.getElementById('linhas').innerHTML=html;
+ document.getElementById('restanteCheio').innerText=estoque-sQ;
+ document.getElementById('restTop').innerText=estoque-sQ;
+ document.getElementById('estIni').innerText=estoque;
+ document.getElementById('vazio').innerText=sQ;
+ document.getElementById('vendido').innerText=sQ;
+ document.getElementById('totalBot').innerText=sQ;
+ document.getElementById('totalFixo').innerText=sTotal;
+ document.getElementById('praReceber').innerText=sTotal-sPix;
+ document.getElementById('fiado').innerText=sTotal-sPix;
 }
-function editarEstoque(){let n=prompt('Estoque inicial?',estoqueInicial); if(n){estoqueInicial=parseInt(n); salvar(); render();}}
-function addVenda(){dados.push({c:'Nome', q:0, u:84, pix:0}); salvar(); render();}
-function zerar(){if(confirm('Zerar dia?')){dados.forEach(d=>{d.q=0; d.pix=0;}); salvar(); render();}}
-function gerarPDF(){window.print();}
-function fotoZap(){alert('Tire print agora - tabela 100% automática!');}
+function editarEstoque(){let n=prompt('Quantos CHEIOS tem?',estoque); if(n){estoque=parseInt(n); render();}}
+function addLinha(){dados.push({c:'Nome',q:0,u:84,pix:0}); render();}
+function zerarTudo(){
+ if(confirm('Zerar TUDO mesmo? Vai apagar todas as vendas!')){
+  estoque=200;
+  dados.forEach(d=>{d.q=0; d.pix=0;});
+  render();
+  alert('Tudo zerado! ✅');
+ }
+}
 render();
 </script>
 </body>
