@@ -1,34 +1,132 @@
-<!-- FRANJA NOVA - BONITINHA E DETALHADA -->
-<div style="background: linear-gradient(135deg, #111 0%, #2a2a2a 100%); border-radius:16px; padding:12px; margin-bottom:12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid #333;">
-  
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    
-    <div style="display:flex; align-items:center; gap:8px;">
-      <div style="background:#1f1f1f; border-radius:10px; padding:8px 12px; border:1px solid #333;">
-        <div style="color:#888; font-size:10px; letter-spacing:1px;">ESTOQUE CHEIO</div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span id="cheioTxt" style="color:#22c55e; font-size:28px; font-weight:900;">263</span>
-          <button onclick="editarEstoque()" style="background:#333; color:#fff; font-size:9px; padding:4px 8px; border-radius:6px; border:1px solid #444;">EDITAR</button>
-        </div>
-      </div>
-    </div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EL SHADAY - 200 GÁS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input{outline:none}
+ .col{border-radius:12px; text-align:center; font-weight:bold; padding:10px 2px; border:2px solid #e5e7eb;}
+ .col:focus{border-color:#3b82f6}
+</style>
+</head>
+<body class="bg-[#eef2f7]">
 
-    <div style="display:flex; gap:8px;">
-      <div style="background:#1f1f1f; border-radius:10px; padding:8px 12px; text-align:center; border:1px solid #333;">
-        <div style="color:#888; font-size:9px;">VAZIO</div>
-        <div id="vazioTxt" style="color:#fff; font-weight:bold; font-size:16px;">0</div>
-      </div>
-      <div style="background:#1f1f1f; border-radius:10px; padding:8px 12px; text-align:center; border:1px solid #333;">
-        <div style="color:#888; font-size:9px;">VENDIDO</div>
-        <div id="vendidoTxt" style="color:#fbbf24; font-weight:bold; font-size:16px;">0</div>
-      </div>
-    </div>
-
-    <button onclick="voltarAuto()" style="background: linear-gradient(135deg, #16a34a, #22c55e); color:white; font-weight:900; font-size:12px; padding:10px 14px; border-radius:10px; box-shadow: 0 2px 8px rgba(34,197,94,0.4);">AUTO</button>
-
-  </div>
-
-  <div style="margin-top:8px; height:4px; background:#222; border-radius:10px; overflow:hidden;">
-    <div id="barraProgresso" style="width:100%; height:100%; background: linear-gradient(90deg, #22c55e, #16a34a);"></div>
+<!-- TOPO AZUL IGUAL A SUA FOTO -->
+<div class="bg-[#1e3a8a] rounded-b-[24px] p-3 pb-5 text-center">
+  <h1 class="text-white font-black text-[32px]">🔥 EL SHADAY - 200 GÁS</h1>
+  <div class="bg-white rounded-xl p-2 mt-2 flex justify-center items-center gap-2 flex-wrap text-[15px] font-bold">
+    <span>📅</span>
+    <input type="date" id="data" value="2026-08-22" class="border rounded px-2">
+    <span>- ESTOQUE INICIAL: <span id="estInicialTxt">200</span> CHEIOS - ● <span id="cheioRestanteTop">0</span> cheios restantes</span>
+    <button onclick="editarEstoque()" class="bg-gray-100 border px-2 rounded text-[12px]">EDITAR</button>
   </div>
 </div>
+
+<!-- 3 CARDS - 100% AUTOMÁTICO -->
+<div class="grid grid-cols-3 gap-2 p-2 -mt-2">
+  <!-- CHEIO -->
+  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-green-500">
+    <div class="text-[13px]">🔵 RESTANTE CHEIO</div>
+    <div id="restanteCheio" class="text-[36px] font-black">0</div>
+    <div class="text-[11px]">200 - vendido</div>
+  </div>
+  <!-- VAZIO -->
+  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-red-500">
+    <div class="text-[13px]">🔴 VAZIO</div>
+    <div id="vazio" class="text-[36px] font-black">0</div>
+    <div class="text-[11px]">igual ao vendido</div>
+  </div>
+  <!-- VENDIDO -->
+  <div class="bg-white rounded-2xl p-3 text-center shadow border-l-[8px] border-yellow-400">
+    <div class="text-[13px]">📦 VENDIDO</div>
+    <div id="vendido" class="text-[36px] font-black">0</div>
+    <div class="text-[11px]">soma Quant</div>
+  </div>
+</div>
+
+<!-- TABELA IGUAL SUA FOTO - 100% AUTO -->
+<div class="bg-white m-2 rounded-2xl p-2 shadow">
+  <div class="grid grid-cols-6 gap-1 mb-2">
+    <div class="bg-yellow-400 rounded-xl p-2 text-center font-black text-[12px]">Cliente</div>
+    <div class="bg-green-600 text-white rounded-xl p-2 text-center font-black text-[12px]">Quant</div>
+    <div class="bg-black text-white rounded-xl p-2 text-center font-black text-[12px]">Unit</div>
+    <div class="bg-yellow-200 rounded-xl p-2 text-center font-black text-[12px]">Total</div>
+    <div class="bg-red-500 text-white rounded-xl p-2 text-center font-black text-[12px]">PIX</div>
+    <div class="bg-teal-800 text-white rounded-xl p-2 text-center font-black text-[12px]">DH</div>
+  </div>
+  <div id="linhas"></div>
+
+  <div class="mt-3 font-bold text-[13px]">TOTAL: <span id="totalBot">0</span> bot | FIXO R$ <span id="totalFixo">0</span></div>
+  <div class="bg-yellow-400 rounded-xl p-3 mt-2 font-black text-center">⏰ PRA RECEBER AMANHÃ: R$ <span id="praReceber">0</span></div>
+  <div class="bg-red-500 text-white rounded-xl p-3 mt-2 font-black text-center">📝 FIADO TOTAL: R$ <span id="fiado">0</span></div>
+</div>
+
+<div class="grid grid-cols-3 gap-2 p-2">
+  <button onclick="gerarPDF()" class="bg-white p-3 rounded-xl font-bold shadow">📄 PDF</button>
+  <button onclick="fotoZap()" class="bg-yellow-400 p-3 rounded-xl font-bold shadow">🖼️ FOTO Zap</button>
+  <button onclick="addVenda()" class="bg-green-600 text-white p-3 rounded-xl font-bold shadow">+ Venda</button>
+</div>
+<div class="grid grid-cols-2 gap-2 p-2">
+  <button onclick="zerar()" class="bg-red-500 text-white p-3 rounded-xl font-bold">🗑️ ZERAR DIA</button>
+  <button onclick="location.reload()" class="bg-black text-white p-3 rounded-xl font-bold">Sair</button>
+</div>
+
+<script>
+let estoqueInicial = parseInt(localStorage.getItem('estoqueIni')) || 200;
+let dados = JSON.parse(localStorage.getItem('elshaday_auto')) || [
+ {c:'Paulo', q:10, u:86, pix:860},
+ {c:'Wellingto', q:6, u:85, pix:410},
+ {c:'Beto', q:8, u:83, pix:664},
+ {c:'Neto', q:33, u:82, pix:2706},
+ {c:'Rebeca', q:11, u:84, pix:924},
+ {c:'GiL', q:21, u:84, pix:764},
+ {c:'Melk', q:70, u:82, pix:5740},
+ {c:'Sérgio', q:52, u:85, pix:0},
+ {c:'Severino', q:52, u:83, pix:4316},
+];
+
+function salvar(){localStorage.setItem('elshaday_auto', JSON.stringify(dados)); localStorage.setItem('estoqueIni', estoqueInicial);}
+
+function render(){
+  let html=''; let somaQ=0, somaTotal=0, somaPix=0, somaDH=0;
+  dados.forEach((d,i)=>{
+    let total = (d.q||0)*(d.u||0);
+    let dh = total - (d.pix||0);
+    somaQ+=d.q||0; somaTotal+=total; somaPix+=d.pix||0; somaDH+=dh;
+    html+=`<div class="grid grid-cols-6 gap-1 mb-1">
+      <input class="col" value="${d.c}" oninput="dados[${i}].c=this.value; salvar(); render()">
+      <input class="col" type="number" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; salvar(); render()">
+      <input class="col" type="number" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; salvar(); render()">
+      <div class="col bg-yellow-100">R$ ${total}</div>
+      <input class="col" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; salvar(); render()">
+      <div class="col bg-teal-100">R$ ${dh}</div>
+    </div>`;
+  });
+  document.getElementById('linhas').innerHTML=html;
+
+  // FORMULAS 100% AUTOMÁTICAS
+  let restante = estoqueInicial - somaQ;
+  let vazio = somaQ;
+  let vendido = somaQ;
+
+  document.getElementById('restanteCheio').innerText=restante;
+  document.getElementById('cheioRestanteTop').innerText=restante;
+  document.getElementById('estInicialTxt').innerText=estoqueInicial;
+  document.getElementById('vazio').innerText=vazio;
+  document.getElementById('vendido').innerText=vendido;
+  document.getElementById('totalBot').innerText=somaQ;
+  document.getElementById('totalFixo').innerText=somaTotal;
+  document.getElementById('praReceber').innerText=somaDH;
+  document.getElementById('fiado').innerText=somaDH;
+}
+function editarEstoque(){let n=prompt('Estoque inicial?',estoqueInicial); if(n){estoqueInicial=parseInt(n); salvar(); render();}}
+function addVenda(){dados.push({c:'Nome', q:0, u:84, pix:0}); salvar(); render();}
+function zerar(){if(confirm('Zerar dia?')){dados.forEach(d=>{d.q=0; d.pix=0;}); salvar(); render();}}
+function gerarPDF(){window.print();}
+function fotoZap(){alert('Tire print agora - tabela 100% automática!');}
+render();
+</script>
+</body>
+</html>
