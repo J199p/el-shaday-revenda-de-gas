@@ -2,94 +2,120 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY SEM SENHA</title>
+<title>EL SHADAY FIX</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#f5f7fb;font-family:Arial}
 .top{background:#1e3a8a;color:#fff;padding:15px;text-align:center;border-radius:0 0 20px 20px}
-.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:10px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-.est input{width:100%;height:50px;border:2px dashed #16a34a;border-radius:12px;text-align:center;font-size:26px;font-weight:bold;background:#f0fdf4}
-.card{background:#fff;margin:12px;border-radius:20px;padding:12px}
-table{width:100%;border-spacing:4px}th{padding:12px 2px;border-radius:10px;color:#fff;font-size:11px;text-align:center} td input{width:100%;height:52px;border:2px solid #ddd;border-radius:10px;text-align:center;font-weight:bold;font-size:14px}
-.calc{height:52px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:11px;border:2px solid #ddd;background:#fff}
+.estoque{display:flex;gap:8px;margin:12px}.est{flex:1;background:#fff;border-radius:15px;padding:10px;text-align:center}
+.est input{width:100%;height:48px;border:2px dashed #16a34a;border-radius:12px;text-align:center;font-size:24px;font-weight:bold;background:#f0fdf4}
+.card{background:#fff;margin:12px;border-radius:16px;padding:10px;overflow-x:auto}
+table{width:100%;border-spacing:4px}th{padding:10px 2px;border-radius:10px;color:#fff;font-size:11px;text-align:center} td input{width:100%;height:50px;border:2px solid #ddd;border-radius:10px;text-align:center;font-weight:bold;font-size:14px}
+.calc{height:50px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:bold;font-size:12px;border:2px solid #ddd;background:#fff}
 .c1{background:#facc15;color:#000}.c2{background:#16a34a}.c3{background:#000}.c4{background:#facc15;color:#000}.c5{background:#2563eb}.c6{background:#0f766e}.c7{background:#ea580c}
-select.status{width:100%;height:52px;border-radius:10px;border:2px solid #ddd;font-weight:bold;font-size:10px;text-align:center}
-.btn{border:none;padding:12px 16px;border-radius:12px;font-weight:bold;color:#fff;background:#16a34a;font-size:13px}.btn-img{background:#facc15;color:#000}.btn-zerar{background:#ef4444}
+select.status{width:100%;height:50px;border-radius:10px;border:2px solid #ddd;font-weight:bold;font-size:10px}
+.btn{border:none;padding:12px 16px;border-radius:12px;font-weight:bold;color:#fff;background:#16a34a;font-size:13px;cursor:pointer}.btn-img{background:#facc15;color:#000}.btn-zerar{background:#ef4444}
 </style>
 </head>
 <body>
 <div id="areaPrint">
-<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:10px;border-radius:12px;margin-top:10px">📅 <input type="date" id="data"> - ESTOQUE: <input type="number" id="estoqueInicial" value="200" style="width:70px;border-radius:8px;text-align:center;font-weight:bold;border:1px solid #ccc" onchange="salvar()"> - <span id="status">✓ Salvo</span></div></div>
+<div class="top"><h1>🔥 EL SHADAY</h1><div style="background:#fff;color:#000;padding:10px;border-radius:12px;margin-top:10px">📅 <input type="date" id="data"> - ESTOQUE: <input type="number" id="estoqueInicial" value="200" style="width:70px;border-radius:8px;text-align:center;font-weight:bold;border:1px solid #ccc" oninput="salvar()"> - <span id="status">✓ Salvo</span></div></div>
 <div class="estoque">
-<div class="est" style="border-left:8px solid #16a34a"><small>🔵 CHEIO EDITÁVEL</small><input type="number" id="qCheio" value="200" oninput="manualCheio=true;salvar()"><br><button onclick="manualCheio=false;calcular();salvar()" style="font-size:9px;padding:4px;border:none;background:#16a34a;color:#fff;border-radius:5px;margin-top:4px">Voltar Auto</button></div>
-<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio" style="font-size:24px;font-weight:bold;margin-top:6px">0</p></div>
-<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend" style="font-size:24px;font-weight:bold;margin-top:6px">0</p></div>
+<div class="est" style="border-left:8px solid #16a34a"><small>🔵 CHEIO EDITÁVEL</small><input type="number" id="qCheio" value="200" oninput="manualCheio=true;salvar()"><br><button onclick="manualCheio=false;calcular();salvar()" style="font-size:10px;padding:4px 8px;border:none;background:#16a34a;color:#fff;border-radius:6px;margin-top:4px">Voltar Auto</button></div>
+<div class="est" style="border-left:8px solid #ef4444"><small>🔴 VAZIO</small><p id="qVazio" style="font-size:26px;font-weight:bold">0</p></div>
+<div class="est" style="border-left:8px solid #facc15"><small>📦 VENDIDO</small><p id="qVend" style="font-size:26px;font-weight:bold">0</p></div>
 </div>
-<div class="card"><table><thead><tr><th class="c1">Cliente</th><th class="c2">Qtd</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th><th class="c7">PAG?</th></tr></thead><tbody id="corpo"></tbody></table>
-<div id="totGeral" style="margin-top:10px;font-weight:bold;font-size:13px">TOTAL: 0</div>
-<div id="totAmanha" style="background:#facc15;color:#000;padding:8px;border-radius:10px;margin-top:6px;font-weight:bold">⏰ PRA RECEBER AMANHÃ: R$ 0</div>
-<div id="totFiado" style="background:#ef4444;color:#fff;padding:8px;border-radius:10px;margin-top:4px;font-weight:bold">📝 FIADO TOTAL: R$ 0</div>
+<div class="card">
+<table>
+<thead><tr><th class="c1">Cliente</th><th class="c2">Qtd</th><th class="c3">Unit</th><th class="c4">Total</th><th class="c5">PIX</th><th class="c6">DH</th><th class="c7">PAG?</th></tr></thead>
+<tbody id="corpo">
+<!-- 10 LINHAS JÁ PRONTAS -->
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+<tr><td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td></tr>
+</tbody>
+</table>
+<div id="totGeral" style="margin-top:12px;font-weight:bold">TOTAL: 0</div>
+<div id="totAmanha" style="background:#facc15;padding:8px;border-radius:10px;margin-top:6px;font-weight:bold">⏰ AMANHÃ: R$ 0</div>
+<div id="totFiado" style="background:#ef4444;color:#fff;padding:8px;border-radius:10px;margin-top:4px;font-weight:bold">📝 FIADO: R$ 0</div>
 </div>
 </div>
 
 <div style="margin:12px;display:flex;gap:8px;flex-wrap:wrap">
 <button class="btn btn-img" onclick="gerarImagem()">🖼️ FOTO Zap</button>
-<button class="btn" onclick="novaLinha(true)">+ Venda</button>
+<button class="btn" onclick="addLinha()">+ Venda</button>
 <button class="btn btn-zerar" onclick="zerarDia()">🗑️ ZERAR DIA</button>
 </div>
 
 <script>
-const CHAVE="ELSHADAY_SEM_SENHA_V3"; let manualCheio=false, podeSalvar=false;
-function novaLinha(salvarAgora,d){
+const CHAVE="ELSHADAY_FIX_V5"; let manualCheio=false;
+function addLinha(){
+ let tbody=document.getElementById('corpo');
  let tr=document.createElement('tr');
- tr.innerHTML=`<td><input class="cli" value="${d?d.n:'' :''}" placeholder="Nome"></td><td><input type="number" class="q" value="${d?d.q:'' :''}"></td><td><input type="number" class="vu" value="${d?d.vu:'' :''}"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" value="${d?d.pix:'' :''}"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar();"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td>`;
- if(d && d.st) tr.querySelector('.status').value=d.st;
- document.getElementById('corpo').appendChild(tr);
- tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{calcular();salvar();}));
- if(salvarAgora) salvar();
+ tr.innerHTML=`<td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td>`;
+ tbody.appendChild(tr); salvar();
 }
 function calcular(){
- let v=0,tG=0,tP=0,tD=0,tA=0,tF=0;
+ let vendido=0,tG=0,tP=0,tD=0,tA=0,tF=0;
  document.querySelectorAll('#corpo tr').forEach(r=>{
   let q=parseFloat(r.querySelector('.q').value)||0, vu=parseFloat(r.querySelector('.vu').value)||0, pix=parseFloat(r.querySelector('.pix').value)||0, st=r.querySelector('.status').value;
   let total=q*vu, dh=total-pix; if(dh<0) dh=0;
-  r.querySelector('.vt').innerText='R$ '+total.toFixed(0); r.querySelector('.dh').innerText='R$ '+dh.toFixed(0);
-  v+=q; tG+=total; tP+=pix; tD+=dh; if(st==='AMANHA') tA+=dh; if(st==='FIADO') tF+=dh;
+  r.querySelector('.vt').innerText='R$ '+total;
+  r.querySelector('.dh').innerText='R$ '+dh;
+  vendido+=q; tG+=total; tP+=pix; tD+=dh;
+  if(st==='AMANHA') tA+=dh;
+  if(st==='FIADO') tF+=dh;
  });
- if(!manualCheio){ let e=parseFloat(document.getElementById('estoqueInicial').value)||200; let rest=e-v; if(rest<0) rest=0; document.getElementById('qCheio').value=rest; }
- document.getElementById('qVend').innerText=v; document.getElementById('qVazio').innerText=v;
- document.getElementById('totGeral').innerText=`TOTAL: ${v} bot | FIXO R$ ${tG.toFixed(0)} | PIX R$ ${tP.toFixed(0)} | DH R$ ${tD.toFixed(0)} | CHEIO ${document.getElementById('qCheio').value}`;
- document.getElementById('totAmanha').innerText=`⏰ PRA RECEBER AMANHÃ: R$ ${tA.toFixed(0)}`; document.getElementById('totFiado').innerText=`📝 FIADO TOTAL: R$ ${tF.toFixed(0)}`;
+ let estoque=parseFloat(document.getElementById('estoqueInicial').value)||200;
+ if(!manualCheio){ let rest=estoque-vendido; if(rest<0) rest=0; document.getElementById('qCheio').value=rest; }
+ document.getElementById('qVend').innerText=vendido;
+ document.getElementById('qVazio').innerText=vendido;
+ document.getElementById('totGeral').innerText=`TOTAL: ${vendido} bot | FIXO R$ ${tG} | PIX R$ ${tP} | DH R$ ${tD} | CHEIO ${document.getElementById('qCheio').value}`;
+ document.getElementById('totAmanha').innerText=`⏰ PRA RECEBER AMANHÃ: R$ ${tA}`;
+ document.getElementById('totFiado').innerText=`📝 FIADO TOTAL: R$ ${tF}`;
 }
 function salvar(){
- if(!podeSalvar) return;
  calcular();
- let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>{ let n=r.querySelector('.cli').value; let q=r.querySelector('.q').value; if(n || q){ arr.push({n:n,q:q,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value,st:r.querySelector('.status').value}); }});
- if(arr.length===0) return;
- let dados={vendas:arr,data:document.getElementById('data').value,estoque:document.getElementById('estoqueInicial').value,cheio:document.getElementById('qCheio').value,manual:manualCheio};
- localStorage.setItem(CHAVE, JSON.stringify(dados));
- document.getElementById('status').innerText='Salvo ✓ '+new Date().toLocaleTimeString();
+ let arr=[]; document.querySelectorAll('#corpo tr').forEach(r=>{ let n=r.querySelector('.cli').value; let q=r.querySelector('.q').value; if(n||q||r.querySelector('.vu').value||r.querySelector('.pix').value){arr.push({n:n,q:q,vu:r.querySelector('.vu').value,pix:r.querySelector('.pix').value,st:r.querySelector('.status').value});}});
+ localStorage.setItem(CHAVE, JSON.stringify({vendas:arr,data:document.getElementById('data').value,estoque:document.getElementById('estoqueInicial').value,cheio:document.getElementById('qCheio').value,manual:manualCheio}));
+ document.getElementById('status').innerText='Salvo ✓ '+new Date().toLocaleTimeString().slice(0,5);
 }
-function iniciar(){
- let dados=null; try{ dados=JSON.parse(localStorage.getItem(CHAVE)||'null'); }catch(e){}
- document.getElementById('corpo').innerHTML='';
- if(dados && dados.vendas && dados.vendas.length>0){ dados.vendas.forEach(v=>novaLinha(false,v)); if(dados.data) document.getElementById('data').value=dados.data; if(dados.estoque) document.getElementById('estoqueInicial').value=dados.estoque; if(dados.cheio) document.getElementById('qCheio').value=dados.cheio; manualCheio=!!dados.manual; }
- else{ for(let i=0;i<6;i++) novaLinha(false,null); }
+function carregar(){
+ let d=null; try{d=JSON.parse(localStorage.getItem(CHAVE)||'null');}catch(e){}
+ if(d && d.vendas && d.vendas.length>0){
+   let tbody=document.getElementById('corpo'); tbody.innerHTML='';
+   d.vendas.forEach(v=>{
+     let tr=document.createElement('tr');
+     tr.innerHTML=`<td><input class="cli" value="${v.n||''}"></td><td><input type="number" class="q" value="${v.q||''}" oninput="calcular();salvar()"></td><td><input type="number" class="vu" value="${v.vu||''}" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" value="${v.pix||''}" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td>`;
+     if(v.st) tr.querySelector('.status').value=v.st;
+     tbody.appendChild(tr);
+   });
+   // completa até 10
+   while(tbody.children.length<10){ addLinhaSemSalvar(); }
+   if(d.data) document.getElementById('data').value=d.data;
+   if(d.estoque) document.getElementById('estoqueInicial').value=d.estoque;
+   if(d.cheio) document.getElementById('qCheio').value=d.cheio;
+   manualCheio=!!d.manual;
+ }
  if(!document.getElementById('data').value) document.getElementById('data').valueAsDate=new Date();
  calcular();
- setTimeout(()=>{ podeSalvar=true; },1000);
 }
-function zerarDia(){
- if(!confirm("Zerar tudo pro próximo dia?")) return;
- localStorage.removeItem(CHAVE);
- document.getElementById('corpo').innerHTML='';
- for(let i=0;i<6;i++) novaLinha(false,null);
- document.getElementById('estoqueInicial').value=200; document.getElementById('qCheio').value=200; manualCheio=false;
- document.getElementById('data').valueAsDate=new Date(); calcular(); podeSalvar=true; salvar();
- alert("Dia zerado!");
+function addLinhaSemSalvar(){
+ let tbody=document.getElementById('corpo');
+ let tr=document.createElement('tr');
+ tr.innerHTML=`<td><input class="cli"></td><td><input type="number" class="q" oninput="calcular();salvar()"></td><td><input type="number" class="vu" oninput="calcular();salvar()"></td><td><div class="calc vt">R$ 0</div></td><td><input type="number" class="pix" oninput="calcular();salvar()"></td><td><div class="calc dh">R$ 0</div></td><td><select class="status" onchange="calcular();salvar()"><option value="PAGO">✅ PAGO</option><option value="FIADO">📝 FIADO</option><option value="AMANHA">⏰ AMANHÃ</option></select></td>`;
+ tbody.appendChild(tr);
 }
-iniciar();
+function zerarDia(){ if(confirm("Zerar tudo?")){localStorage.removeItem(CHAVE); location.reload();} }
 async function gerarImagem(){ const area=document.getElementById('areaPrint'); const canvas=await html2canvas(area,{scale:2,backgroundColor:'#f5f7fb'}); const a=document.createElement('a'); a.download=`EL-SHADAY-${document.getElementById('data').value}.png`; a.href=canvas.toDataURL(); a.click(); }
+carregar();
 </script>
 </body>
 </html>
