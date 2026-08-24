@@ -60,13 +60,10 @@
 </div>
 
 <script>
-// MUDEI A CHAVE PRA V4 - ISSO FORÇA ZERAR TUDO QUE TAVA SALVO ANTES
+// === CORRIGIDO - NÃO ZERA MAIS SOZINHO ===
 let hoje = new Date().toISOString().split('T')[0];
-let estoque = 263;
-let dataSalva = localStorage.getItem('data_gas')||hoje;
 
-// AQUI AGORA TUDO ZERADO - UNIT TAMBÉM 0
-let dados = [
+const dadosPadrao = [
  {c:'Paulo',q:0,u:0,pix:0,dh:0},
  {c:'Wellin',q:0,u:0,pix:0,dh:0},
  {c:'Beto',q:0,u:0,pix:0,dh:0},
@@ -75,21 +72,25 @@ let dados = [
  {c:'Sérgio',q:0,u:0,pix:0,dh:0},
 ];
 
-// Limpa memória antiga
-localStorage.removeItem('dados_gas');
-localStorage.removeItem('dados_gas_v2');
-localStorage.removeItem('dados_gas_v3');
-localStorage.setItem('estoque_gas', estoque);
+// CARREGA DO CELULAR SE JÁ EXISTIR - SE NÃO, USA PADRÃO
+let dadosSalvos = localStorage.getItem('dados_gas_v4');
+let dados = dadosSalvos? JSON.parse(dadosSalvos) : dadosPadrao;
 
+let estoqueSalvo = localStorage.getItem('estoque_gas');
+let estoque = estoqueSalvo? parseInt(estoqueSalvo) : 263;
+
+let dataSalva = localStorage.getItem('data_gas') || hoje;
 document.getElementById('dataPlanilha').value = dataSalva;
 
 function salvar(){
   localStorage.setItem('dados_gas_v4', JSON.stringify(dados));
   localStorage.setItem('estoque_gas', estoque);
   let d = document.getElementById('dataPlanilha').value;
-  localStorage.setItem('data_gas', d);
-  let partes = d.split('-');
-  document.getElementById('dataExibe').innerText = partes[2]+'/'+partes[1]+'/'+partes[0];
+  if(d){
+    localStorage.setItem('data_gas', d);
+    let partes = d.split('-');
+    document.getElementById('dataExibe').innerText = partes[2]+'/'+partes[1]+'/'+partes[0];
+  }
 }
 
 function renderLinhas(){
@@ -105,7 +106,8 @@ function renderLinhas(){
   </div>`;
  });
  document.getElementById('linhas').innerHTML=html;
- calc(); salvar();
+ calc();
+ salvar();
 }
 
 function calc(){
@@ -126,18 +128,30 @@ function calc(){
  document.getElementById('faltaReceber').innerText=sTotal-(sPix+sDH);
 }
 
-function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n){estoque=parseInt(n)||estoque; salvar(); calc();}}
+function editarEstoque(){
+  let n=prompt('Quantos CHEIOS?',estoque);
+  if(n!==null){
+    estoque=parseInt(n)||estoque;
+    salvar(); calc();
+  }
+}
+
 function forcarZerar(){
- if(confirm('Zerar TUDO mesmo? Unit também vai pra 0')){
+ if(confirm('Zerar TUDO mesmo? Unit também vai pra 0 - SÓ AQUI ZERA!')){
   dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;});
-  localStorage.clear();
-  document.getElementById('dataPlanilha').value = hoje;
+  localStorage.setItem('dados_gas_v4', JSON.stringify(dados));
   renderLinhas();
-  alert('ZERADO! Agora tudo 0');
+  alert('ZERADO! Foi porque você clicou no ZERAR');
  }
 }
-function addLinha(){dados.push({c:'Novo',q:0,u:0,pix:0,dh:0}); salvar(); renderLinhas();}
+
+function addLinha(){
+  dados.push({c:'Novo',q:0,u:0,pix:0,dh:0});
+  salvar(); renderLinhas();
+}
+
 renderLinhas();
+window.addEventListener('beforeunload', salvar);
 </script>
 </body>
 </html>
