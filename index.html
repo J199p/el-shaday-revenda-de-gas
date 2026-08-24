@@ -6,7 +6,7 @@
 <title>EL SHADAY - 200 GÁS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-@media print{.no-print{display:none}.fixo-totais{position:static!important}}
+@media print{.no-print{display:none}.fixo-totais{position:static!important}.btn-x{display:none}}
 .fixo-totais{position:sticky; bottom:0; z-index:50}
 </style>
 </head>
@@ -18,32 +18,17 @@
     <div>ESTOQUE: <span id="estIni">263</span> - Rest: <span id="restTop">263</span></div>
   </div>
 </div>
-
 <div class="grid grid-cols-3 gap-2 p-2">
-  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500">
-    <div class="text-[9px] font-bold">🔵 CHEIO EDITÁVEL</div>
-    <div id="restanteCheio" class="text-[28px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">263</div>
-  </div>
-  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-red-500">
-    <div class="text-[9px] font-bold">🔴 VAZIO</div><div id="vazio" class="text-[28px] font-black">0</div>
-  </div>
-  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-yellow-400">
-    <div class="text-[9px] font-bold">📦 VENDIDO</div><div id="vendido" class="text-[28px] font-black">0</div>
-  </div>
+  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500"><div class="text-[9px] font-bold">🔵 CHEIO EDITÁVEL</div><div id="restanteCheio" class="text-[28px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">263</div></div>
+  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-red-500"><div class="text-[9px] font-bold">🔴 VAZIO</div><div id="vazio" class="text-[28px] font-black">0</div></div>
+  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-yellow-400"><div class="text-[9px] font-bold">📦 VENDIDO</div><div id="vendido" class="text-[28px] font-black">0</div></div>
 </div>
-
 <div class="bg-white m-2 rounded-2xl p-2 shadow">
-  <div class="grid grid-cols-6 gap-1 mb-2 text-white text-[8px] font-black">
-    <div class="bg-yellow-400 text-black rounded-lg p-2 text-center">Cliente</div>
-    <div class="bg-green-600 rounded-lg p-2 text-center">Quant</div>
-    <div class="bg-black rounded-lg p-2 text-center">Unit</div>
-    <div class="bg-yellow-200 text-black rounded-lg p-2 text-center">Total</div>
-    <div class="bg-blue-600 rounded-lg p-2 text-center">PIX</div>
-    <div class="bg-green-700 rounded-lg p-2 text-center">DH</div>
+  <div class="grid grid-cols-[1.1fr_0.6fr_0.6fr_0.7fr_0.6fr_0.6fr_0.32fr] gap-1 mb-2 text-white text-[8px] font-black">
+    <div class="bg-yellow-400 text-black rounded-lg p-2 text-center">Cliente</div><div class="bg-green-600 rounded-lg p-2 text-center">Quant</div><div class="bg-black rounded-lg p-2 text-center">Unit</div><div class="bg-yellow-200 text-black rounded-lg p-2 text-center">Total</div><div class="bg-blue-600 rounded-lg p-2 text-center">PIX</div><div class="bg-green-700 rounded-lg p-2 text-center">DH</div><div class="bg-red-500 rounded-lg p-2 text-center">X</div>
   </div>
   <div id="linhas"></div>
 </div>
-
 <div class="fixo-totais bg-white border-t-2 border-black p-2 shadow-[0_-4px_10px_rgba(0,0,0,0.2)] space-y-1">
   <div class="text-center font-bold text-[10px]">📅 Data da planilha: <span id="dataExibe">--/--/----</span></div>
   <div class="grid grid-cols-2 gap-1">
@@ -52,106 +37,28 @@
   </div>
   <div class="bg-[#1e3a8a] text-white rounded-lg p-2 font-black text-[12px] flex justify-between"><span>📦 TOTAL GERAL:</span><span>R$ <span id="totalGeral">0</span></span></div>
   <div class="bg-red-600 text-white rounded-lg p-2 font-black text-[13px] flex justify-between border-2 border-black"><span>⚠️ FALTA RECEBER:</span><span>R$ <span id="faltaReceber">0</span></span></div>
-  <div class="grid grid-cols-3 gap-2 pt-1 no-print">
-    <button onclick="addLinha()" class="bg-green-600 text-white p-2 rounded-xl font-bold text-[11px]">+ Venda</button>
+  <div class="grid grid-cols-4 gap-2 pt-1 no-print">
+    <button onclick="addLinha()" class="bg-green-600 text-white p-2 rounded-xl font-bold text-[12px]">+ Venda</button>
+    <button onclick="removerLinha()" class="bg-orange-500 text-white p-2 rounded-xl font-bold text-[12px]">- Folha</button>
     <button onclick="forcarZerar()" class="bg-red-600 text-white p-2 rounded-xl font-bold text-[11px]">🗑️ ZERAR</button>
     <button onclick="window.print()" class="bg-blue-800 text-white p-2 rounded-xl font-bold text-[11px]">📄 PDF</button>
   </div>
 </div>
-
 <script>
-// === CORRIGIDO - NÃO ZERA MAIS SOZINHO ===
 let hoje = new Date().toISOString().split('T')[0];
-
-const dadosPadrao = [
- {c:'Paulo',q:0,u:0,pix:0,dh:0},
- {c:'Wellin',q:0,u:0,pix:0,dh:0},
- {c:'Beto',q:0,u:0,pix:0,dh:0},
- {c:'Neto',q:0,u:0,pix:0,dh:0},
- {c:'Rebeca',q:0,u:0,pix:0,dh:0},
- {c:'Sérgio',q:0,u:0,pix:0,dh:0},
-];
-
-// CARREGA DO CELULAR SE JÁ EXISTIR - SE NÃO, USA PADRÃO
-let dadosSalvos = localStorage.getItem('dados_gas_v4');
-let dados = dadosSalvos? JSON.parse(dadosSalvos) : dadosPadrao;
-
-let estoqueSalvo = localStorage.getItem('estoque_gas');
-let estoque = estoqueSalvo? parseInt(estoqueSalvo) : 263;
-
-let dataSalva = localStorage.getItem('data_gas') || hoje;
-document.getElementById('dataPlanilha').value = dataSalva;
-
-function salvar(){
-  localStorage.setItem('dados_gas_v4', JSON.stringify(dados));
-  localStorage.setItem('estoque_gas', estoque);
-  let d = document.getElementById('dataPlanilha').value;
-  if(d){
-    localStorage.setItem('data_gas', d);
-    let partes = d.split('-');
-    document.getElementById('dataExibe').innerText = partes[2]+'/'+partes[1]+'/'+partes[0];
-  }
-}
-
-function renderLinhas(){
- let html='';
- dados.forEach((d,i)=>{
-  html+=`<div class="grid grid-cols-6 gap-1 mb-1">
-   <input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c}" oninput="dados[${i}].c=this.value; salvar()">
-   <input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()">
-   <input class="border rounded-lg p-1 text-center font-bold bg-white" type="number" inputmode="numeric" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()">
-   <div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px]">R$ 0</div>
-   <input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()">
-   <input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()">
-  </div>`;
- });
- document.getElementById('linhas').innerHTML=html;
- calc();
- salvar();
-}
-
-function calc(){
- let sQ=0, sTotal=0, sPix=0, sDH=0;
- dados.forEach((d,i)=>{
-  let tot=(d.q||0)*(d.u||0);
-  sQ+=d.q||0; sTotal+=tot; sPix+=d.pix||0; sDH+=d.dh||0;
-  let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+tot;
- });
- document.getElementById('restanteCheio').innerText=estoque-sQ;
- document.getElementById('restTop').innerText=estoque-sQ;
- document.getElementById('estIni').innerText=estoque;
- document.getElementById('vazio').innerText=sQ;
- document.getElementById('vendido').innerText=sQ;
- document.getElementById('totalPix').innerText=sPix;
- document.getElementById('totalDH').innerText=sDH;
- document.getElementById('totalGeral').innerText=sTotal;
- document.getElementById('faltaReceber').innerText=sTotal-(sPix+sDH);
-}
-
-function editarEstoque(){
-  let n=prompt('Quantos CHEIOS?',estoque);
-  if(n!==null){
-    estoque=parseInt(n)||estoque;
-    salvar(); calc();
-  }
-}
-
-function forcarZerar(){
- if(confirm('Zerar TUDO mesmo? Unit também vai pra 0 - SÓ AQUI ZERA!')){
-  dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;});
-  localStorage.setItem('dados_gas_v4', JSON.stringify(dados));
-  renderLinhas();
-  alert('ZERADO! Foi porque você clicou no ZERAR');
- }
-}
-
-function addLinha(){
-  dados.push({c:'Novo',q:0,u:0,pix:0,dh:0});
-  salvar(); renderLinhas();
-}
-
-renderLinhas();
-window.addEventListener('beforeunload', salvar);
+const dadosPadrao = [{c:'Paulo',q:0,u:0,pix:0,dh:0},{c:'Wellin',q:0,u:0,pix:0,dh:0},{c:'Beto',q:0,u:0,pix:0,dh:0},{c:'Neto',q:0,u:0,pix:0,dh:0},{c:'Rebeca',q:0,u:0,pix:0,dh:0},{c:'Sérgio',q:0,u:0,pix:0,dh:0},];
+let dadosSalvos = localStorage.getItem('dados_gas_v4'); let dados = dadosSalvos? JSON.parse(dadosSalvos) : dadosPadrao;
+let estoqueSalvo = localStorage.getItem('estoque_gas'); let estoque = estoqueSalvo? parseInt(estoqueSalvo) : 263;
+let dataSalva = localStorage.getItem('data_gas') || hoje; document.getElementById('dataPlanilha').value = dataSalva;
+function salvar(){localStorage.setItem('dados_gas_v4', JSON.stringify(dados)); localStorage.setItem('estoque_gas', estoque); let d=document.getElementById('dataPlanilha').value; if(d){localStorage.setItem('data_gas', d); let p=d.split('-'); document.getElementById('dataExibe').innerText=p[2]+'/'+p[1]+'/'+p[0];}}
+function renderLinhas(){let h=''; dados.forEach((d,i)=>{h+=`<div class="grid grid-cols-[1.1fr_0.6fr_0.6fr_0.7fr_0.6fr_0.6fr_0.32fr] gap-1 mb-1"><input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c}" oninput="dados[${i}].c=this.value; salvar()"><input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()"><input class="border rounded-lg p-1 text-center font-bold bg-white" type="number" inputmode="numeric" value="${d.u}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()"><div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px] flex items-center justify-center">R$ 0</div><input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()"><input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()"><button class="btn-x bg-red-500 text-white rounded-lg font-bold text-[14px]" onclick="removerLinhaIndice(${i})">✕</button></div>`;}); document.getElementById('linhas').innerHTML=h; calc(); salvar();}
+function calc(){let sQ=0,sT=0,sP=0,sD=0; dados.forEach((d,i)=>{let t=(d.q||0)*(d.u||0); sQ+=d.q||0; sT+=t; sP+=d.pix||0; sD+=d.dh||0; let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+t;}); document.getElementById('restanteCheio').innerText=estoque-sQ; document.getElementById('restTop').innerText=estoque-sQ; document.getElementById('estIni').innerText=estoque; document.getElementById('vazio').innerText=sQ; document.getElementById('vendido').innerText=sQ; document.getElementById('totalPix').innerText=sP; document.getElementById('totalDH').innerText=sD; document.getElementById('totalGeral').innerText=sT; document.getElementById('faltaReceber').innerText=sT-(sP+sD);}
+function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n!==null){estoque=parseInt(n)||estoque; salvar(); calc();}}
+function forcarZerar(){if(confirm('Zerar TUDO? Só aqui zera!')){dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;}); localStorage.setItem('dados_gas_v4', JSON.stringify(dados)); renderLinhas();}}
+function addLinha(){dados.push({c:'Novo',q:0,u:0,pix:0,dh:0}); salvar(); renderLinhas();}
+function removerLinha(){if(dados.length<=1){alert('Tem que ter pelo menos 1 folha!'); return;} if(confirm('Diminuir folha? Vai apagar a ÚLTIMA.')){dados.pop(); salvar(); renderLinhas();}}
+function removerLinhaIndice(i){if(dados.length<=1){alert('Tem que ter pelo menos 1 folha!'); return;} if(confirm('Apagar '+dados[i].c+'?')){dados.splice(i,1); salvar(); renderLinhas();}}
+renderLinhas(); window.addEventListener('beforeunload', salvar);
 </script>
 </body>
 </html>
