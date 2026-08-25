@@ -2,55 +2,47 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EL SHADAY - 200 GÁS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-*{box-sizing:border-box}
-html,body{width:100%;max-width:100vw;overflow-x:hidden;margin:0;padding:0}
+*{box-sizing:border-box}html,body{width:100%;overflow-x:hidden;margin:0;padding:0}
 body{background:#eef2f7;min-height:100dvh;padding-bottom:320px}
-.fixo-totais{position:fixed;bottom:0;left:0;right:0;width:100%;z-index:50;background:white;box-shadow: 0 -4px 20px rgba(0,0,0,0.15);}
-.tabela-wrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
-.tabela-wrapper::-webkit-scrollbar{height:6px}
-.tabela-wrapper::-webkit-scrollbar-thumb{background:#1e3a8a;border-radius:10px}
-.grid-linha{display:grid;grid-template-columns:130px 60px 60px 70px 60px 60px 45px;gap:5px;width:max-content;min-width:100%}
+.fixo-totais{position:fixed;bottom:0;left:0;right:0;width:100%;z-index:50;background:white;box-shadow:0 -4px 20px rgba(0,0,0,0.15)}
+.grid-linha{display:grid;grid-template-columns:1.3fr 0.6fr 0.6fr 0.7fr 0.6fr 0.6fr;gap:4px;width:100%}
 .grid-linha input,.grid-linha div{min-width:0;width:100%}
-@media print{.no-print{display:none}.fixo-totais{position:static!important} body{padding-bottom:0}}
+@media print{.no-print{display:none}.fixo-totais{position:static!important}body{padding-bottom:0}}
 </style>
 </head>
 <body>
 <div class="bg-[#1e3a8a] w-full p-3 text-center rounded-b-[20px]">
   <h1 class="text-white font-black text-[20px]">🔥 EL SHADAY - 200 GÁS</h1>
-  <div class="bg-white rounded-xl p-2 mt-2 flex justify-between items-center font-bold text-[11px] w-full">
+  <div class="bg-white rounded-xl p-2 mt-2 flex justify-between items-center font-bold text-[11px]">
     <div>📅 DATA: <input type="date" id="dataPlanilha" class="border rounded-lg p-1 font-black" onchange="salvar()"></div>
-    <div>EST: <span id="estIni">263</span> - Rest: <span id="restTop">263</span></div>
+    <div>EST: <span id="estIni">200</span> - Rest: <span id="restTop">200</span></div>
   </div>
 </div>
 
-<div class="grid grid-cols-3 gap-2 p-2 w-full">
-  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500"><div class="text-[8px] font-bold">🔵 CHEIO EDITÁVEL</div><div id="restanteCheio" class="text-[26px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">263</div></div>
+<div class="grid grid-cols-3 gap-2 p-2">
+  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500"><div class="text-[8px] font-bold">🔵 CHEIO EDITÁVEL</div><div id="restanteCheio" class="text-[26px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">200</div></div>
   <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-red-500"><div class="text-[8px] font-bold">🔴 VAZIO</div><div id="vazio" class="text-[26px] font-black">0</div></div>
   <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-yellow-400"><div class="text-[8px] font-bold">📦 VENDIDO</div><div id="vendido" class="text-[26px] font-black">0</div></div>
 </div>
 
 <div class="bg-white m-2 rounded-2xl p-2 shadow">
-  <div class="tabela-wrapper">
-    <div class="grid-linha mb-2 text-white text-[8px] font-black">
-      <div class="bg-yellow-400 text-black rounded-lg p-2 text-center">Cliente</div>
-      <div class="bg-green-600 rounded-lg p-2 text-center">Quant</div>
-      <div class="bg-black rounded-lg p-2 text-center">Unit</div>
-      <div class="bg-yellow-200 text-black rounded-lg p-2 text-center">Total</div>
-      <div class="bg-blue-600 rounded-lg p-2 text-center">PIX</div>
-      <div class="bg-green-700 rounded-lg p-2 text-center">DH</div>
-      <div class="bg-red-500 rounded-lg p-2 text-center">X</div>
-    </div>
-    <div id="linhas"></div>
+  <div class="grid-linha mb-2 text-white text-[8px] font-black">
+    <div class="bg-yellow-400 text-black rounded-lg p-2 text-center">Cliente</div>
+    <div class="bg-green-600 rounded-lg p-2 text-center">Quant</div>
+    <div class="bg-black rounded-lg p-2 text-center">Unit</div>
+    <div class="bg-yellow-200 text-black rounded-lg p-2 text-center">Total</div>
+    <div class="bg-blue-600 rounded-lg p-2 text-center">PIX</div>
+    <div class="bg-green-700 rounded-lg p-2 text-center">DH</div>
   </div>
-  <div class="text-[9px] text-gray-400 text-center mt-1">👉 Arraste pro lado pra ver o X 👉</div>
+  <div id="linhas"></div>
 </div>
 
 <div class="fixo-totais border-t-2 border-black p-2 space-y-1">
-  <div class="text-center font-bold text-[10px]">Data: <span id="dataExibe">--/--/----</span></div>
+  <div class="text-center font-bold text-[10px]">Data: <span id="dataExibe">24/08/2026</span></div>
   <div class="grid grid-cols-2 gap-1"><div class="bg-blue-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💰 PIX:</span><span>R$ <span id="totalPix">0</span></span></div><div class="bg-green-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💵 DH:</span><span>R$ <span id="totalDH">0</span></span></div></div>
   <div class="bg-[#1e3a8a] text-white rounded-lg p-2 font-black text-[12px] flex justify-between"><span>📦 TOTAL GERAL:</span><span>R$ <span id="totalGeral">0</span></span></div>
   <div class="bg-red-600 text-white rounded-lg p-2 font-black text-[13px] flex justify-between border-2 border-black"><span>⚠️ FALTA RECEBER:</span><span>R$ <span id="faltaReceber">0</span></span></div>
@@ -64,82 +56,24 @@ body{background:#eef2f7;min-height:100dvh;padding-bottom:320px}
 
 <script>
 let hoje = new Date().toISOString().split('T')[0];
-const dadosPadrao = [
-  {c:'Paulo',q:0,u:0,pix:0,dh:0},
-  {c:'Wellin',q:0,u:0,pix:0,dh:0},
-  {c:'Beto',q:0,u:0,pix:0,dh:0},
-  {c:'Neto',q:0,u:0,pix:0,dh:0},
-  {c:'Rebeca',q:0,u:0,pix:0,dh:0},
-  {c:'Sérgio',q:0,u:0,pix:0,dh:0},
-];
-
-let dados;
-try{
-  let salvos = localStorage.getItem('dados_gas_v4');
-  dados = salvos? JSON.parse(salvos) : dadosPadrao;
-  if(!Array.isArray(dados) || dados.length==0) dados = dadosPadrao;
-}catch(e){ dados = dadosPadrao; }
-
-let estoqueSalvo = localStorage.getItem('estoque_gas');
-let estoque = estoqueSalvo? parseInt(estoqueSalvo) : 263;
-let dataSalva = localStorage.getItem('data_gas') || hoje;
-document.getElementById('dataPlanilha').value = dataSalva;
-
-function salvar(){
-  try{
-    localStorage.setItem('dados_gas_v4', JSON.stringify(dados));
-    localStorage.setItem('estoque_gas', estoque.toString());
-    let d = document.getElementById('dataPlanilha').value;
-    if(d){
-      localStorage.setItem('data_gas', d);
-      let p = d.split('-');
-      document.getElementById('dataExibe').innerText = p[2]+'/'+p[1]+'/'+p[0];
-    }
-  }catch(e){}
-}
-
-function renderLinhas(){
-  let html = '';
-  dados.forEach((d,i)=>{
-    html += `<div class="grid-linha mb-1">
-      <input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c||''}" oninput="dados[${i}].c=this.value; salvar()">
-      <input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q||0}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()">
-      <input class="border rounded-lg p-1 text-center font-bold bg-white" type="number" inputmode="numeric" value="${d.u||0}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()">
-      <div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px] flex items-center justify-center">R$ 0</div>
-      <input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix||0}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()">
-      <input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh||0}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()">
-      <button class="bg-red-500 text-white rounded-lg font-black text-[12px]" onclick="removerLinhaIndice(${i})">✕</button>
-    </div>`;
-  });
-  document.getElementById('linhas').innerHTML = html;
-  calc();
-  salvar();
-}
-
-function calc(){
-  let sQ=0,sT=0,sP=0,sD=0;
-  dados.forEach((d,i)=>{
-    let tot = (parseInt(d.q)||0)*(parseInt(d.u)||0);
-    sQ+=parseInt(d.q)||0; sT+=tot; sP+=parseInt(d.pix)||0; sD+=parseInt(d.dh)||0;
-    let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+tot;
-  });
-  document.getElementById('restanteCheio').innerText = estoque - sQ;
-  document.getElementById('restTop').innerText = estoque - sQ;
-  document.getElementById('estIni').innerText = estoque;
-  document.getElementById('vazio').innerText = sQ;
-  document.getElementById('vendido').innerText = sQ;
-  document.getElementById('totalPix').innerText = sP;
-  document.getElementById('totalDH').innerText = sD;
-  document.getElementById('totalGeral').innerText = sT;
-  document.getElementById('faltaReceber').innerText = sT - (sP+sD);
-}
-
-function editarEstoque(){ let n=prompt('Quantos CHEIOS?',estoque); if(n!==null){ estoque=parseInt(n)||estoque; salvar(); calc(); } }
-function forcarZerar(){ if(confirm('Zerar TUDO?')){ dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;}); localStorage.setItem('dados_gas_v4',JSON.stringify(dados)); renderLinhas(); } }
-function addLinha(){ dados.push({c:'Novo',q:0,u:0,pix:0,dh:0}); salvar(); renderLinhas(); }
-function removerLinha(){ if(dados.length<=1){alert('Tem que ter pelo menos 1!'); return;} if(confirm('Diminuir folha? Apagar a ÚLTIMA?')){ dados.pop(); salvar(); renderLinhas(); } }
-function removerLinhaIndice(i){ if(dados.length<=1){alert('Tem que ter pelo menos 1!'); return;} if(confirm('Apagar '+dados[i].c+'?')){ dados.splice(i,1); salvar(); renderLinhas(); } }
-
+const dadosPadrao = [{c:'Balduca',q:0,u:0,pix:0,dh:0},{c:'Japonês',q:0,u:0,pix:0,dh:0},{c:'Francisco',q:0,u:0,pix:0,dh:0},{c:'Leandro',q:0,u:0,pix:0,dh:0},{c:'Raiane',q:0,u:0,pix:0,dh:0},{c:'Mercadinho Menezes',q:0,u:0,pix:0,dh:0}];
+let dados; try{let s=localStorage.getItem('dados_gas_v4'); dados=s?JSON.parse(s):dadosPadrao; if(!Array.isArray(dados)||dados.length==0) dados=dadosPadrao;}catch(e){dados=dadosPadrao;}
+let estoqueSalvo=localStorage.getItem('estoque_gas'); let estoque=estoqueSalvo?parseInt(estoqueSalvo):200;
+let dataSalva=localStorage.getItem('data_gas')||hoje; document.getElementById('dataPlanilha').value=dataSalva;
+function salvar(){try{localStorage.setItem('dados_gas_v4',JSON.stringify(dados)); localStorage.setItem('estoque_gas',estoque.toString()); let d=document.getElementById('dataPlanilha').value; if(d){localStorage.setItem('data_gas',d); let p=d.split('-'); document.getElementById('dataExibe').innerText=p[2]+'/'+p[1]+'/'+p[0];}}catch(e){}}
+function renderLinhas(){let html=''; dados.forEach((d,i)=>{html+=`<div class="grid-linha mb-1">
+<input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c||''}" oninput="dados[${i}].c=this.value; salvar()">
+<input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q||0}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()">
+<input class="border rounded-lg p-1 text-center font-bold bg-white" type="number" inputmode="numeric" value="${d.u||0}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()">
+<div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px] flex items-center justify-center">R$ 0</div>
+<input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix||0}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()">
+<input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh||0}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()">
+</div>`;}); document.getElementById('linhas').innerHTML=html; calc(); salvar();}
+function calc(){let sQ=0,sT=0,sP=0,sD=0; dados.forEach((d,i)=>{let tot=(parseInt(d.q)||0)*(parseInt(d.u)||0); sQ+=parseInt(d.q)||0; sT+=tot; sP+=parseInt(d.pix)||0; sD+=parseInt(d.dh)||0; let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+tot;}); document.getElementById('restanteCheio').innerText=estoque-sQ; document.getElementById('restTop').innerText=estoque-sQ; document.getElementById('estIni').innerText=estoque; document.getElementById('vazio').innerText=sQ; document.getElementById('vendido').innerText=sQ; document.getElementById('totalPix').innerText=sP; document.getElementById('totalDH').innerText=sD; document.getElementById('totalGeral').innerText=sT; document.getElementById('faltaReceber').innerText=sT-(sP+sD);}
+function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n!==null){estoque=parseInt(n)||estoque; salvar(); calc();}}
+function forcarZerar(){if(confirm('Zerar TUDO?')){dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;}); localStorage.setItem('dados_gas_v4',JSON.stringify(dados)); renderLinhas();}}
+function addLinha(){dados.push({c:'Novo',q:0,u:0,pix:0,dh:0}); salvar(); renderLinhas();}
+function removerLinha(){if(dados.length<=1){alert('Tem que ter pelo menos 1!'); return;} if(confirm('Apagar a ÚLTIMA linha?')){dados.pop(); salvar(); renderLinhas();}}
 renderLinhas();
 </script>
 </body>
