@@ -7,11 +7,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#eef2f7;padding:10px}
-.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
 .cards{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
 .card{flex:1;min-width:110px;background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
 .card b{font-size:10px;display:block;margin-bottom:4px}
-.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
+.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center}
+.card.valor{font-size:26px;font-weight:900}
 .tabela{background:white;border-radius:15px;padding:8px}
 .header{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
 .header span{padding:7px;border-radius:8px;font-weight:900;font-size:11px;text-align:center}
@@ -26,16 +27,16 @@ body{background:#eef2f7;padding:10px}
 
 <div class="topo">
   <h1>🔥 EL SHADAY - GÁS E ÁGUA 💧</h1>
-  <input type="date" id="data" style="padding:6px 12px;border-radius:20px;border:none;font-weight:bold">
+  <input type="date" id="data">
 </div>
 
 <div class="cards">
   <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()"></div>
-  <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><input type="number" id="gasVazio" value="0" oninput="salvar()"></div>
-  <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div style="font-size:26px;font-weight:900" id="gasVendido">0</div></div>
+  <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
+  <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
   <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()"></div>
-  <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><input type="number" id="aguaVazia" value="0" oninput="salvar()"></div>
-  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div style="font-size:26px;font-weight:900" id="aguaVendida">0</div></div>
+  <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
+  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
 
 <div class="tabela">
@@ -55,34 +56,30 @@ body{background:#eef2f7;padding:10px}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
   <div style="background:#2563eb;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>PIX:</span><span id="totalPix">R$ 0</span></div>
   <div style="background:#16a34a;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>DH:</span><span id="totalDh">R$ 0</span></div>
-  <div style="background:#ea580c;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div>
-  <div style="background:#0284c7;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
 </div>
 <div style="background:#0d2a6b;margin-top:8px;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
-<div style="background:#dc2626;margin-top:8px;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
 
 <div class="botoes">
   <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
-  <button style="background:#f97316" onclick="remLinha()">- Linha</button>
   <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR</button>
   <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
 </div>
 
 <script>
-let numLinhas = 8;
-let STORAGE_KEY = 'elshaday_gas_agua_v2';
+let numLinhas=8;
+let KEY='elshaday_final_v3';
 
-function criarLinhas(dadosSalvos){
+function criarLinhas(dados){
   let c=document.getElementById('linhas'); c.innerHTML='';
   for(let i=0;i<numLinhas;i++){
-    let d = dadosSalvos && dadosSalvos[i]? dadosSalvos[i] : {cliente:'', prod:'gas', q:0, u:0, p:0, dh:0};
+    let d=dados&&dados[i]?dados[i]:{cliente:'',prod:'gas',q:0,u:0,p:0,dh:0};
     c.innerHTML+=`
     <div class="linha">
-      <input class="c" placeholder="Cliente" value="${d.cliente}" oninput="salvar()">
-      <select class="prod" onchange="mudarProduto(this)">
+      <input class="c" value="${d.cliente}" placeholder="Cliente" oninput="salvar()">
+      <select class="prod" onchange="mudar(this)">
         <option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option>
         <option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option>
-        <option value="gasRev" ${d.prod=='gasRev'?'selected':''}>🔥 Revenda</option>
+        <option value="gasRev" ${d.prod=='gasRev'?'selected':''}>🔥 Rev</option>
       </select>
       <input type="number" class="q" value="${d.q}" oninput="salvar()">
       <input type="number" class="u" value="${d.u}" oninput="salvar()">
@@ -93,76 +90,66 @@ function criarLinhas(dadosSalvos){
   }
   calcular();
 }
-
-function mudarProduto(sel){
+function mudar(sel){
   let u=sel.closest('.linha').querySelector('.u');
   if(sel.value==='gas') u.value=115;
   if(sel.value==='gasRev') u.value=95;
   if(sel.value==='agua') u.value=12;
   salvar();
 }
-
 function calcular(){
-  let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;
+  let vg=0,va=0,pix=0,dh=0,geral=0;
   document.querySelectorAll('.linha').forEach(l=>{
     let pr=l.querySelector('.prod').value;
     let q=parseFloat(l.querySelector('.q').value)||0;
     let u=parseFloat(l.querySelector('.u').value)||0;
     let p=parseFloat(l.querySelector('.p').value)||0;
-    let d=parseFloat(l.querySelector('.d').value)||0;
-    let tot=q*u;
-    l.querySelector('.total').innerText='R$ '+tot;
-    if(pr.includes('gas')){vg+=q; tGas+=tot;} else {va+=q; tAgua+=tot;}
-    pix+=p; dh+=d; geral+=tot;
+    let dd=parseFloat(l.querySelector('.d').value)||0;
+    l.querySelector('.total').innerText='R$ '+(q*u);
+    if(pr.includes('gas')) vg+=q; else va+=q;
+    pix+=p; dh+=dd; geral+=(q*u);
   });
+  // AQUI ESTÁ A CORREÇÃO - VAZIO = VENDIDO
+  document.getElementById('gasVazio').innerText=vg;
+  document.getElementById('aguaVazia').innerText=va;
   document.getElementById('gasVendido').innerText=vg;
   document.getElementById('aguaVendida').innerText=va;
   document.getElementById('totalPix').innerText='R$ '+pix;
   document.getElementById('totalDh').innerText='R$ '+dh;
-  document.getElementById('totalGas').innerText='R$ '+tGas;
-  document.getElementById('totalAgua').innerText='R$ '+tAgua;
   document.getElementById('totalGeral').innerText='R$ '+geral;
-  document.getElementById('falta').innerText='R$ '+(geral-(pix+dh));
   let gc=parseInt(document.getElementById('gasCheio').value)||0;
   let ac=parseInt(document.getElementById('aguaCheia').value)||0;
-  let data=document.getElementById('data').value;
-  if(data){let [a,m,d]=data.split('-'); document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;}
+  document.getElementById('rodape').innerText=`Gás Rest: ${gc-vg} | Água Rest: ${ac-va} | Vasilhames pra trocar: Gás ${vg} e Água ${va}`;
 }
-
 function salvar(){
   calcular();
-  let dados = {
-    gasCheio: document.getElementById('gasCheio').value,
-    gasVazio: document.getElementById('gasVazio').value,
-    aguaCheia: document.getElementById('aguaCheia').value,
-    aguaVazia: document.getElementById('aguaVazia').value,
-    data: document.getElementById('data').value,
-    linhas: []
+  let dados={
+    gasCheio:document.getElementById('gasCheio').value,
+    aguaCheia:document.getElementById('aguaCheia').value,
+    data:document.getElementById('data').value,
+    linhas:[]
   };
   document.querySelectorAll('.linha').forEach(l=>{
     dados.linhas.push({
-      cliente: l.querySelector('.c').value,
-      prod: l.querySelector('.prod').value,
-      q: l.querySelector('.q').value,
-      u: l.querySelector('.u').value,
-      p: l.querySelector('.p').value,
-      dh: l.querySelector('.d').value
+      cliente:l.querySelector('.c').value,
+      prod:l.querySelector('.prod').value,
+      q:l.querySelector('.q').value,
+      u:l.querySelector('.u').value,
+      p:l.querySelector('.p').value,
+      dh:l.querySelector('.d').value
     });
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+  localStorage.setItem(KEY,JSON.stringify(dados));
 }
-
 function carregar(){
-  let salvo = localStorage.getItem(STORAGE_KEY);
-  if(salvo){
+  let s=localStorage.getItem(KEY);
+  if(s){
     try{
-      let d = JSON.parse(salvo);
-      document.getElementById('gasCheio').value = d.gasCheio || 200;
-      document.getElementById('gasVazio').value = d.gasVazio || 0;
-      document.getElementById('aguaCheia').value = d.aguaCheia || 150;
-      document.getElementById('aguaVazia').value = d.aguaVazia || 0;
-      document.getElementById('data').value = d.data || new Date().toISOString().split('T')[0];
-      numLinhas = d.linhas? d.linhas.length : 8;
+      let d=JSON.parse(s);
+      document.getElementById('gasCheio').value=d.gasCheio||200;
+      document.getElementById('aguaCheia').value=d.aguaCheia||150;
+      document.getElementById('data').value=d.data||new Date().toISOString().split('T')[0];
+      numLinhas=d.linhas?d.linhas.length:8;
       criarLinhas(d.linhas);
       return;
     }catch(e){}
@@ -170,22 +157,13 @@ function carregar(){
   document.getElementById('data').value=new Date().toISOString().split('T')[0];
   criarLinhas();
 }
-
-function addLinha(){numLinhas++; criarLinhas(); salvar();}
-function remLinha(){if(numLinhas>1){numLinhas--; let d=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d&&d.linhas) d.linhas.pop(); criarLinhas(d?d.linhas:null); salvar();}}
-function zerarTudo(){
-  if(confirm('Tem certeza que quer ZERAR TUDO? Isso apaga tudo salvo!')){
-    localStorage.removeItem(STORAGE_KEY);
-    document.getElementById('gasCheio').value=200;
-    document.getElementById('gasVazio').value=0;
-    document.getElementById('aguaCheia').value=150;
-    document.getElementById('aguaVazia').value=0;
-    criarLinhas();
-  }
-}
+function addLinha(){numLinhas++; salvar(); carregar();}
+function zerarTudo(){if(confirm('Zerar tudo?')){localStorage.removeItem(KEY); location.reload();}}
 
 carregar();
-document.getElementById('data').addEventListener('change', salvar);
+document.getElementById('gasCheio').addEventListener('input',salvar);
+document.getElementById('aguaCheia').addEventListener('input',salvar);
+document.getElementById('data').addEventListener('change',salvar);
 </script>
 </body>
 </html>
