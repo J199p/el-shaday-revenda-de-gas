@@ -50,8 +50,25 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </div>
 <script>
 const SENHA="822078@";
-function verificarSenha(){let d=document.getElementById('senhaInput').value;if(d===SENHA){document.getElementById('bloqueio').style.display='none';localStorage.setItem('logado_elshaday','sim');}else{document.getElementById('erro').style.display='block';document.getElementById('senhaInput').value='';}}
-if(localStorage.getItem('logado_elshaday')==='sim'){document.getElementById('bloqueio').style.display='none';}
+function verificarSenha(){
+  let d=document.getElementById('senhaInput').value;
+  if(d===SENHA){
+    document.getElementById('bloqueio').style.display='none';
+  }else{
+    document.getElementById('erro').style.display='block';
+    document.getElementById('senhaInput').value='';
+  }
+}
+// SEMPRE pede senha ao abrir
+document.getElementById('bloqueio').style.display='flex';
+// Se minimizar/sair e voltar, pede senha de novo
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible'){
+    document.getElementById('bloqueio').style.display='flex';
+    document.getElementById('senhaInput').value='';
+    document.getElementById('erro').style.display='none';
+  }
+});
 document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')verificarSenha();});
 </script>
 <div class="topo">
