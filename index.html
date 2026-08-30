@@ -7,30 +7,23 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#eef2f7;padding:10px}
-.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
 .cards{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
-.card{flex:1;min-width:120px;background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);border-left:6px solid}
-.card b{font-size:10px;display:block}
-.card input{font-size:24px;font-weight:900;width:100%;border:2px dashed #00c950;border-radius:10px;text-align:center}
-.card .valor{font-size:24px;font-weight:900}
-.cheio{border-color:#00c950}
-.vazio{border-color:#ef4444}
-.agua{border-color:#0ea5e9}
-.agua-vazio{border-color:#0284c7}
-
+.card{flex:1;min-width:110px;background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
+.card b{font-size:10px;display:block;margin-bottom:3px}
+.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
+.card.valor{font-size:26px;font-weight:900}
 .tabela{background:white;border-radius:15px;padding:8px;overflow-x:auto}
 .header{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
 .header span{padding:6px;border-radius:8px;font-weight:900;font-size:10px;text-align:center}
 .linha{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:5px}
-.linha input, .linha select{padding:8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;width:100%;font-size:12px}
+.linha input,.linha select{padding:8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;width:100%;font-size:12px}
 .total{background:#fef9c3;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px}
-
 .resumo{margin-top:12px}
 .resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .resumo-grid div{padding:10px;border-radius:12px;color:white;font-weight:900;font-size:13px;display:flex;justify-content:space-between}
 .geral{background:#0d2a6b;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;margin-bottom:8px;font-size:16px}
 .falta{background:#dc2626;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between}
-
 .botoes{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .botoes button{flex:1;min-width:70px;padding:14px;border:none;border-radius:12px;font-weight:900;color:white}
 </style>
@@ -42,13 +35,12 @@ body{background:#eef2f7;padding:10px}
   <input type="date" id="data" style="padding:6px;border-radius:20px;border:none;font-weight:bold">
 </div>
 
-<!-- ESTOQUE GÁS -->
 <div class="cards">
-  <div class="card cheio"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="50" oninput="calcular()"></div>
-  <div class="card vazio"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">150</div></div>
+  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="0" oninput="calcular()"></div>
+  <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><input type="number" id="gasVazio" value="0" oninput="calcular()"></div>
   <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
-  <div class="card agua"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="30" oninput="calcular()"></div>
-  <div class="card agua-vazio"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">20</div></div>
+  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="0" oninput="calcular()"></div>
+  <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><input type="number" id="aguaVazia" value="0" oninput="calcular()"></div>
   <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
 
@@ -94,32 +86,28 @@ function criarLinhas(){
     <div class="linha">
       <input placeholder="Cliente">
       <select class="prod" onchange="mudarProduto(this)">
-        <option value="gas">🔥 GÁS P13</option>
-        <option value="agua">💧 ÁGUA 20L</option>
-        <option value="gasRevenda">🔥 GÁS Revenda</option>
+        <option value="gas">🔥 GÁS</option>
+        <option value="agua">💧 ÁGUA</option>
+        <option value="gasRevenda">🔥 Revenda</option>
       </select>
       <input type="number" class="q" value="0" oninput="calcular()">
       <input type="number" class="u" value="115" oninput="calcular()">
       <div class="total">R$ 0</div>
       <input type="number" class="p" value="0" oninput="calcular()" style="border-color:#3b82f6;color:#2563eb">
-      <input type="number" class="d" value="0" oninput="calcular()" style="border-color:#16a34a">
+      <input type="number" class="d" value="0" oninput="calcular()">
     </div>`;
   }
 }
 function mudarProduto(sel){
-  let linha=sel.closest('.linha');
-  let unit=linha.querySelector('.u');
-  if(sel.value==='gas') unit.value=115;
-  if(sel.value==='gasRevenda') unit.value=95;
-  if(sel.value==='agua') unit.value=12;
+  let u=sel.closest('.linha').querySelector('.u');
+  if(sel.value==='gas') u.value=115;
+  if(sel.value==='gasRevenda') u.value=95;
+  if(sel.value==='agua') u.value=12;
   calcular();
 }
 function calcular(){
-  let gasCheio=parseInt(document.getElementById('gasCheio').value)||0;
-  let aguaCheia=parseInt(document.getElementById('aguaCheia').value)||0;
   let linhas=document.querySelectorAll('.linha');
   let vendGas=0, vendAgua=0, somaPix=0, somaDh=0, somaGeral=0, somaGas=0, somaAgua=0, lucro=0;
-
   linhas.forEach(l=>{
     let prod=l.querySelector('.prod').value;
     let q=parseFloat(l.querySelector('.q').value)||0;
@@ -128,15 +116,10 @@ function calcular(){
     let d=parseFloat(l.querySelector('.d').value)||0;
     let total=q*u;
     l.querySelector('.total').innerText='R$ '+total;
-
-    if(prod.includes('gas')){ vendGas+=q; somaGas+=total; lucro+=q*(u-85); }
-    else{ vendAgua+=q; somaAgua+=total; lucro+=q*(u-6); }
-
+    if(prod.includes('gas')){vendGas+=q;somaGas+=total;lucro+=q*(u-85);}
+    else{vendAgua+=q;somaAgua+=total;lucro+=q*(u-6);}
     somaPix+=p; somaDh+=d; somaGeral+=total;
   });
-
-  document.getElementById('gasVazio').innerText=200-gasCheio;
-  document.getElementById('aguaVazia').innerText=50-aguaCheia;
   document.getElementById('gasVendido').innerText=vendGas;
   document.getElementById('aguaVendida').innerText=vendAgua;
   document.getElementById('totalPix').innerText='R$ '+somaPix;
@@ -147,12 +130,23 @@ function calcular(){
   document.getElementById('falta').innerText='R$ '+(somaGeral-(somaPix+somaDh));
   document.getElementById('lucro').innerText='R$ '+lucro;
 
+  let gc=parseInt(document.getElementById('gasCheio').value)||0;
+  let ac=parseInt(document.getElementById('aguaCheia').value)||0;
   let data=document.getElementById('data').value;
-  if(data){ let [a,m,d]=data.split('-'); document.getElementById('dataRodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gasCheio-vendGas} | Água Rest: ${aguaCheia-vendAgua}`; }
+  if(data){let [a,m,d]=data.split('-'); document.getElementById('dataRodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vendGas} | Água Rest: ${ac-vendAgua}`;}
 }
 function addLinha(){numLinhas++;criarLinhas();calcular();}
 function remLinha(){if(numLinhas>1){numLinhas--;criarLinhas();calcular();}}
-function zerar(){if(confirm('Zerar vendas de hoje?')){document.querySelectorAll('.linha .q, .linha .p, .linha .d').forEach(i=>i.value=0);calcular();}}
+function zerar(){
+  if(confirm('Zerar tudo?')){
+    document.getElementById('gasCheio').value=0;
+    document.getElementById('gasVazio').value=0;
+    document.getElementById('aguaCheia').value=0;
+    document.getElementById('aguaVazia').value=0;
+    document.querySelectorAll('.linha.q,.linha.p,.linha.d').forEach(i=>i.value=0);
+    calcular();
+  }
+}
 document.getElementById('data').value=new Date().toISOString().split('T')[0];
 criarLinhas(); calcular();
 document.getElementById('data').addEventListener('change', calcular);
