@@ -3,30 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY - GÁS E ÁGUA</title>
+<title>ALYSSON GÁS E ÁGUA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#eef2f7;padding:10px}
-.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center}
-.cards{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
-.card{flex:1;min-width:110px;background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
+body{background:#eef2f7;padding:10px;padding-bottom:30px}
+.topo{background:#0d2a6b;color:white;padding:16px;border-radius:15px;text-align:center}
+.topo h1{font-size:22px;font-weight:900}
+.topo input{margin-top:8px;padding:6px 14px;border-radius:20px;border:none;font-weight:bold;font-size:14px}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
+.card{background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
 .card b{font-size:10px;display:block;margin-bottom:4px}
-.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center}
-.card.valor{font-size:26px;font-weight:900}
+.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
+.card div.valor{font-size:26px;font-weight:900}
 .tabela{background:white;border-radius:15px;padding:8px}
 .header{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
 .header span{padding:7px;border-radius:8px;font-weight:900;font-size:11px;text-align:center}
 .linha{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:5px}
 .linha input,.linha select{padding:8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;width:100%;font-size:12px}
 .total{background:#fef9c3;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px}
-.botoes{display:flex;gap:8px;margin-top:12px}
-.botoes button{flex:1;padding:14px;border:none;border-radius:12px;font-weight:900;color:white}
+.resumo{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.resumo-linha{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.resumo-box{padding:12px 14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.resumo-full{padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:16px}
+.botoes{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:12px}
+.botoes button{padding:16px 6px;border:none;border-radius:12px;font-weight:900;color:white;font-size:14px}
+.data-rodape{text-align:center;font-weight:bold;margin:10px 0;font-size:13px}
 </style>
 </head>
 <body>
 
 <div class="topo">
-  <h1>🔥 EL SHADAY - GÁS E ÁGUA 💧</h1>
+  <h1>🔥 ALYSSON GÁS E ÁGUA 💧</h1>
   <input type="date" id="data">
 </div>
 
@@ -50,24 +57,39 @@ body{background:#eef2f7;padding:10px}
     <span style="background:#16a34a;color:white">DH</span>
   </div>
   <div id="linhas"></div>
-  <div id="rodape" style="text-align:center;font-weight:bold;margin-top:10px;font-size:13px"></div>
+  <div class="data-rodape" id="rodape"></div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-  <div style="background:#2563eb;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>PIX:</span><span id="totalPix">R$ 0</span></div>
-  <div style="background:#16a34a;padding:10px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>DH:</span><span id="totalDh">R$ 0</span></div>
+<!-- FUNÇÕES DE BAIXO IGUAL VOCÊ PEDIU -->
+<div class="resumo">
+  <div class="data-rodape" id="dataTopo" style="margin-bottom:2px"></div>
+
+  <div class="resumo-linha">
+    <div class="resumo-box" style="background:#2563eb"><span>💰 PIX:</span><span id="totalPix">R$ 0</span></div>
+    <div class="resumo-box" style="background:#16a34a"><span>💵 DH:</span><span id="totalDh">R$ 0</span></div>
+  </div>
+
+  <div class="resumo-full" style="background:#1e3a8a"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
+
+  <div class="resumo-full" style="background:#dc2626;border:2px solid #000"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
+
+  <!-- EXTRAS GÁS E ÁGUA -->
+  <div class="resumo-linha">
+    <div class="resumo-box" style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div>
+    <div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
+  </div>
 </div>
-<div style="background:#0d2a6b;margin-top:8px;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between"><span>TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
 
 <div class="botoes">
   <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
+  <button style="background:#f97316" onclick="remLinha()">- Folha</button>
   <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR</button>
   <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
 </div>
 
 <script>
 let numLinhas=8;
-let KEY='elshaday_final_v3';
+let KEY='alysson_final_completo';
 
 function criarLinhas(dados){
   let c=document.getElementById('linhas'); c.innerHTML='';
@@ -77,9 +99,9 @@ function criarLinhas(dados){
     <div class="linha">
       <input class="c" value="${d.cliente}" placeholder="Cliente" oninput="salvar()">
       <select class="prod" onchange="mudar(this)">
-        <option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option>
-        <option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option>
-        <option value="gasRev" ${d.prod=='gasRev'?'selected':''}>🔥 Rev</option>
+        <option value="gas" ${d.prod=='gas'?'selected':''}>🔥</option>
+        <option value="agua" ${d.prod=='agua'?'selected':''}>💧</option>
+        <option value="gasRev" ${d.prod=='gasRev'?'selected':''}>🔥R</option>
       </select>
       <input type="number" class="q" value="${d.q}" oninput="salvar()">
       <input type="number" class="u" value="${d.u}" oninput="salvar()">
@@ -98,28 +120,37 @@ function mudar(sel){
   salvar();
 }
 function calcular(){
-  let vg=0,va=0,pix=0,dh=0,geral=0;
+  let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;
   document.querySelectorAll('.linha').forEach(l=>{
     let pr=l.querySelector('.prod').value;
     let q=parseFloat(l.querySelector('.q').value)||0;
     let u=parseFloat(l.querySelector('.u').value)||0;
     let p=parseFloat(l.querySelector('.p').value)||0;
     let dd=parseFloat(l.querySelector('.d').value)||0;
-    l.querySelector('.total').innerText='R$ '+(q*u);
-    if(pr.includes('gas')) vg+=q; else va+=q;
-    pix+=p; dh+=dd; geral+=(q*u);
+    let tot=q*u;
+    l.querySelector('.total').innerText='R$ '+tot;
+    if(pr.includes('gas')){vg+=q; tGas+=tot;} else {va+=q; tAgua+=tot;}
+    pix+=p; dh+=dd; geral+=tot;
   });
-  // AQUI ESTÁ A CORREÇÃO - VAZIO = VENDIDO
+  // VAZIO AUTOMÁTICO
   document.getElementById('gasVazio').innerText=vg;
   document.getElementById('aguaVazia').innerText=va;
   document.getElementById('gasVendido').innerText=vg;
   document.getElementById('aguaVendida').innerText=va;
   document.getElementById('totalPix').innerText='R$ '+pix;
   document.getElementById('totalDh').innerText='R$ '+dh;
+  document.getElementById('totalGas').innerText='R$ '+tGas;
+  document.getElementById('totalAgua').innerText='R$ '+tAgua;
   document.getElementById('totalGeral').innerText='R$ '+geral;
+  document.getElementById('falta').innerText='R$ '+(geral-(pix+dh));
   let gc=parseInt(document.getElementById('gasCheio').value)||0;
   let ac=parseInt(document.getElementById('aguaCheia').value)||0;
-  document.getElementById('rodape').innerText=`Gás Rest: ${gc-vg} | Água Rest: ${ac-va} | Vasilhames pra trocar: Gás ${vg} e Água ${va}`;
+  let data=document.getElementById('data').value;
+  if(data){
+    let [a,m,d]=data.split('-');
+    document.getElementById('dataTopo').innerText=`Data: ${d}/${m}/${a}`;
+    document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;
+  }
 }
 function salvar(){
   calcular();
@@ -158,8 +189,8 @@ function carregar(){
   criarLinhas();
 }
 function addLinha(){numLinhas++; salvar(); carregar();}
+function remLinha(){if(numLinhas>1){numLinhas--; let d=JSON.parse(localStorage.getItem(KEY)); if(d&&d.linhas) d.linhas.pop(); localStorage.setItem(KEY,JSON.stringify(d)); carregar();}}
 function zerarTudo(){if(confirm('Zerar tudo?')){localStorage.removeItem(KEY); location.reload();}}
-
 carregar();
 document.getElementById('gasCheio').addEventListener('input',salvar);
 document.getElementById('aguaCheia').addEventListener('input',salvar);
