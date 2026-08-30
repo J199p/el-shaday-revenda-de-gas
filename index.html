@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALYSSON GÁS E ÁGUA</title>
+<title>GRUPO EL SHADAY GÁS</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#eef2f7;padding:10px;padding-bottom:30px}
@@ -37,8 +37,37 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </head>
 <body>
 
+<!-- BLOQUEIO SENHA 822078@ -->
+<div id="bloqueio" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0d2a6b;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">
+  <h1 style="color:white;font-size:24px;margin-bottom:10px;text-align:center">🔒 GRUPO EL SHADAY GÁS</h1>
+  <p style="color:white;margin-bottom:15px">Digite a senha:</p>
+  <input type="password" id="senhaInput" placeholder="•••••••" style="padding:16px;border-radius:12px;border:none;width:240px;text-align:center;font-size:22px;font-weight:900;letter-spacing:4px">
+  <button onclick="verificarSenha()" style="margin-top:12px;padding:14px 50px;background:#16a34a;color:white;border:none;border-radius:12px;font-weight:900;font-size:16px">ENTRAR</button>
+  <p id="erro" style="color:#ff6b6b;margin-top:10px;display:none;font-weight:bold">❌ Senha errada!</p>
+</div>
+<script>
+const SENHA = "822078@";
+function verificarSenha(){
+  let digitada = document.getElementById('senhaInput').value;
+  if(digitada === SENHA){
+    document.getElementById('bloqueio').style.display='none';
+    localStorage.setItem('logado_elshaday','sim');
+  } else {
+    document.getElementById('erro').style.display='block';
+    document.getElementById('senhaInput').value='';
+  }
+}
+if(localStorage.getItem('logado_elshaday')==='sim'){
+  document.getElementById('bloqueio').style.display='none';
+}
+document.getElementById('senhaInput').addEventListener('keydown', function(e){
+  if(e.key==='Enter') verificarSenha();
+});
+</script>
+<!-- FIM BLOQUEIO -->
+
 <div class="topo">
-  <h1>🔥 ALYSSON GÁS E ÁGUA 💧</h1>
+  <h1>🔥 GRUPO EL SHADAY GÁS 💧</h1>
   <input type="date" id="data">
 </div>
 
