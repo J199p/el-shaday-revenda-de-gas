@@ -9,24 +9,30 @@
 body{background:#eef2f7;padding:10px;padding-bottom:30px}
 .topo{background:#0d2a6b;color:white;padding:16px;border-radius:15px;text-align:center}
 .topo h1{font-size:22px;font-weight:900}
-.topo input{margin-top:8px;padding:6px 14px;border-radius:20px;border:none;font-weight:bold}
+.topo input{margin-top:8px;padding:8px 14px;border-radius:20px;border:none;font-weight:bold;font-size:16px}
 .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.card{background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
-.card b{font-size:10px;display:block;margin-bottom:4px}
-.card input{font-size:26px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
-.card div.valor{font-size:26px;font-weight:900}
-.tabela{background:white;border-radius:15px;padding:8px}
+.card{background:white;padding:12px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
+.card b{font-size:11px;display:block;margin-bottom:4px}
+.card input{font-size:28px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
+.card div.valor{font-size:28px;font-weight:900}
+.tabela{background:white;border-radius:15px;padding:10px}
 .header{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
-.header span{padding:7px;border-radius:8px;font-weight:900;font-size:11px;text-align:center}
+.header span{padding:8px;border-radius:10px;font-weight:900;font-size:12px;text-align:center}
 .linha{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:5px}
-.linha input,.linha select{padding:8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;width:100%;font-size:12px}
-.total{background:#fef9c3;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px}
+.linha input,.linha select{padding:10px 4px;border:1px solid #ddd;border-radius:10px;text-align:center;font-weight:bold;width:100%;font-size:13px}
+.total{background:#fef9c3;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px}
 .resumo{margin-top:12px;display:flex;flex-direction:column;gap:8px}
 .resumo-linha{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.resumo-box{padding:12px 14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:14px}
+.resumo-box{padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:15px}
 .resumo-full{padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:16px}
 .botoes{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:12px}
-.botoes button{padding:16px 6px;border:none;border-radius:12px;font-weight:900;color:white;font-size:14px}
+.botoes button{padding:14px 6px;border:none;border-radius:12px;font-weight:900;color:white;font-size:13px}
+.hist{background:white;border-radius:15px;padding:12px;margin-top:12px;display:none}
+.hist h2{font-size:16px;text-align:center;margin-bottom:8px}
+.hist-item{display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:8px;border-bottom:1px solid #eee;font-size:12px;font-weight:bold;text-align:center}
+.hist-total{background:#0d2a6b;color:white;padding:12px;border-radius:10px;margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.filtro{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+.filtro select{padding:6px 10px;border-radius:8px;font-weight:bold;border:2px solid #0d2a6b}
 </style>
 </head>
 <body>
@@ -37,10 +43,10 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </div>
 
 <div class="cards">
-  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200"></div>
+  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()"></div>
   <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
   <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
-  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150"></div>
+  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()"></div>
   <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
   <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
@@ -60,18 +66,13 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </div>
 
 <div class="resumo">
-  <div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:8px"></div>
-
+  <div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:10px;font-size:15px"></div>
   <div class="resumo-linha">
     <div class="resumo-box" style="background:#2563eb"><span>💰 PIX:</span><span id="totalPix">R$ 0</span></div>
     <div class="resumo-box" style="background:#16a34a"><span>💵 DH:</span><span id="totalDh">R$ 0</span></div>
   </div>
-
   <div class="resumo-full" style="background:#1e3a8a"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
-
   <div class="resumo-full" style="background:#dc2626;border:2px solid #000"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
-
-  <!-- ISSO QUE VOCÊ CIRCULOU -->
   <div class="resumo-linha">
     <div class="resumo-box" style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div>
     <div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
@@ -81,20 +82,35 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 <div class="botoes">
   <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
   <button style="background:#f97316" onclick="remLinha()">- Folha</button>
-  <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR</button>
+  <button style="background:#0d2a6b" onclick="salvarHistorico()">💾 Salvar Dia</button>
+  <button style="background:#7c3aed" onclick="verHistorico()">📊 Histórico Mês</button>
+</div>
+
+<div class="botoes">
+  <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR HOJE</button>
   <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
+  <button style="background:#6b7280" onclick="fecharHistorico()">Fechar</button>
+  <button style="background:#000" onclick="limparHistoricoMesAtual()">🗑️ Limpar Mês</button>
+</div>
+
+<div class="hist" id="historicoDiv">
+  <h2>📊 HISTÓRICO COMPLETO DO MÊS</h2>
+  <div class="filtro">
+    <select id="filtroMes" onchange="verHistorico()"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select>
+    <select id="filtroAno" onchange="verHistorico()"><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:6px;background:#e5e7eb;border-radius:8px;font-size:11px;font-weight:900;text-align:center;margin-bottom:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>TOTAL</span></div>
+  <div id="listaHistorico"></div>
+  <div class="hist-total" id="totalMesDiv"></div>
 </div>
 
 <script>
-let KEY='alysson_com_gas_agua_final';
+let KEY='alysson_final_v3';
+let KEY_HIST='alysson_historico_mes_v3';
 function htmlLinha(d={}){
   return `<div class="linha">
     <input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()">
-    <select class="prod" onchange="mudar(this)">
-      <option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option>
-      <option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option>
-      <option value="gasRev" ${d.prod=='gasRev'?'selected':''}>🔥 Rev</option>
-    </select>
+    <select class="prod" onchange="mudar(this)"><option value="gas" ${d.prod=='gas'?'selected':''}>🔥</option><option value="agua" ${d.prod=='agua'?'selected':''}>💧</option></select>
     <input type="number" class="q" value="${d.q||0}" oninput="salvar()">
     <input type="number" class="u" value="${d.u||0}" oninput="salvar()">
     <div class="total">R$ 0</div>
@@ -102,13 +118,7 @@ function htmlLinha(d={}){
     <input type="number" class="d" value="${d.dh||0}" oninput="salvar()">
   </div>`;
 }
-function mudar(sel){
-  let u=sel.closest('.linha').querySelector('.u');
-  if(sel.value==='gas') u.value=88;
-  if(sel.value==='gasRev') u.value=80;
-  if(sel.value==='agua') u.value=10;
-  salvar();
-}
+function mudar(sel){let u=sel.closest('.linha').querySelector('.u'); if(sel.value==='gas') u.value=88; else u.value=8; salvar();}
 function calcular(){
   let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;
   document.querySelectorAll('.linha').forEach(l=>{
@@ -117,8 +127,7 @@ function calcular(){
     let u=parseFloat(l.querySelector('.u').value)||0;
     let p=parseFloat(l.querySelector('.p').value)||0;
     let dd=parseFloat(l.querySelector('.d').value)||0;
-    let tot=q*u;
-    l.querySelector('.total').innerText='R$ '+tot;
+    let tot=q*u; l.querySelector('.total').innerText='R$ '+tot;
     if(pr.includes('gas')){vg+=q; tGas+=tot;} else {va+=q; tAgua+=tot;}
     pix+=p; dh+=dd; geral+=tot;
   });
@@ -136,28 +145,75 @@ function calcular(){
   let ac=parseInt(document.getElementById('aguaCheia').value)||0;
   let data=document.getElementById('data').value;
   if(data){let [a,m,d]=data.split('-'); document.getElementById('dataTopo').innerText=`Data: ${d}/${m}/${a}`; document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;}
+  return {vg,va,pix,dh,geral,tGas,tAgua,data};
 }
 function salvar(){
-  calcular();
+  let res=calcular();
   let dados={gasCheio:document.getElementById('gasCheio').value,aguaCheia:document.getElementById('aguaCheia').value,data:document.getElementById('data').value,linhas:[]};
-  document.querySelectorAll('.linha').forEach(l=>{
-    dados.linhas.push({cliente:l.querySelector('.c').value,prod:l.querySelector('.prod').value,q:l.querySelector('.q').value,u:l.querySelector('.u').value,p:l.querySelector('.p').value,dh:l.querySelector('.d').value});
-  });
+  document.querySelectorAll('.linha').forEach(l=>{dados.linhas.push({cliente:l.querySelector('.c').value,prod:l.querySelector('.prod').value,q:l.querySelector('.q').value,u:l.querySelector('.u').value,p:l.querySelector('.p').value,dh:l.querySelector('.d').value});});
   localStorage.setItem(KEY,JSON.stringify(dados));
 }
 function addLinha(){document.getElementById('linhas').insertAdjacentHTML('beforeend',htmlLinha()); salvar();}
 function remLinha(){let ls=document.querySelectorAll('.linha'); if(ls.length>1){ls[ls.length-1].remove(); salvar();}}
-function zerarTudo(){if(confirm('Zerar tudo?')){localStorage.removeItem(KEY); location.reload();}}
+function zerarTudo(){if(confirm('Zerar HOJE? O histórico do mês continua!')){localStorage.removeItem(KEY); location.reload();}}
+function salvarHistorico(){
+  let res=calcular(); if(res.geral==0){alert('Nada pra salvar!'); return;}
+  let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
+  let data=res.data||new Date().toISOString().split('T')[0];
+  let [a,m,d]=data.split('-'); let dataBR=`${d}/${m}/${a}`;
+  let idx=hist.findIndex(h=>h.dataISO==data);
+  let item={dataISO:data,dataBR:dataBR,mes:m,ano:a,total:res.geral,pix:res.pix,dh:res.dh,gas:res.vg,agua:res.va,tGas:res.tGas,tAgua:res.tAgua};
+  if(idx>=0) hist[idx]=item; else hist.push(item);
+  localStorage.setItem(KEY_HIST,JSON.stringify(hist));
+  alert(`✅ Dia ${dataBR} salvo!\n🔥 Gás: ${res.vg} | 💧 Água: ${res.va}\nTotal: R$ ${res.geral}`);
+}
+function verHistorico(){
+  let mesFiltro=document.getElementById('filtroMes').value;
+  let anoFiltro=document.getElementById('filtroAno').value;
+  let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
+  let histFiltrado=hist.filter(h=>h.mes==mesFiltro && h.ano==anoFiltro);
+  histFiltrado.sort((a,b)=>a.dataISO.localeCompare(b.dataISO));
+  let div=document.getElementById('listaHistorico');
+  let totalMes=0, totalGasQtd=0, totalAguaQtd=0, totalGasR=0, totalAguaR=0, totalPix=0, totalDh=0;
+  if(histFiltrado.length==0){div.innerHTML=`<div style="text-align:center;padding:10px">Nenhuma venda em ${mesFiltro}/${anoFiltro}</div>`;}
+  else{div.innerHTML=''; histFiltrado.forEach(h=>{
+      totalMes+=h.total; totalGasQtd+=h.gas; totalAguaQtd+=h.agua; totalGasR+=h.tGas; totalAguaR+=h.tAgua; totalPix+=h.pix; totalDh+=h.dh;
+      div.innerHTML+=`<div class="hist-item"><span>${h.dataBR}</span><span>🔥 ${h.gas}</span><span>💧 ${h.agua}</span><span>R$ ${h.total}</span></div>`;
+    });}
+  document.getElementById('totalMesDiv').innerHTML=`
+    <div style="display:flex;justify-content:space-between"><span>📅 DIAS:</span><span>${histFiltrado.length} dias</span></div>
+    <div style="display:flex;justify-content:space-between"><span>🔥 GÁS QTD MÊS:</span><span>${totalGasQtd} botijões</span></div>
+    <div style="display:flex;justify-content:space-between"><span>💧 ÁGUA QTD MÊS:</span><span>${totalAguaQtd} galões</span></div>
+    <div style="display:flex;justify-content:space-between"><span>🔥 GÁS R$:</span><span>R$ ${totalGasR}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>💧 ÁGUA R$:</span><span>R$ ${totalAguaR}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>💰 PIX MÊS:</span><span>R$ ${totalPix}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>💵 DH MÊS:</span><span>R$ ${totalDh}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:18px;border-top:2px solid white;padding-top:6px;margin-top:6px"><span>💰 TOTAL MÊS:</span><span>R$ ${totalMes}</span></div>
+  `;
+  document.getElementById('historicoDiv').style.display='block';
+  window.scrollTo(0,document.body.scrollHeight);
+}
+function fecharHistorico(){document.getElementById('historicoDiv').style.display='none';}
+function limparHistoricoMesAtual(){
+  let mesFiltro=document.getElementById('filtroMes').value;
+  let anoFiltro=document.getElementById('filtroAno').value;
+  if(confirm(`Apagar TODO histórico de ${mesFiltro}/${anoFiltro}?`)){
+    let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
+    let novoHist=hist.filter(h=>!(h.mes==mesFiltro && h.ano==anoFiltro));
+    localStorage.setItem(KEY_HIST,JSON.stringify(novoHist)); verHistorico();
+  }
+}
 function carregar(){
   let s=localStorage.getItem(KEY);
   let cont=document.getElementById('linhas');
-  if(s){try{let d=JSON.parse(s); document.getElementById('gasCheio').value=d.gasCheio||200; document.getElementById('aguaCheia').value=d.aguaCheia||150; document.getElementById('data').value=d.data||new Date().toISOString().split('T')[0]; cont.innerHTML=''; d.linhas.forEach(i=>cont.insertAdjacentHTML('beforeend',htmlLinha(i))); calcular(); return;}catch(e){}}
-  document.getElementById('data').value=new Date().toISOString().split('T')[0];
-  cont.innerHTML=''; for(let i=0;i<3;i++) cont.insertAdjacentHTML('beforeend',htmlLinha()); calcular();
+  let hoje=new Date().toISOString().split('T')[0];
+  let [a,m]=hoje.split('-');
+  document.getElementById('filtroMes').value=m;
+  document.getElementById('filtroAno').value=a;
+  if(s){try{let d=JSON.parse(s); document.getElementById('gasCheio').value=d.gasCheio||200; document.getElementById('aguaCheia').value=d.aguaCheia||150; document.getElementById('data').value=d.data||hoje; cont.innerHTML=''; d.linhas.forEach(i=>cont.insertAdjacentHTML('beforeend',htmlLinha(i))); calcular(); return;}catch(e){}}
+  document.getElementById('data').value=hoje;
+  cont.innerHTML=''; for(let i=0;i<4;i++) cont.insertAdjacentHTML('beforeend',htmlLinha()); calcular();
 }
-document.getElementById('gasCheio').addEventListener('input',salvar);
-document.getElementById('aguaCheia').addEventListener('input',salvar);
-document.getElementById('data').addEventListener('change',salvar);
 carregar();
 </script>
 </body>
