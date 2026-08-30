@@ -1,80 +1,161 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EL SHADAY - 200 GÁS</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>EL SHADAY - GÁS E ÁGUA</title>
 <style>
-*{box-sizing:border-box}html,body{width:100%;overflow-x:hidden;margin:0;padding:0}
-body{background:#eef2f7;min-height:100dvh;padding-bottom:320px}
-.fixo-totais{position:fixed;bottom:0;left:0;right:0;width:100%;z-index:50;background:white;box-shadow:0 -4px 20px rgba(0,0,0,0.15)}
-.grid-linha{display:grid;grid-template-columns:1.3fr 0.6fr 0.6fr 0.7fr 0.6fr 0.6fr;gap:4px;width:100%}
-.grid-linha input,.grid-linha div{min-width:0;width:100%}
-@media print{.no-print{display:none}.fixo-totais{position:static!important}body{padding-bottom:0}}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#eef2f7;padding:10px}
+.topo{background:#0d2a6b;color:white;padding:14px;border-radius:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.cards{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+.card{flex:1;min-width:120px;background:white;padding:10px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.1);border-left:6px solid}
+.card b{font-size:10px;display:block}
+.card input{font-size:24px;font-weight:900;width:100%;border:2px dashed #00c950;border-radius:10px;text-align:center}
+.card .valor{font-size:24px;font-weight:900}
+.cheio{border-color:#00c950}
+.vazio{border-color:#ef4444}
+.agua{border-color:#0ea5e9}
+.agua-vazio{border-color:#0284c7}
+
+.tabela{background:white;border-radius:15px;padding:8px;overflow-x:auto}
+.header{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
+.header span{padding:6px;border-radius:8px;font-weight:900;font-size:10px;text-align:center}
+.linha{display:grid;grid-template-columns:1.3fr 0.7fr 0.5fr 0.5fr 0.7fr 0.5fr 0.5fr;gap:4px;margin-bottom:5px}
+.linha input, .linha select{padding:8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-weight:bold;width:100%;font-size:12px}
+.total{background:#fef9c3;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px}
+
+.resumo{margin-top:12px}
+.resumo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.resumo-grid div{padding:10px;border-radius:12px;color:white;font-weight:900;font-size:13px;display:flex;justify-content:space-between}
+.geral{background:#0d2a6b;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;margin-bottom:8px;font-size:16px}
+.falta{background:#dc2626;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between}
+
+.botoes{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.botoes button{flex:1;min-width:70px;padding:14px;border:none;border-radius:12px;font-weight:900;color:white}
 </style>
 </head>
 <body>
-<div class="bg-[#1e3a8a] w-full p-3 text-center rounded-b-[20px]">
-  <h1 class="text-white font-black text-[20px]">🔥 EL SHADAY - 200 GÁS</h1>
-  <div class="bg-white rounded-xl p-2 mt-2 flex justify-between items-center font-bold text-[11px]">
-    <div>📅 DATA: <input type="date" id="dataPlanilha" class="border rounded-lg p-1 font-black" onchange="salvar()"></div>
-    <div>EST: <span id="estIni">200</span> - Rest: <span id="restTop">200</span></div>
-  </div>
+
+<div class="topo">
+  <h1>🔥 EL SHADAY - GÁS E ÁGUA 💧</h1>
+  <input type="date" id="data" style="padding:6px;border-radius:20px;border:none;font-weight:bold">
 </div>
 
-<div class="grid grid-cols-3 gap-2 p-2">
-  <div onclick="editarEstoque()" class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-green-500"><div class="text-[8px] font-bold">🔵 CHEIO EDITÁVEL</div><div id="restanteCheio" class="text-[26px] font-black border-2 border-dashed border-green-500 rounded-xl bg-green-50">200</div></div>
-  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-red-500"><div class="text-[8px] font-bold">🔴 VAZIO</div><div id="vazio" class="text-[26px] font-black">0</div></div>
-  <div class="bg-white rounded-2xl p-2 text-center shadow border-l-[6px] border-yellow-400"><div class="text-[8px] font-bold">📦 VENDIDO</div><div id="vendido" class="text-[26px] font-black">0</div></div>
+<!-- ESTOQUE GÁS -->
+<div class="cards">
+  <div class="card cheio"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="50" oninput="calcular()"></div>
+  <div class="card vazio"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">150</div></div>
+  <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
+  <div class="card agua"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="30" oninput="calcular()"></div>
+  <div class="card agua-vazio"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">20</div></div>
+  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
 
-<div class="bg-white m-2 rounded-2xl p-2 shadow">
-  <div class="grid-linha mb-2 text-white text-[8px] font-black">
-    <div class="bg-yellow-400 text-black rounded-lg p-2 text-center">Cliente</div>
-    <div class="bg-green-600 rounded-lg p-2 text-center">Quant</div>
-    <div class="bg-black rounded-lg p-2 text-center">Unit</div>
-    <div class="bg-yellow-200 text-black rounded-lg p-2 text-center">Total</div>
-    <div class="bg-blue-600 rounded-lg p-2 text-center">PIX</div>
-    <div class="bg-green-700 rounded-lg p-2 text-center">DH</div>
+<div class="tabela">
+  <div class="header">
+    <span style="background:#facc15">Cliente</span>
+    <span style="background:#e0e7ff">Produto</span>
+    <span style="background:#86efac">Qtd</span>
+    <span style="background:#000;color:white">Unit</span>
+    <span style="background:#fef08a">Total</span>
+    <span style="background:#3b82f6;color:white">PIX</span>
+    <span style="background:#16a34a;color:white">DH</span>
   </div>
   <div id="linhas"></div>
 </div>
 
-<div class="fixo-totais border-t-2 border-black p-2 space-y-1">
-  <div class="text-center font-bold text-[10px]">Data: <span id="dataExibe">24/08/2026</span></div>
-  <div class="grid grid-cols-2 gap-1"><div class="bg-blue-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💰 PIX:</span><span>R$ <span id="totalPix">0</span></span></div><div class="bg-green-600 text-white rounded-lg p-2 font-black text-[11px] flex justify-between"><span>💵 DH:</span><span>R$ <span id="totalDH">0</span></span></div></div>
-  <div class="bg-[#1e3a8a] text-white rounded-lg p-2 font-black text-[12px] flex justify-between"><span>📦 TOTAL GERAL:</span><span>R$ <span id="totalGeral">0</span></span></div>
-  <div class="bg-red-600 text-white rounded-lg p-2 font-black text-[13px] flex justify-between border-2 border-black"><span>⚠️ FALTA RECEBER:</span><span>R$ <span id="faltaReceber">0</span></span></div>
-  <div class="grid grid-cols-4 gap-2 pt-1 no-print">
-    <button onclick="addLinha()" class="bg-green-600 text-white p-3 rounded-xl font-black text-[12px]">+ Venda</button>
-    <button onclick="removerLinha()" class="bg-orange-500 text-white p-3 rounded-xl font-black text-[12px]">- Folha</button>
-    <button onclick="forcarZerar()" class="bg-red-600 text-white p-3 rounded-xl font-black text-[11px]">🗑️ ZERAR</button>
-    <button onclick="window.print()" class="bg-blue-800 text-white p-3 rounded-xl font-black text-[11px]">📄 PDF</button>
+<div class="resumo">
+  <div id="dataRodape" style="text-align:center;font-weight:bold;margin:8px 0"></div>
+  <div class="resumo-grid">
+    <div style="background:#2563eb"><span>PIX:</span><span id="totalPix">R$ 0</span></div>
+    <div style="background:#16a34a"><span>DH:</span><span id="totalDh">R$ 0</span></div>
+    <div style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div>
+    <div style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
   </div>
+  <div class="geral"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
+  <div class="falta"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
+  <div style="background:#16a34a;margin-top:8px;padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:16px"><span>💰 LUCRO HOJE:</span><span id="lucro">R$ 0</span></div>
+</div>
+
+<div class="botoes">
+  <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
+  <button style="background:#f97316" onclick="remLinha()">- Linha</button>
+  <button style="background:#dc2626" onclick="zerar()">🗑️ ZERAR</button>
+  <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
 </div>
 
 <script>
-let hoje = new Date().toISOString().split('T')[0];
-const dadosPadrao = [{c:'Balduca',q:0,u:0,pix:0,dh:0},{c:'Japonês',q:0,u:0,pix:0,dh:0},{c:'Francisco',q:0,u:0,pix:0,dh:0},{c:'Leandro',q:0,u:0,pix:0,dh:0},{c:'Raiane',q:0,u:0,pix:0,dh:0},{c:'Mercadinho Menezes',q:0,u:0,pix:0,dh:0}];
-let dados; try{let s=localStorage.getItem('dados_gas_v4'); dados=s?JSON.parse(s):dadosPadrao; if(!Array.isArray(dados)||dados.length==0) dados=dadosPadrao;}catch(e){dados=dadosPadrao;}
-let estoqueSalvo=localStorage.getItem('estoque_gas'); let estoque=estoqueSalvo?parseInt(estoqueSalvo):200;
-let dataSalva=localStorage.getItem('data_gas')||hoje; document.getElementById('dataPlanilha').value=dataSalva;
-function salvar(){try{localStorage.setItem('dados_gas_v4',JSON.stringify(dados)); localStorage.setItem('estoque_gas',estoque.toString()); let d=document.getElementById('dataPlanilha').value; if(d){localStorage.setItem('data_gas',d); let p=d.split('-'); document.getElementById('dataExibe').innerText=p[2]+'/'+p[1]+'/'+p[0];}}catch(e){}}
-function renderLinhas(){let html=''; dados.forEach((d,i)=>{html+=`<div class="grid-linha mb-1">
-<input class="border rounded-lg p-1 text-center font-bold text-[11px]" value="${d.c||''}" oninput="dados[${i}].c=this.value; salvar()">
-<input class="border rounded-lg p-1 text-center font-bold" type="number" inputmode="numeric" value="${d.q||0}" oninput="dados[${i}].q=parseInt(this.value)||0; calc(); salvar()">
-<input class="border rounded-lg p-1 text-center font-bold bg-white" type="number" inputmode="numeric" value="${d.u||0}" oninput="dados[${i}].u=parseInt(this.value)||0; calc(); salvar()">
-<div id="tot-${i}" class="bg-yellow-100 rounded-lg p-1 text-center font-bold text-[10px] flex items-center justify-center">R$ 0</div>
-<input class="border-2 border-blue-500 bg-blue-50 rounded-lg p-1 text-center font-bold text-blue-700" type="number" value="${d.pix||0}" oninput="dados[${i}].pix=parseInt(this.value)||0; calc(); salvar()">
-<input class="border-2 border-green-500 bg-green-50 rounded-lg p-1 text-center font-bold" type="number" value="${d.dh||0}" oninput="dados[${i}].dh=parseInt(this.value)||0; calc(); salvar()">
-</div>`;}); document.getElementById('linhas').innerHTML=html; calc(); salvar();}
-function calc(){let sQ=0,sT=0,sP=0,sD=0; dados.forEach((d,i)=>{let tot=(parseInt(d.q)||0)*(parseInt(d.u)||0); sQ+=parseInt(d.q)||0; sT+=tot; sP+=parseInt(d.pix)||0; sD+=parseInt(d.dh)||0; let el=document.getElementById(`tot-${i}`); if(el) el.innerText='R$ '+tot;}); document.getElementById('restanteCheio').innerText=estoque-sQ; document.getElementById('restTop').innerText=estoque-sQ; document.getElementById('estIni').innerText=estoque; document.getElementById('vazio').innerText=sQ; document.getElementById('vendido').innerText=sQ; document.getElementById('totalPix').innerText=sP; document.getElementById('totalDH').innerText=sD; document.getElementById('totalGeral').innerText=sT; document.getElementById('faltaReceber').innerText=sT-(sP+sD);}
-function editarEstoque(){let n=prompt('Quantos CHEIOS?',estoque); if(n!==null){estoque=parseInt(n)||estoque; salvar(); calc();}}
-function forcarZerar(){if(confirm('Zerar TUDO?')){dados.forEach(d=>{d.q=0; d.u=0; d.pix=0; d.dh=0;}); localStorage.setItem('dados_gas_v4',JSON.stringify(dados)); renderLinhas();}}
-function addLinha(){dados.push({c:'Novo',q:0,u:0,pix:0,dh:0}); salvar(); renderLinhas();}
-function removerLinha(){if(dados.length<=1){alert('Tem que ter pelo menos 1!'); return;} if(confirm('Apagar a ÚLTIMA linha?')){dados.pop(); salvar(); renderLinhas();}}
-renderLinhas();
+let numLinhas=8;
+function criarLinhas(){
+  let c=document.getElementById('linhas'); c.innerHTML='';
+  for(let i=0;i<numLinhas;i++){
+    c.innerHTML+=`
+    <div class="linha">
+      <input placeholder="Cliente">
+      <select class="prod" onchange="mudarProduto(this)">
+        <option value="gas">🔥 GÁS P13</option>
+        <option value="agua">💧 ÁGUA 20L</option>
+        <option value="gasRevenda">🔥 GÁS Revenda</option>
+      </select>
+      <input type="number" class="q" value="0" oninput="calcular()">
+      <input type="number" class="u" value="115" oninput="calcular()">
+      <div class="total">R$ 0</div>
+      <input type="number" class="p" value="0" oninput="calcular()" style="border-color:#3b82f6;color:#2563eb">
+      <input type="number" class="d" value="0" oninput="calcular()" style="border-color:#16a34a">
+    </div>`;
+  }
+}
+function mudarProduto(sel){
+  let linha=sel.closest('.linha');
+  let unit=linha.querySelector('.u');
+  if(sel.value==='gas') unit.value=115;
+  if(sel.value==='gasRevenda') unit.value=95;
+  if(sel.value==='agua') unit.value=12;
+  calcular();
+}
+function calcular(){
+  let gasCheio=parseInt(document.getElementById('gasCheio').value)||0;
+  let aguaCheia=parseInt(document.getElementById('aguaCheia').value)||0;
+  let linhas=document.querySelectorAll('.linha');
+  let vendGas=0, vendAgua=0, somaPix=0, somaDh=0, somaGeral=0, somaGas=0, somaAgua=0, lucro=0;
+
+  linhas.forEach(l=>{
+    let prod=l.querySelector('.prod').value;
+    let q=parseFloat(l.querySelector('.q').value)||0;
+    let u=parseFloat(l.querySelector('.u').value)||0;
+    let p=parseFloat(l.querySelector('.p').value)||0;
+    let d=parseFloat(l.querySelector('.d').value)||0;
+    let total=q*u;
+    l.querySelector('.total').innerText='R$ '+total;
+
+    if(prod.includes('gas')){ vendGas+=q; somaGas+=total; lucro+=q*(u-85); }
+    else{ vendAgua+=q; somaAgua+=total; lucro+=q*(u-6); }
+
+    somaPix+=p; somaDh+=d; somaGeral+=total;
+  });
+
+  document.getElementById('gasVazio').innerText=200-gasCheio;
+  document.getElementById('aguaVazia').innerText=50-aguaCheia;
+  document.getElementById('gasVendido').innerText=vendGas;
+  document.getElementById('aguaVendida').innerText=vendAgua;
+  document.getElementById('totalPix').innerText='R$ '+somaPix;
+  document.getElementById('totalDh').innerText='R$ '+somaDh;
+  document.getElementById('totalGas').innerText='R$ '+somaGas;
+  document.getElementById('totalAgua').innerText='R$ '+somaAgua;
+  document.getElementById('totalGeral').innerText='R$ '+somaGeral;
+  document.getElementById('falta').innerText='R$ '+(somaGeral-(somaPix+somaDh));
+  document.getElementById('lucro').innerText='R$ '+lucro;
+
+  let data=document.getElementById('data').value;
+  if(data){ let [a,m,d]=data.split('-'); document.getElementById('dataRodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gasCheio-vendGas} | Água Rest: ${aguaCheia-vendAgua}`; }
+}
+function addLinha(){numLinhas++;criarLinhas();calcular();}
+function remLinha(){if(numLinhas>1){numLinhas--;criarLinhas();calcular();}}
+function zerar(){if(confirm('Zerar vendas de hoje?')){document.querySelectorAll('.linha .q, .linha .p, .linha .d').forEach(i=>i.value=0);calcular();}}
+document.getElementById('data').value=new Date().toISOString().split('T')[0];
+criarLinhas(); calcular();
+document.getElementById('data').addEventListener('change', calcular);
 </script>
 </body>
 </html>
