@@ -1,139 +1,84 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRUPO EL SHADAY GÁS - Disponível só para cliente</title>
-<meta property="og:title" content="GRUPO EL SHADAY GÁS - Disponível só para cliente" />
-<meta property="og:description" content="Sistema exclusivo - Disponível só para cliente" />
-<meta property="og:url" content="https://j199p.github.io/el-shaday-revenda-de-gas/" />
-<meta property="og:type" content="website" />
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#eef2f7;padding:10px;padding-bottom:30px}
-.topo{background:#0d2a6b;color:white;padding:16px;border-radius:15px;text-align:center}
-.topo h1{font-size:20px;font-weight:900;line-height:1.2}
-.topo h1 span{display:block;font-size:13px;font-weight:600;margin-top:4px;opacity:.9}
-.topo input{margin-top:8px;padding:8px 14px;border-radius:20px;border:none;font-weight:bold;font-size:16px}
-.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.card{background:white;padding:12px;border-radius:15px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.1);border-left:6px solid}
-.card b{font-size:11px;display:block;margin-bottom:4px}
-.card input{font-size:28px;font-weight:900;width:100%;border:2px dashed #ccc;border-radius:10px;text-align:center;background:#f9fafb}
-.card div.valor{font-size:28px;font-weight:900}
-.tabela{background:white;border-radius:15px;padding:10px}
-.header{display:grid;grid-template-columns:1.2fr 0.9fr 0.45fr 0.45fr 0.65fr 0.5fr 0.5fr;gap:4px;margin-bottom:6px}
-.header span{padding:8px 2px;border-radius:10px;font-weight:900;font-size:11px;text-align:center}
-.linha{display:grid;grid-template-columns:1.2fr 0.9fr 0.45fr 0.45fr 0.65fr 0.5fr 0.5fr;gap:4px;margin-bottom:5px}
-.linha input,.linha select{padding:10px 2px;border:1px solid #ddd;border-radius:10px;text-align:center;font-weight:900;width:100%;font-size:12px}
-.linha select{background:#eef2ff;font-size:12px}
-.total{background:#fef9c3;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px}
-.resumo{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-.resumo-linha{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.resumo-box{padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:15px}
-.resumo-full{padding:14px;border-radius:12px;color:white;font-weight:900;display:flex;justify-content:space-between;font-size:16px}
-.botoes{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:12px}
-.botoes button{padding:14px 6px;border:none;border-radius:12px;font-weight:900;color:white;font-size:13px}
-.hist{background:white;border-radius:15px;padding:12px;margin-top:12px;display:none}
-.hist-item{display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:8px;border-bottom:1px solid #eee;font-size:12px;font-weight:bold;text-align:center}
-.hist-total{background:#0d2a6b;color:white;padding:12px;border-radius:10px;margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px}
-.filtro{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
-.filtro select{padding:6px 10px;border-radius:8px;font-weight:bold;border:2px solid #0d2a6b}
-</style>
-</head>
-<body>
-<div id="bloqueio" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0d2a6b;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">
-<h1 style="color:white;font-size:22px;text-align:center">🔒 GRUPO EL SHADAY GÁS</h1>
-<p style="color:#a5b4fc;margin-bottom:15px;font-size:13px;font-weight:bold">Disponível só para cliente</p>
-<input type="password" id="senhaInput" placeholder="•••••••" style="padding:16px;border-radius:12px;border:none;width:240px;text-align:center;font-size:22px;font-weight:900;letter-spacing:4px">
-<button onclick="verificarSenha()" style="margin-top:12px;padding:14px 50px;background:#16a34a;color:white;border:none;border-radius:12px;font-weight:900;font-size:16px">ENTRAR</button>
-<p id="erro" style="color:#ff6b6b;margin-top:10px;display:none;font-weight:bold">❌ Senha errada!</p>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Alysson Gás e Água</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#121212;color:#fff;padding-bottom:20px}
+#loginScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:#f0f0f0;z-index:9999;display:flex;flex-direction:column}
+.loginHeader{background:#0a2342;color:#fff;padding:40px 20px 30px;font-weight:900;font-size:20px;border-radius:0 0 24px 24px}
+.loginBox{background:#fff;margin:20px;border-radius:16px;padding:24px;color:#000}
+.loginBox h2{font-size:18px;margin-bottom:15px;border-bottom:1px solid #ddd;padding-bottom:12px}
+.loginBox label{font-weight:900;font-size:14px;display:block;margin:20px 0 8px;text-align:center}
+.inputWrap{position:relative;display:flex;justify-content:center}
+.inputWrap input{width:90%;border:2px solid #1e40af;border-radius:12px;padding:16px;font-size:20px;text-align:center;letter-spacing:2px;outline:none}
+.eye{position:absolute;right:8%;top:50%;transform:translateY(-50%);cursor:pointer;font-size:22px}
+.btnEntrar{width:90%;background:#1e40af;color:#fff;border:none;border-radius:28px;padding:16px;font-weight:900;font-size:16px;margin:20px auto;display:block}
+.linkEsq{color:#1e40af;font-weight:900;text-align:center;margin-top:10px;display:block;font-size:13px;cursor:pointer}
+.topo{background:#dc2626;text-align:center;padding:14px}.topo h1{color:#fff;font-weight:900;font-size:22px}.alerta{background:#f97316;color:#000;font-weight:900;padding:12px;text-align:center;display:none;position:sticky;top:0;z-index:9}.alerta button{width:100%;background:#000;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:900;margin-top:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}.card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:16px;padding:12px}.formBox{background:#1a1a1a;margin:10px;border-radius:16px;padding:12px;border:1px solid #2a2a2a}label{font-size:11px;font-weight:900;color:#999;margin:8px 0 4px;display:block}input,select{width:100%;background:#252525;border:1.5px solid #333;border-radius:12px;padding:14px;color:#fff;font-weight:700}input.total{background:#dc2626!important}.btnGreen{width:100%;background:#22c55e;color:#000;font-weight:900;padding:14px;border:none;border-radius:12px;margin-top:10px}.clienteCard{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:20px;padding:12px;margin:10px}.status{float:right;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:900;border:1px solid}.hoje{color:#fb923c;border-color:#fb923c}.atrasado{color:#ef4444;border-color:#ef4444}.pago{color:#22c55e;border-color:#22c55e}.acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.btnA{padding:13px;border-radius:12px;font-weight:900;border:none}.btnPago{background:#22c55e;color:#000}.btnCobrar{background:#22c55e;color:#000}.btnExc{width:100%;margin-top:8px;background:#2a1a1a;border:1.5px solid #ef4444!important;color:#ef4444!important}</style></head><body>
+
+<div id="loginScreen">
+  <div class="loginHeader">INSERIR CHAVE DE ACESSO</div>
+  <div class="loginBox">
+    <h2>Digite a sua chave de acesso</h2>
+    <label>Chave de acesso</label>
+    <div class="inputWrap">
+      <input type="password" id="senhaInput">
+      <span class="eye" onclick="senhaInput.type=senhaInput.type==='password'?'text':'password'">👁️</span>
+    </div>
+    <button class="btnEntrar" onclick="entrar()">ENTRAR</button>
+    <span class="linkEsq" onclick="esqueci()">🔑 ESQUECI A CHAVE DE ACESSO</span>
+  </div>
 </div>
+
+<div id="app" style="display:none">
+<div id="alerta" class="alerta"><div id="txtAlerta"></div><button onclick="cobrarTodos()">⚡ COBRAR TODOS AGORA</button></div>
+<div class="topo"><h1>🔥 Alysson Gás e Água 💧</h1><div style="font-size:12px;margin-top:4px;cursor:pointer" onclick="sair()">Sair 🔒</div></div>
+<div class="grid"><div class="card"><b>📒 A RECEBER</b><div id="vTotal" style="font-size:20px;font-weight:900">R$ 0</div></div><div class="card"><b style="color:#ef4444">⚠️ VENCIDOS</b><div id="vVenc" style="font-size:20px;font-weight:900;color:#ef4444">R$ 0</div></div><div class="card"><b style="color:#fb923c">⏰ HOJE</b><div id="vHoje" style="font-size:20px;font-weight:900;color:#fb923c">R$ 0</div></div><div class="card" style="border:1px solid #22c55e"><b style="color:#22c55e">✅ PAGO</b><div id="vPago" style="font-size:20px;font-weight:900;color:#22c55e">R$ 0</div></div></div>
+<div class="formBox"><label>CLIENTE *</label><input id="fNome"><label>WHATSAPP *</label><input id="fZap" type="tel" placeholder="81999999999"><label>PRODUTO</label><select id="fProd"><option value="gás">gás</option><option value="água">água</option></select><label>QTD</label><input type="number" id="fQtd" value="1" oninput="calc()"><label>VALOR</label><input type="number" id="fUnit" value="140" oninput="calc()"><label>TOTAL</label><input id="fTotal" class="total" readonly><label>DATA PEGOU</label><input type="date" id="fPegou" oninput="calcV()"><label>DATA VENCE</label><input type="date" id="fVence"><label>OBS</label><input id="fObs"><button class="btnGreen" onclick="add()">💾 Adicionar Fiado</button></div>
+<div style="padding:0 10px"><input id="busca" placeholder="🔍 Buscar..." oninput="render()" style="width:100%"></div>
+<div id="lista"></div>
+</div>
+
 <script>
-const SENHA="822078@";
-function verificarSenha(){
-  let d=document.getElementById('senhaInput').value;
-  if(d===SENHA){
-    document.getElementById('bloqueio').style.display='none';
+const SENHA_CORRETA="822078@";
+function entrar(){
+  if(senhaInput.value===SENHA_CORRETA){
+    sessionStorage.setItem('logadoAlysson','1');
+    loginScreen.style.display='none';
+    app.style.display='block';
+    render();
   }else{
-    document.getElementById('erro').style.display='block';
-    document.getElementById('senhaInput').value='';
+    alert('Chave errada!');
   }
 }
-// SEMPRE pede senha ao abrir
-document.getElementById('bloqueio').style.display='flex';
-// Se minimizar/sair e voltar, pede senha de novo
-document.addEventListener('visibilitychange', function(){
-  if(document.visibilityState === 'visible'){
-    document.getElementById('bloqueio').style.display='flex';
-    document.getElementById('senhaInput').value='';
-    document.getElementById('erro').style.display='none';
-  }
-});
-document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')verificarSenha();});
-</script>
-<div class="topo">
-<h1>🔥 GRUPO EL SHADAY GÁS 💧<span>Disponível só para cliente</span></h1>
-<input type="date" id="data">
-</div>
-<div class="cards">
-<div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()"></div>
-<div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
-<div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
-<div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()"></div>
-<div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
-<div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
-</div>
-<div class="tabela">
-<div class="header">
-<span style="background:#facc15">Cliente</span><span style="background:#e0e7ff">Produto</span><span style="background:#86efac">Qtd</span><span style="background:#000;color:white">Unit</span><span style="background:#fef08a">Total</span><span style="background:#3b82f6;color:white">PIX</span><span style="background:#16a34a;color:white">DH</span>
-</div>
-<div id="linhas"></div>
-<div id="rodape" style="text-align:center;font-weight:bold;margin-top:10px;font-size:13px"></div>
-</div>
-<div class="resumo">
-<div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:10px;font-size:15px"></div>
-<div class="resumo-linha"><div class="resumo-box" style="background:#2563eb"><span>💰 PIX:</span><span id="totalPix">R$ 0</span></div><div class="resumo-box" style="background:#16a34a"><span>💵 DH:</span><span id="totalDh">R$ 0</span></div></div>
-<div class="resumo-full" style="background:#1e3a8a"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
-<div class="resumo-full" style="background:#dc2626;border:2px solid #000"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
-<div class="resumo-linha"><div class="resumo-box" style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div><div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div></div>
-</div>
-<div class="botoes">
-<button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
-<button style="background:#f97316" onclick="remLinha()">- Folha</button>
-<button style="background:#0d2a6b" onclick="salvarHistorico()">💾 Salvar Dia</button>
-<button style="background:#7c3aed" onclick="verHistorico()">📊 Histórico Mês</button>
-</div>
-<div class="botoes">
-<button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR HOJE</button>
-<button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
-<button style="background:#6b7280" onclick="fecharHistorico()">Fechar</button>
-<button style="background:#000" onclick="limparHistoricoMesAtual()">🗑️ Limpar Mês</button>
-</div>
-<div class="hist" id="historicoDiv">
-<h2>📊 HISTÓRICO COMPLETO DO MÊS</h2>
-<div class="filtro">
-<select id="filtroMes" onchange="verHistorico()"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select>
-<select id="filtroAno" onchange="verHistorico()"><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select>
-</div>
-<div style="display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:6px;background:#e5e7eb;border-radius:8px;font-size:11px;font-weight:900;text-align:center;margin-bottom:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>TOTAL</span></div>
-<div id="listaHistorico"></div>
-<div class="hist-total" id="totalMesDiv"></div>
-</div>
-<script>
-let KEY='elshaday_v1';let KEY_HIST='elshaday_historico_v1';
-function htmlLinha(d={}){return `<div class="linha"><input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()"><select class="prod" onchange="mudar(this)"><option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option><option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option></select><input type="number" class="q" value="${d.q||0}" oninput="salvar()"><input type="number" class="u" value="${d.u||0}" oninput="salvar()"><div class="total">R$ 0</div><input type="number" class="p" value="${d.p||0}" oninput="salvar()"><input type="number" class="d" value="${d.dh||0}" oninput="salvar()"></div>`;}
-function mudar(sel){let u=sel.closest('.linha').querySelector('.u');if(sel.value==='gas')u.value=88;else u.value=8;salvar();}
-function calcular(){let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;document.querySelectorAll('.linha').forEach(l=>{let pr=l.querySelector('.prod').value;let q=parseFloat(l.querySelector('.q').value)||0;let u=parseFloat(l.querySelector('.u').value)||0;let p=parseFloat(l.querySelector('.p').value)||0;let dd=parseFloat(l.querySelector('.d').value)||0;let tot=q*u;l.querySelector('.total').innerText='R$ '+tot;if(pr.includes('gas')){vg+=q;tGas+=tot;}else{va+=q;tAgua+=tot;}pix+=p;dh+=dd;geral+=tot;});document.getElementById('gasVazio').innerText=vg;document.getElementById('aguaVazia').innerText=va;document.getElementById('gasVendido').innerText=vg;document.getElementById('aguaVendida').innerText=va;document.getElementById('totalPix').innerText='R$ '+pix;document.getElementById('totalDh').innerText='R$ '+dh;document.getElementById('totalGas').innerText='R$ '+tGas;document.getElementById('totalAgua').innerText='R$ '+tAgua;document.getElementById('totalGeral').innerText='R$ '+geral;document.getElementById('falta').innerText='R$ '+(geral-(pix+dh));let gc=parseInt(document.getElementById('gasCheio').value)||0;let ac=parseInt(document.getElementById('aguaCheia').value)||0;let data=document.getElementById('data').value;if(data){let [a,m,d]=data.split('-');document.getElementById('dataTopo').innerText=`Data: ${d}/${m}/${a}`;document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;}return {vg,va,pix,dh,geral,tGas,tAgua,data};}
-function salvar(){calcular();let dados={gasCheio:document.getElementById('gasCheio').value,aguaCheia:document.getElementById('aguaCheia').value,data:document.getElementById('data').value,linhas:[]};document.querySelectorAll('.linha').forEach(l=>{dados.linhas.push({cliente:l.querySelector('.c').value,prod:l.querySelector('.prod').value,q:l.querySelector('.q').value,u:l.querySelector('.u').value,p:l.querySelector('.p').value,dh:l.querySelector('.d').value});});localStorage.setItem(KEY,JSON.stringify(dados));}
-function addLinha(){document.getElementById('linhas').insertAdjacentHTML('beforeend',htmlLinha());salvar();}
-function remLinha(){let ls=document.querySelectorAll('.linha');if(ls.length>1){ls[ls.length-1].remove();salvar();}}
-function zerarTudo(){if(confirm('Zerar HOJE? O histórico do mês continua!')){localStorage.removeItem(KEY);location.reload();}}
-function salvarHistorico(){let res=calcular();if(res.geral==0){alert('Nada pra salvar!');return;}let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let data=res.data||new Date().toISOString().split('T')[0];let [a,m,d]=data.split('-');let dataBR=`${d}/${m}/${a}`;let idx=hist.findIndex(h=>h.dataISO==data);let item={dataISO:data,dataBR:dataBR,mes:m,ano:a,total:res.geral,pix:res.pix,dh:res.dh,gas:res.vg,agua:res.va,tGas:res.tGas,tAgua:res.tAgua};if(idx>=0)hist[idx]=item;else hist.push(item);localStorage.setItem(KEY_HIST,JSON.stringify(hist));alert(`✅ Dia ${dataBR} salvo!`);}
-function verHistorico(){let mesFiltro=document.getElementById('filtroMes').value;let anoFiltro=document.getElementById('filtroAno').value;let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let histFiltrado=hist.filter(h=>h.mes==mesFiltro && h.ano==anoFiltro);histFiltrado.sort((a,b)=>a.dataISO.localeCompare(b.dataISO));let div=document.getElementById('listaHistorico');let totalMes=0,totalGasQtd=0,totalAguaQtd=0,totalGasR=0,totalAguaR=0,totalPix=0,totalDh=0;if(histFiltrado.length==0){div.innerHTML=`<div style="text-align:center;padding:10px">Nenhuma venda em ${mesFiltro}/${anoFiltro}</div>`;}else{div.innerHTML='';histFiltrado.forEach(h=>{totalMes+=h.total;totalGasQtd+=h.gas;totalAguaQtd+=h.agua;totalGasR+=h.tGas;totalAguaR+=h.tAgua;totalPix+=h.pix;totalDh+=h.dh;div.innerHTML+=`<div class="hist-item"><span>${h.dataBR}</span><span>🔥 ${h.gas}</span><span>💧 ${h.agua}</span><span>R$ ${h.total}</span></div>`;});}document.getElementById('totalMesDiv').innerHTML=`<div style="display:flex;justify-content:space-between"><span>📅 DIAS:</span><span>${histFiltrado.length} dias</span></div><div style="display:flex;justify-content:space-between"><span>🔥 GÁS QTD MÊS:</span><span>${totalGasQtd}</span></div><div style="display:flex;justify-content:space-between"><span>💧 ÁGUA QTD MÊS:</span><span>${totalAguaQtd}</span></div><div style="display:flex;justify-content:space-between"><span>💰 TOTAL MÊS:</span><span>R$ ${totalMes}</span></div>`;document.getElementById('historicoDiv').style.display='block';}
-function fecharHistorico(){document.getElementById('historicoDiv').style.display='none';}
-function limparHistoricoMesAtual(){let mesFiltro=document.getElementById('filtroMes').value;let anoFiltro=document.getElementById('filtroAno').value;if(confirm(`Apagar histórico de ${mesFiltro}/${anoFiltro}?`)){let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let novoHist=hist.filter(h=>!(h.mes==mesFiltro && h.ano==anoFiltro));localStorage.setItem(KEY_HIST,JSON.stringify(novoHist));verHistorico();}}
-function carregar(){let s=localStorage.getItem(KEY);let cont=document.getElementById('linhas');let hoje=new Date().toISOString().split('T')[0];let [a,m]=hoje.split('-');document.getElementById('filtroMes').value=m;document.getElementById('filtroAno').value=a;if(s){try{let d=JSON.parse(s);document.getElementById('gasCheio').value=d.gasCheio||200;document.getElementById('aguaCheia').value=d.aguaCheia||150;document.getElementById('data').value=d.data||hoje;cont.innerHTML='';d.linhas.forEach(i=>cont.insertAdjacentHTML('beforeend',htmlLinha(i)));calcular();return;}catch(e){}}document.getElementById('data').value=hoje;cont.innerHTML='';for(let i=0;i<4;i++)cont.insertAdjacentHTML('beforeend',htmlLinha());calcular();}
-carregar();
-</script>
-</body>
-</html>
+function sair(){
+  sessionStorage.removeItem('logadoAlysson');
+  location.reload();
+}
+function esqueci(){alert('Sua chave de acesso é: '+SENHA_CORRETA);}
+// SEMPRE pede senha ao abrir - não salva login
+loginScreen.style.display='flex';
+app.style.display='none';
+// Se fechar o navegador / desligar, o sessionStorage apaga sozinho e pede senha de novo
+
+let fiados=JSON.parse(localStorage.getItem('fiadosElShaday')||'[]');
+function calc(){let q=parseInt(fQtd.value)||0;let u=parseFloat(fUnit.value)||0;fTotal.value='R$ '+(q*u).toFixed(2);}
+function calcV(){if(!fPegou.value)return;let d=new Date(fPegou.value+'T12:00:00');d.setDate(d.getDate()+30);fVence.value=d.toISOString().split('T')[0];}
+function dias(v){let h=new Date();h.setHours(0,0,0,0);let x=new Date(v+'T12:00:00');x.setHours(0,0,0,0);return Math.floor((x-h)/86400000);}
+function status(f){if(f.pago)return'pago';let d=dias(f.vence);if(d<0)return'atrasado';if(d===0)return'hoje';return'pendente';}
+function add(){let n=fNome.value.trim(),z=fZap.value.replace(/\D/g,'');if(!n||!z){alert('Nome e Zap!');return;}fiados.unshift({id:Date.now(),nome:n,zap:z,prod:fProd.value,qtd:parseInt(fQtd.value)||1,unit:parseFloat(fUnit.value)||0,total:(parseInt(fQtd.value)||1)*(parseFloat(fUnit.value)||0),pegou:fPegou.value||new Date().toISOString().split('T')[0],vence:fVence.value,obs:fObs.value,pago:false});localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();fNome.value='';fZap.value='';fObs.value='';}
+function pago(id){let f=fiados.find(x=>x.id===id);f.pago=!f.pago;localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();}
+function excluir(id){if(confirm('Excluir após pagamento?')){fiados=fiados.filter(x=>x.id!==id);localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();}}
+function cobrar(f){let valor=f.total.toFixed(2).replace('.',',');let vence=f.vence.split('-').reverse().join('/');let m=`Olá! 😊\n\nPassando para lembrar que existe um pagamento pendente no valor de R$ ${valor}, referente ao ${f.prod}, com vencimento em ${vence}.\n\nQuando puder, pedimos a gentileza de realizar o pagamento.\n\nAgradecemos pela atenção e preferência! 🙏\n\nAlysson Gás e Água 🔥💧`;window.open(`https://wa.me/55${f.zap}?text=${encodeURIComponent(m)}`,'_blank');}
+function cobrarTodos(){let l=fiados.filter(f=>status(f)==='hoje'&&!f.pago);if(!l.length)return alert('Ninguém vence hoje');l.forEach((f,i)=>setTimeout(()=>cobrar(f),i*1000));}
+function render(){
+let b=busca.value.toLowerCase();
+let fil=fiados.filter(f=>!b||f.nome.toLowerCase().includes(b));
+let pend=fiados.filter(f=>!f.pago).reduce((s,f)=>s+f.total,0);
+let venc=fiados.filter(f=>status(f)==='atrasado'&&!f.pago).reduce((s,f)=>s+f.total,0);
+let hoje=fiados.filter(f=>status(f)==='hoje'&&!f.pago).reduce((s,f)=>s+f.total,0);
+let pg=fiados.filter(f=>f.pago).reduce((s,f)=>s+f.total,0);
+vTotal.innerText='R$ '+pend.toFixed(2);vVenc.innerText='R$ '+venc.toFixed(2);vHoje.innerText='R$ '+hoje.toFixed(2);vPago.innerText='R$ '+pg.toFixed(2);
+let qtd=fiados.filter(f=>status(f)==='hoje'&&!f.pago).length;
+if(qtd>0){alerta.style.display='block';txtAlerta.innerText=`⚠️ ${qtd} cliente(s) vencem HOJE!`;}else alerta.style.display='none';
+let h='';fil.forEach(f=>{let st=status(f);h+=`<div class="clienteCard"><span class="status ${st}">${st.toUpperCase()}</span><div style="font-weight:900">${f.nome} - ${f.zap}</div><div>${f.prod} R$ ${f.total.toFixed(2)}</div><div style="font-size:12px;opacity:.7">Pegou ${f.pegou} → Vence ${f.vence} ${f.obs||''}</div><div class="acoes"><button class="btnA btnPago" onclick="pago(${f.id})">${f.pago?'✅ PAGO ✓':'✅ Pago'}</button><button class="btnA btnCobrar" onclick='cobrar(${JSON.stringify(f)})'>📱 Cobrar</button></div><button class="btnA btnExc" onclick="excluir(${f.id})">🗑️ Excluir após pagamento</button></div>`;});
+lista.innerHTML=h||'<div style="text-align:center;padding:20px;opacity:.5">Nenhum fiado</div>';
+}
+fPegou.value=new Date().toISOString().split('T')[0];calcV();calc();render();
+</script></body></html>
