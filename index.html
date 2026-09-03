@@ -10,8 +10,8 @@
 .eye{position:absolute;right:8%;top:50%;transform:translateY(-50%);cursor:pointer;font-size:22px}
 .btnEntrar{width:90%;background:#1e40af;color:#fff;border:none;border-radius:28px;padding:16px;font-weight:900;font-size:16px;margin:20px auto;display:block}
 .linkEsq{color:#1e40af;font-weight:900;text-align:center;margin-top:10px;display:block;font-size:13px;cursor:pointer}
-.topo{background:#dc2626;text-align:center;padding:12px 14px 10px}.topo h1{color:#fff;font-weight:900;font-size:22px;margin:0}.topo.sub{color:#fff;font-weight:900;font-size:13px;opacity:.9;margin-top:4px;letter-spacing:1px}.topo.sair{font-size:12px;margin-top:4px;cursor:pointer;opacity:.8}
-.alerta{background:#f97316;color:#000;font-weight:900;padding:12px;text-align:center;display:none;position:sticky;top:0;z-index:9}.alerta button{width:100%;background:#000;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:900;margin-top:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}.card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:16px;padding:12px}.formBox{background:#1a1a1a;margin:10px;border-radius:16px;padding:12px;border:1px solid #2a2a2a}label{font-size:11px;font-weight:900;color:#999;margin:8px 0 4px;display:block}input,select{width:100%;background:#252525;border:1.5px solid #333;border-radius:12px;padding:14px;color:#fff;font-weight:700}input.total{background:#dc2626!important}.btnGreen{width:100%;background:#22c55e;color:#000;font-weight:900;padding:14px;border:none;border-radius:12px;margin-top:10px}.clienteCard{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:20px;padding:12px;margin:10px}.status{float:right;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:900;border:1px solid}.hoje{color:#fb923c;border-color:#fb923c}.atrasado{color:#ef4444;border-color:#ef4444}.pago{color:#22c55e;border-color:#22c55e}.acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.btnA{padding:13px;border-radius:12px;font-weight:900;border:none}.btnPago{background:#22c55e;color:#000}.btnCobrar{background:#22c55e;color:#000}.btnExc{width:100%;margin-top:8px;background:#2a1a1a;border:1.5px solid #ef4444!important;color:#ef4444!important}</style></head><body>
+.topo{background:#dc2626;text-align:center;padding:12px 14px 10px}.topo h1{color:#fff;font-weight:900;font-size:22px;margin:0}.sub{color:#fff;font-weight:900;font-size:13px;opacity:.9;margin-top:4px;letter-spacing:1px}.sair{font-size:12px;margin-top:4px;cursor:pointer;opacity:.8}
+.alerta{background:#f97316;color:#000;font-weight:900;padding:12px;text-align:center;display:none;position:sticky;top:0;z-index:9}.alerta button{width:100%;background:#000;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:900;margin-top:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}.card{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:16px;padding:12px}.formBox{background:#1a1a1a;margin:10px;border-radius:16px;padding:12px;border:1px solid #2a2a2a}label{font-size:11px;font-weight:900;color:#999;margin:8px 0 4px;display:block}input,select{width:100%;background:#252525;border:1.5px solid #333;border-radius:12px;padding:14px;color:#fff;font-weight:700}input.total{background:#dc2626!important}.btnGreen{width:100%;background:#22c55e;color:#000;font-weight:900;padding:14px;border:none;border-radius:12px;margin-top:10px}.clienteCard{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:20px;padding:12px;margin:10px}.status{float:right;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:900;border:1px solid}.hoje{color:#fb923c;border-color:#fb923c}.atrasado{color:#ef4444;border-color:#ef4444}.pago{color:#22c55e;border-color:#22c55e}.acoes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.btnA{padding:13px;border-radius:12px;font-weight:900;border:none}.btnPago{background:#22c55e;color:#000}.btnCobrar{background:#22c55e;color:#000}.btnExc{width:100%;margin-top:8px;background:#2a1a1a;border:1.5px solid #ef4444!important;color:#ef4444!important}.btnZerar{width:100%;margin:0 10px 10px;background:#1e1e1e;border:1px dashed #22c55e;color:#22c55e;padding:10px;border-radius:12px;font-weight:900}</style></head><body>
 
 <div id="loginScreen">
   <div class="loginHeader">INSERIR CHAVE DE ACESSO</div>
@@ -35,6 +35,7 @@
   <div class="sair" onclick="sair()">Sair 🔒</div>
 </div>
 <div class="grid"><div class="card"><b>📒 A RECEBER</b><div id="vTotal" style="font-size:20px;font-weight:900">R$ 0</div></div><div class="card"><b style="color:#ef4444">⚠️ VENCIDOS</b><div id="vVenc" style="font-size:20px;font-weight:900;color:#ef4444">R$ 0</div></div><div class="card"><b style="color:#fb923c">⏰ HOJE</b><div id="vHoje" style="font-size:20px;font-weight:900;color:#fb923c">R$ 0</div></div><div class="card" style="border:1px solid #22c55e"><b style="color:#22c55e">✅ PAGO</b><div id="vPago" style="font-size:20px;font-weight:900;color:#22c55e">R$ 0</div></div></div>
+<button class="btnZerar" onclick="zerarPago()">🧹 Zerar valor PAGO</button>
 <div class="formBox"><label>CLIENTE *</label><input id="fNome"><label>WHATSAPP *</label><input id="fZap" type="tel" placeholder="81999999999"><label>PRODUTO</label><select id="fProd"><option value="gás">gás</option><option value="água">água</option></select><label>QTD</label><input type="number" id="fQtd" value="1" oninput="calc()"><label>VALOR</label><input type="number" id="fUnit" value="140" oninput="calc()"><label>TOTAL</label><input id="fTotal" class="total" readonly><label>DATA PEGOU</label><input type="date" id="fPegou" oninput="calcV()"><label>DATA VENCE</label><input type="date" id="fVence"><label>OBS</label><input id="fObs"><button class="btnGreen" onclick="add()">💾 Adicionar Fiado</button></div>
 <div style="padding:0 10px"><input id="busca" placeholder="🔍 Buscar..." oninput="render()" style="width:100%"></div>
 <div id="lista"></div>
@@ -44,17 +45,38 @@
 const SENHA_CORRETA="822078@";
 function entrar(){if(senhaInput.value===SENHA_CORRETA){sessionStorage.setItem('logadoAlysson','1');loginScreen.style.display='none';app.style.display='block';render();}else{alert('Chave errada!');}}
 function sair(){sessionStorage.removeItem('logadoAlysson');location.reload();}
-function esqueci(){alert('Sua chave de acesso é: '+SENHA_CORRETA);}
+function esqueci(){alert('Sua chave é: '+SENHA_CORRETA);}
 loginScreen.style.display='flex';app.style.display='none';
 
 let fiados=JSON.parse(localStorage.getItem('fiadosElShaday')||'[]');
+let historicoPago=parseFloat(localStorage.getItem('historicoPago')||'0');
+
 function calc(){let q=parseInt(fQtd.value)||0;let u=parseFloat(fUnit.value)||0;fTotal.value='R$ '+(q*u).toFixed(2);}
 function calcV(){if(!fPegou.value)return;let d=new Date(fPegou.value+'T12:00:00');d.setDate(d.getDate()+30);fVence.value=d.toISOString().split('T')[0];}
 function dias(v){let h=new Date();h.setHours(0,0,0,0);let x=new Date(v+'T12:00:00');x.setHours(0,0,0,0);return Math.floor((x-h)/86400000);}
 function status(f){if(f.pago)return'pago';let d=dias(f.vence);if(d<0)return'atrasado';if(d===0)return'hoje';return'pendente';}
 function add(){let n=fNome.value.trim(),z=fZap.value.replace(/\D/g,'');if(!n||!z){alert('Nome e Zap!');return;}fiados.unshift({id:Date.now(),nome:n,zap:z,prod:fProd.value,qtd:parseInt(fQtd.value)||1,unit:parseFloat(fUnit.value)||0,total:(parseInt(fQtd.value)||1)*(parseFloat(fUnit.value)||0),pegou:fPegou.value||new Date().toISOString().split('T')[0],vence:fVence.value,obs:fObs.value,pago:false});localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();fNome.value='';fZap.value='';fObs.value='';}
 function pago(id){let f=fiados.find(x=>x.id===id);f.pago=!f.pago;localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();}
-function excluir(id){if(confirm('Excluir após pagamento?')){fiados=fiados.filter(x=>x.id!==id);localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));render();}}
+function excluir(id){
+  let f=fiados.find(x=>x.id===id);
+  if(!f.pago){alert('Só pode excluir após dar PAGO!');return;}
+  if(confirm('Excluir '+f.nome+'? O valor vai continuar no PAGO.')){
+    historicoPago+=f.total;
+    localStorage.setItem('historicoPago',historicoPago);
+    fiados=fiados.filter(x=>x.id!==id);
+    localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));
+    render();
+  }
+}
+function zerarPago(){
+  if(confirm('Quer zerar o PAGO? Vai zerar R$ '+ (historicoPago + fiados.filter(f=>f.pago).reduce((s,f)=>s+f.total,0)).toFixed(2) +'?')){
+    historicoPago=0;
+    localStorage.setItem('historicoPago','0');
+    fiados=fiados.filter(f=>!f.pago);
+    localStorage.setItem('fiadosElShaday',JSON.stringify(fiados));
+    render();
+  }
+}
 function cobrar(f){let valor=f.total.toFixed(2).replace('.',',');let vence=f.vence.split('-').reverse().join('/');let m=`Olá! 😊\n\nPassando para lembrar que existe um pagamento pendente no valor de R$ ${valor}, referente ao ${f.prod}, com vencimento em ${vence}.\n\nQuando puder, pedimos a gentileza de realizar o pagamento.\n\nAgradecemos pela atenção e preferência! 🙏\n\nAlysson Gás e Água 🔥💧`;window.open(`https://wa.me/55${f.zap}?text=${encodeURIComponent(m)}`,'_blank');}
 function cobrarTodos(){let l=fiados.filter(f=>status(f)==='hoje'&&!f.pago);if(!l.length)return alert('Ninguém vence hoje');l.forEach((f,i)=>setTimeout(()=>cobrar(f),i*1000));}
 function render(){
@@ -63,7 +85,8 @@ let fil=fiados.filter(f=>!b||f.nome.toLowerCase().includes(b));
 let pend=fiados.filter(f=>!f.pago).reduce((s,f)=>s+f.total,0);
 let venc=fiados.filter(f=>status(f)==='atrasado'&&!f.pago).reduce((s,f)=>s+f.total,0);
 let hoje=fiados.filter(f=>status(f)==='hoje'&&!f.pago).reduce((s,f)=>s+f.total,0);
-let pg=fiados.filter(f=>f.pago).reduce((s,f)=>s+f.total,0);
+let pagoAtual=fiados.filter(f=>f.pago).reduce((s,f)=>s+f.total,0);
+let pg= pagoAtual + historicoPago;
 vTotal.innerText='R$ '+pend.toFixed(2);vVenc.innerText='R$ '+venc.toFixed(2);vHoje.innerText='R$ '+hoje.toFixed(2);vPago.innerText='R$ '+pg.toFixed(2);
 let qtd=fiados.filter(f=>status(f)==='hoje'&&!f.pago).length;
 if(qtd>0){alerta.style.display='block';txtAlerta.innerText=`⚠️ ${qtd} cliente(s) vencem HOJE!`;}else alerta.style.display='none';
