@@ -1,150 +1,86 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>El Shaday - Gás e Água</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f0f2f5}
-header{background:#15803d;color:#fff;padding:15px;text-align:center}
-header h1{font-size:20px}
-header p{font-size:13px;opacity:.9}
-nav{display:flex;gap:8px;overflow-x:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #ddd}
-nav button{white-space:nowrap;border:1px solid #ddd;background:#eef2ee;padding:10px 16px;border-radius:20px;font-weight:bold;color:#14532d;cursor:pointer}
-nav button.active{background:#15803d;color:#fff;border-color:#15803d}
-main{padding:12px;max-width:900px;margin:0 auto}
-.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
-.card h2{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.hidden{display:none!important}
-label{font-size:13px;font-weight:bold;display:block;margin:8px 0 4px}
-input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px}
-.btn{width:100%;padding:12px;border:0;border-radius:10px;background:#15803d;color:#fff;font-weight:bold;margin-top:10px;cursor:pointer}
-.btn2{background:#0f5e2c}
-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
-th{background:#1e3a8a;color:#fff;padding:8px;text-align:left}
-td{padding:8px;border-bottom:1px solid #eee}
-.small{font-size:12px;color:#666}
-.flex{display:flex;gap:8px}
-.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0}
-.stat b{color:#15803d}
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLANILHA GESTÃO - El Shaday</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#eef3f0}
+header{background:#087f3f;color:#fff;padding:16px;position:fixed;top:0;left:0;right:0;z-index:20;height:58px}
+nav{display:flex;gap:6px;overflow:auto;background:#fff;padding:8px;position:fixed;top:58px;left:0;right:0;z-index:19;border-bottom:1px solid #ddd}
+nav button{background:#e7eee9;color:#14562f;padding:10px 13px;border-radius:20px;font-weight:bold;white-space:nowrap}
+nav button.active{background:#087f3f;color:#fff}
+main{max-width:1150px;margin:auto;padding:10px;margin-top:110px}
+.tela{display:none}.tela.active{display:block}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:bold;font-size:12px;margin:6px 0 4px}
+input,select{width:100%;padding:11px;border:2px solid #aaa;border-radius:10px}
+.btn{padding:11px;border-radius:10px;color:#fff;font-weight:bold;margin:3px;border:0}
+.green{background:#087f3f}.red{background:#d92727}.blue{background:#1557a6}.gray{background:#657c89}
+.stat{color:#fff;padding:13px;border-radius:13px}.sblue{background:#1557a6}.sgreen{background:#087f3f}.sred{background:#d92727}.spurple{background:#7b1fa2}
+th,td{padding:8px;border-bottom:1px solid #ddd}th{background:#204574;color:#fff}
+#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:11px 16px;border-radius:10px;z-index:99}
+.estoque{border:2px solid #244f83;border-radius:10px;padding:10px;text-align:center;background:#f7fbff}.estoque b{display:block;font-size:24px}
 </style>
 </head>
 <body>
-<header>
-<h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1>
-<p>Gás e água - El Shaday</p>
-</header>
+<header><h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1><p>Gás e água - El Shaday</p></header>
 <nav>
-<button id="b-dash" class="active" onclick="showTab('dash')">📊 Dashboard</button>
-<button id="b-cli" onclick="showTab('cli')">👤 Clientes</button>
-<button id="b-ven" onclick="showTab('ven')">🛒 Vendas</button>
-<button id="b-rec" onclick="showTab('rec')">💰 Receber</button>
+<button class="active" onclick="abrir('dashboard',this)">📊 Dashboard</button>
+<button onclick="abrir('clientes',this)">👤 Clientes</button>
+<button onclick="abrir('vendas',this)">🛒 Vendas</button>
+<button onclick="abrir('receber',this)">💰 Receber</button>
+<button onclick="abrir('estoque',this)">📦 Estoque</button>
+<button onclick="abrir('despesas',this)">💸 Despesas</button>
+<button onclick="abrir('mes',this)">📅 Mês</button>
+<button onclick="abrir('backup',this)">💾 Backup</button>
 </nav>
 <main>
-<div id="tab-dash">
-<div class="card"><h2>💰 Resumo financeiro</h2>
-<div class="stat"><span>Total vendas mês</span><b id="t-vendas">R$ 0,00</b></div>
-<div class="stat"><span>Total a receber</span><b id="t-receber">R$ 0,00</b></div>
-<div class="stat"><span>Clientes</span><b id="t-clientes">0</b></div>
-</div>
-<div class="card"><h2>📦 Estoque</h2>
-<div class="stat"><span>Gás P13</span><b id="est-gas">20 un</b></div>
-<div class="stat"><span>Água 20L</span><b id="est-agua">30 un</b></div>
-<p class="small">* Controle manual por enquanto</p>
-</div>
-<div class="card"><h2>🛒 Últimas vendas do mês</h2>
-<table><thead><tr><th>Data</th><th>Cliente</th><th>Produto</th><th>Total</th></tr></thead><tbody id="lista-vendas"><tr><td colspan="4" class="small">Nenhuma venda ainda</td></tr></tbody></table>
-</div>
-</div>
-<div id="tab-cli" class="hidden">
-<div class="card"><h2>👤 Novo Cliente</h2>
-<label>Nome</label><input id="cli-nome" placeholder="Ex: Maria Silva">
-<label>Telefone / WhatsApp</label><input id="cli-tel" placeholder="Ex: 82 9 9999-9999">
-<label>Endereço</label><input id="cli-end" placeholder="Rua, número, bairro">
-<button class="btn" onclick="addCliente()">Salvar Cliente</button>
-</div>
-<div class="card"><h2>Lista de Clientes</h2><div id="lista-clientes" class="small">Nenhum cliente ainda</div></div>
-</div>
-<div id="tab-ven" class="hidden">
-<div class="card"><h2>🛒 Nova Venda</h2>
-<label>Cliente</label><select id="ven-cli"></select>
-<label>Produto</label><select id="ven-prod"><option value="Gás P13 - R$ 110">Gás P13 - R$ 110</option><option value="Água 20L - R$ 10">Água 20L - R$ 10</option><option value="Gás + Água - R$ 115">Gás + Água - R$ 115</option></select>
-<label>Valor (R$)</label><input id="ven-valor" type="number" value="110">
-<label>Data</label><input id="ven-data" type="date">
-<div class="flex"><button class="btn" onclick="addVenda()">💾 Salvar Venda</button><button class="btn btn2" onclick="addVendaZap()">📲 Salvar e chamar no Zap</button></div>
-</div>
-</div>
-<div id="tab-rec" class="hidden">
-<div class="card"><h2>💰 Contas a Receber</h2><div id="lista-receber" class="small">Nenhuma conta pendente</div></div>
-</div>
+<section id="dashboard" class="tela active"><div id="dashboardStats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div><div class="card"><h2>💰 Resumo financeiro</h2><div id="financeiro"></div></div><div class="card"><h2>🛒 Últimas vendas</h2><table><thead><tr><th>Data</th><th>Cliente</th><th>Prod</th><th>Total</th></tr></thead><tbody id="ultimasVendas"></tbody></table></div></section>
+<section id="clientes" class="tela"><div class="card"><h2>👤 Cadastrar Cliente</h2><input type="hidden" id="clienteId"><label>Nome *</label><input id="clienteNome"><label>WhatsApp *</label><input id="clienteWhatsApp"><div style="margin-top:10px"><button class="btn green" onclick="salvarCliente()">Salvar</button><button class="btn gray" onclick="limparCliente()">Limpar</button></div></div><div class="card"><h2>Clientes</h2><div id="listaClientes"></div></div></section>
+<section id="vendas" class="tela"><div class="card"><h2>🛒 Registrar Venda - COM FÓRMULA</h2><label>Cliente</label><select id="vendaCliente"></select><label>Produto</label><select id="vendaProduto" onchange="calc()"><option>Gás</option><option>Água</option><option>Outro</option></select><label>Qtd</label><input id="vendaQuantidade" type="number" value="1" oninput="calc()"><label>Valor unit R$</label><input id="vendaValor" type="number" value="110" oninput="calc()"><label style="color:#087f3f">TOTAL = Qtd × Valor</label><input id="vendaTotal" disabled style="background:#d4edda;font-weight:bold;font-size:16px"><label>Data</label><input id="vendaData" type="date"><label>Pagamento</label><select id="vendaPagamento"><option value="PIX">PIX</option><option value="DINHEIRO">Dinheiro</option><option value="CARTAO">Cartão</option><option value="FIADO">Fiado</option></select><div style="margin-top:10px"><button class="btn green" onclick="salvarVenda()">✅ Registrar Venda</button><button class="btn blue" onclick="addVendaRapida()">+1 Venda Rápida</button></div></div><div class="card"><h2>Vendas de Hoje</h2><div id="listaVendas"></div></div></section>
+<section id="receber" class="tela"><div class="card"><h2>💰 A Receber</h2><div id="receberStats"></div><div id="listaReceber"></div></div></section>
+<section id="estoque" class="tela"><div class="card"><h2>📦 Estoque - baixa automático</h2><div id="estoqueCards" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div></div></section>
+<section id="despesas" class="tela"><div class="card"><h2>💸 Despesas</h2><label>Valor</label><input id="despesaValor" type="number"><label>Motivo</label><input id="despesaMotivo"><button class="btn red" style="margin-top:8px" onclick="salvarDespesa()">Salvar</button><div id="listaDespesas" style="margin-top:10px"></div></div></section>
+<section id="mes" class="tela"><div class="card"><h2>📅 Mês</h2><input id="mesSelecionado" type="month"><div id="mesStats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"></div><div id="resumoMes" style="margin-top:10px"></div></div></section>
+<section id="backup" class="tela"><div class="card"><h2>💾 Backup</h2><button class="btn blue" onclick="baixarBackup()">Baixar Backup</button> <button class="btn red" onclick="apagarTudo()">Apagar Tudo</button></div></section>
 </main>
+<div id="toast"></div>
 <script>
-let clientes = JSON.parse(localStorage.getItem('el_cli')||'[]');
-let vendas = JSON.parse(localStorage.getItem('el_ven')||'[]');
-function save(){localStorage.setItem('el_cli',JSON.stringify(clientes));localStorage.setItem('el_ven',JSON.stringify(vendas));render()}
-function showTab(t){
-document.getElementById('tab-dash').classList.add('hidden');
-document.getElementById('tab-cli').classList.add('hidden');
-document.getElementById('tab-ven').classList.add('hidden');
-document.getElementById('tab-rec').classList.add('hidden');
-document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-document.getElementById('tab-'+t).classList.remove('hidden');
-document.getElementById('b-'+t).classList.add('active');
-if(t==='ven'){document.getElementById('ven-data').valueAsDate=new Date(); fillCliSelect()}
+const CHAVE="EL_SHADAY_GESTAO_V4_FINAL";
+let banco; try{banco=JSON.parse(localStorage.getItem(CHAVE))}catch(e){banco=null}
+if(!banco){banco={clientes:[],vendas:[],despesas:[],estoque:{gasCheio:200,gasVazio:0,aguaCheia:150,aguaVazia:0}}}
+function salvar(){localStorage.setItem(CHAVE,JSON.stringify(banco)); atualizarTudo();}
+function hoje(){return new Date().toISOString().slice(0,10);}
+function dinheiro(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});}
+function dataBR(d){if(!d)return "-";let p=d.split("-");return p[2]+"/"+p[1]+"/"+p[0];}
+function aviso(t){let e=document.getElementById("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",2500);}
+function abrir(id,btn){document.querySelectorAll(".tela").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");window.scrollTo(0,0);atualizarTudo();}
+function calc(){let q=Number(document.getElementById("vendaQuantidade").value||0);let v=Number(document.getElementById("vendaValor").value||0);let t=q*v;document.getElementById("vendaTotal").value=dinheiro(t)+"  ("+q+" x "+v+")";return t;}
+function salvarCliente(){let nome=document.getElementById("clienteNome").value.trim();let zap=document.getElementById("clienteWhatsApp").value.trim();if(!nome)return aviso("Digite nome");let id=Date.now().toString();banco.clientes.push({id:id,nome:nome,whatsapp:zap});document.getElementById("clienteNome").value="";document.getElementById("clienteWhatsApp").value="";salvar();aviso("Cliente salvo!");}
+function limparCliente(){document.getElementById("clienteNome").value="";document.getElementById("clienteWhatsApp").value="";}
+function salvarVenda(){let cid=document.getElementById("vendaCliente").value;let prod=document.getElementById("vendaProduto").value;let qtd=Number(document.getElementById("vendaQuantidade").value||1);let valor=Number(document.getElementById("vendaValor").value||0);let total=calc();let data=document.getElementById("vendaData").value||hoje();let pag=document.getElementById("vendaPagamento").value;banco.vendas.push({id:Date.now().toString(),clienteId:cid,produto:prod,quantidade:qtd,valor:valor,total:total,data:data,pagamento:pag,status:pag==="FIADO"?"PENDENTE":"PAGO"});if(prod==="Gás"){banco.estoque.gasCheio=Math.max(0,banco.estoque.gasCheio-qtd);banco.estoque.gasVazio+=qtd;}if(prod==="Água"){banco.estoque.aguaCheia=Math.max(0,banco.estoque.aguaCheia-qtd);banco.estoque.aguaVazia+=qtd;}salvar();aviso("Venda "+dinheiro(total)+" registrada!");abrir('dashboard',document.querySelectorAll('nav button')[0]);}
+function addVendaRapida(){let ultima=banco.vendas.length?banco.vendas[banco.vendas.length-1]:null;banco.vendas.push({id:Date.now().toString(),clienteId:ultima?ultima.clienteId:"",produto:ultima?ultima.produto:"Gás",quantidade:1,valor:ultima?ultima.valor:110,total:ultima?ultima.valor:110,data:hoje(),pagamento:ultima?ultima.pagamento:"PIX",status:"PAGO"});if((ultima?ultima.produto:"Gás")==="Gás"){banco.estoque.gasCheio=Math.max(0,banco.estoque.gasCheio-1);banco.estoque.gasVazio+=1;}else{banco.estoque.aguaCheia=Math.max(0,banco.estoque.aguaCheia-1);banco.estoque.aguaVazia+=1;}salvar();aviso("+1 venda");}
+function salvarDespesa(){let v=Number(document.getElementById("despesaValor").value||0);let m=document.getElementById("despesaMotivo").value||"Despesa";if(v<=0)return aviso("Valor inválido");banco.despesas.push({id:Date.now().toString(),valor:v,motivo:m,data:hoje()});document.getElementById("despesaValor").value="";document.getElementById("despesaMotivo").value="";salvar();aviso("Despesa salva");}
+function atualizarTudo(){
+ let mes=hoje().slice(0,7);
+ let vendasMes=banco.vendas.filter(v=>v.data.startsWith(mes));
+ let vendido=vendasMes.reduce((s,v)=>s+v.total,0);
+ let recebido=vendasMes.filter(v=>v.status==="PAGO").reduce((s,v)=>s+v.total,0);
+ let aReceber=vendasMes.filter(v=>v.status!=="PAGO").reduce((s,v)=>s+v.total,0);
+ let desp=banco.despesas.filter(d=>d.data.startsWith(mes)).reduce((s,d)=>s+d.valor,0);
+ document.getElementById("dashboardStats").innerHTML=`<div class="stat sblue"><small>CLIENTES</small><strong>${banco.clientes.length}</strong></div><div class="stat sgreen"><small>VENDAS MÊS</small><strong>${vendasMes.length}</strong></div><div class="stat spurple"><small>RECEBIDO</small><strong>${dinheiro(recebido)}</strong></div><div class="stat sred"><small>A RECEBER</small><strong>${dinheiro(aReceber)}</strong></div>`;
+ document.getElementById("financeiro").innerHTML=`<p><b>Vendido:</b> ${dinheiro(vendido)}</p><p><b>Recebido:</b> ${dinheiro(recebido)}</p><p><b>A receber:</b> ${dinheiro(aReceber)}</p><p><b>Despesas:</b> ${dinheiro(desp)}</p><p style="color:green"><b>Lucro = ${dinheiro(recebido-desp)}</b></p>`;
+ document.getElementById("ultimasVendas").innerHTML=vendasMes.slice(-10).reverse().map(v=>`<tr><td>${dataBR(v.data)}</td><td>${banco.clientes.find(c=>c.id===v.clienteId)?.nome||"Consumidor"}</td><td>${v.produto} (${v.quantidade}x)</td><td>${dinheiro(v.total)}</td></tr>`).join("")||"<tr><td colspan=4>Nenhuma venda</td></tr>";
+ document.getElementById("listaClientes").innerHTML=banco.clientes.map(c=>`<div style="padding:8px;border-bottom:1px solid #eee">${c.nome} - ${c.whatsapp}</div>`).join("")||"Nenhum";
+ document.getElementById("vendaCliente").innerHTML="<option value=''>Consumidor avulso</option>"+banco.clientes.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
+ document.getElementById("listaVendas").innerHTML=banco.vendas.filter(v=>v.data===hoje()).map(v=>`<div style="padding:6px;border-bottom:1px solid #eee">${v.produto} - ${v.quantidade}x ${dinheiro(v.valor)} = <b>${dinheiro(v.total)}</b></div>`).join("")||"Nenhuma hoje";
+ document.getElementById("estoqueCards").innerHTML=`<div class="estoque">Gás cheio<b>${banco.estoque.gasCheio}</b></div><div class="estoque">Gás vazio<b>${banco.estoque.gasVazio}</b></div><div class="estoque">Água cheia<b>${banco.estoque.aguaCheia}</b></div><div class="estoque">Água vazia<b>${banco.estoque.aguaVazia}</b></div>`;
+ document.getElementById("listaDespesas").innerHTML=banco.despesas.map(d=>`<div>${dataBR(d.data)} - ${d.motivo} - ${dinheiro(d.valor)}</div>`).join("")||"Nenhuma";
+ document.getElementById("mesStats").innerHTML=`<div class="stat sgreen"><small>VENDAS</small><strong>${vendasMes.length}</strong></div><div class="stat sblue"><small>VENDIDO</small><strong>${dinheiro(vendido)}</strong></div><div class="stat spurple"><small>LUCRO</small><strong>${dinheiro(recebido-desp)}</strong></div>`;
 }
-function addCliente(){
-let n=document.getElementById('cli-nome').value.trim();
-let tel=document.getElementById('cli-tel').value.trim();
-let end=document.getElementById('cli-end').value.trim();
-if(!n){alert('Digite o nome');return}
-clientes.push({nome:n,tel:tel,end:end});
-document.getElementById('cli-nome').value='';document.getElementById('cli-tel').value='';document.getElementById('cli-end').value='';
-save(); alert('Cliente salvo!'); showTab('ven');
-}
-function fillCliSelect(){
-let s=document.getElementById('ven-cli'); s.innerHTML='';
-if(clientes.length==0){s.innerHTML='<option> Cadastre um cliente primeiro </option>';return}
-clientes.forEach((c,i)=>{let o=document.createElement('option');o.value=i;o.textContent=c.nome; s.appendChild(o)})
-}
-function addVenda(){
-let ci=document.getElementById('ven-cli').value;
-if(clientes.length==0||ci===''){alert('Cadastre um cliente antes');showTab('cli');return}
-let cli=clientes[ci];
-let prod=document.getElementById('ven-prod').value;
-let valor=parseFloat(document.getElementById('ven-valor').value)||0;
-let data=document.getElementById('ven-data').value||new Date().toISOString().slice(0,10);
-vendas.unshift({data:data,cliente:cli.nome,tel:cli.tel,produto:prod,valor:valor});
-save(); alert('Venda salva!');
-}
-function addVendaZap(){
-addVenda();
-let ci=document.getElementById('ven-cli').value;
-if(!clientes[ci]) return;
-let tel=clientes[ci].tel.replace(/[^0-9]/g,'');
-if(tel.length<10){alert('Venda salva, mas telefone inválido para Zap');return}
-if(!tel.startsWith('55')) tel='55'+tel;
-let prod=document.getElementById('ven-prod').value;
-window.open('https://wa.me/'+tel+'?text=Olá '+encodeURIComponent(clientes[ci].nome)+'! Sua venda de '+encodeURIComponent(prod)+' foi registrada. Obrigado pela preferência! - El Shaday Gás e Água','_blank');
-}
-function render(){
-document.getElementById('t-clientes').textContent=clientes.length;
-let total=vendas.reduce((a,b)=>a+b.valor,0);
-document.getElementById('t-vendas').textContent='R$ '+total.toFixed(2).replace('.',',');
-document.getElementById('t-receber').textContent='R$ '+total.toFixed(2).replace('.',',');
-let lc=document.getElementById('lista-clientes');
-if(clientes.length==0) lc.innerHTML='Nenhum cliente ainda';
-else lc.innerHTML=clientes.map(c=>'<div class="stat"><span>'+c.nome+'<br><small>'+c.tel+'</small></span><b>...</b></div>').join('');
-let lv=document.getElementById('lista-vendas');
-if(vendas.length==0) lv.innerHTML='<tr><td colspan="4" class="small">Nenhuma venda ainda</td></tr>';
-else lv.innerHTML=vendas.slice(0,10).map(v=>'<tr><td>'+v.data.slice(5,10).split('-').reverse().join('/')+'</td><td>'+v.cliente.split(' ')[0]+'</td><td>'+v.produto.split(' - ')[0]+'</td><td>R$ '+v.valor.toFixed(0)+'</td></tr>').join('');
-let lr=document.getElementById('lista-receber');
-if(vendas.length==0) lr.innerHTML='Nenhuma conta pendente';
-else lr.innerHTML=vendas.map(v=>'<div class="stat"><span>'+v.cliente+' - '+v.produto+'</span><b>R$ '+v.valor.toFixed(2)+'</b></div>').join('');
-fillCliSelect();
-}
-render();
-document.getElementById('ven-data').valueAsDate=new Date();
+function baixarBackup(){let blob=new Blob([JSON.stringify(banco,null,2)],{type:"application/json"});let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download="backup-el-shaday.json";a.click();}
+function apagarTudo(){if(!confirm("Apagar tudo?"))return;localStorage.removeItem(CHAVE);location.reload();}
+document.getElementById("vendaData").value=hoje();document.getElementById("mesSelecionado").value=hoje().slice(0,7);calc(); atualizarTudo();
 </script>
 </body>
 </html>
