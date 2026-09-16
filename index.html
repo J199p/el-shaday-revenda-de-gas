@@ -1,96 +1,103 @@
-a:hoje(),qtd:vendasHoje.length,total:total,gas:gas,agua:agua,pix:pix,dh:dh,cart:cart,fiado:fiado,vendas:vendasHoje});
-banco.vendas=banco.vendas.filter(function(v){return v.data!==hoje()});
-salvar();aviso("Dia zerado! Salvo no mês.");
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EL SHADAY - Gás e Água</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:#eef3f0}
+header{background:#087f3f;color:#fff;padding:14px;text-align:center}
+nav{background:#fff;padding:8px;display:flex;gap:6px;overflow:auto;border-bottom:2px solid #087f3f;position:sticky;top:0;z-index:20}
+nav button{background:#e7eee9;color:#14562f;padding:11px 14px;border-radius:20px;font-weight:bold;white-space:nowrap;border:2px solid #087f3f;flex-shrink:0}
+nav button.active{background:#087f3f;color:#fff}
+main{padding:10px;max-width:900px;margin:0 auto}
+.tela{display:none}.tela.active{display:block}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px}
+.stat{color:#fff;padding:12px;border-radius:10px;text-align:center}
+.sblue{background:#1557a6}.sgreen{background:#087f3f}.sred{background:#d92727}.spurple{background:#7b1fa2}
+input,select{width:100%;padding:11px;border:2px solid #999;border-radius:10px;margin-top:4px}
+.btn{width:100%;padding:13px;border-radius:10px;color:#fff;font-weight:bold;border:0;margin-top:8px}
+.green{background:#087f3f}.red{background:#d92727}.blue{background:#1557a6}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;display:none;z-index:99}
+table{width:100%;font-size:13px;border-collapse:collapse}th{background:#204574;color:#fff;padding:8px}td{padding:8px;border-bottom:1px solid #ddd}
+.estoque{border:2px solid #204574;border-radius:10px;padding:10px;text-align:center}
+</style>
+</head>
+<body>
+<header><h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1><p>El Shaday - Gás e água</p></header>
+<nav>
+<button id="b-dashboard" class="active" onclick="abrir('dashboard')">📊 Dashboard</button>
+<button id="b-clientes" onclick="abrir('clientes')">👤 Clientes</button>
+<button id="b-vendas" onclick="abrir('vendas')">🛒 Vendas</button>
+<button id="b-receber" onclick="abrir('receber')">💰 Receber</button>
+<button id="b-estoque" onclick="abrir('estoque')">📦 Estoque</button>
+<button id="b-mes" onclick="abrir('mes')">📅 Mês</button>
+</nav>
+<main>
+<div id="dashboard" class="tela active">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div class="stat sblue">CLIENTES<b id="c1" style="display:block;font-size:22px">0</b></div>
+<div class="stat sgreen">VENDAS MÊS<b id="c2" style="display:block;font-size:22px">0</b></div>
+<div class="stat spurple">RECEBIDO<b id="c3" style="display:block;font-size:18px">R$ 0,00</b></div>
+<div class="stat sred">A RECEBER<b id="c4" style="display:block;font-size:18px">R$ 0,00</b></div>
+</div>
+<div class="card" style="margin-top:10px"><b>💰 Resumo - Fórmula: Total = Qtd x Valor</b><div id="resumo"></div></div>
+<div class="card"><b>📦 Estoque</b><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div class="estoque">Gás cheio<b id="egc">200</b></div><div class="estoque">Gás vazio<b id="egv">0</b></div><div class="estoque">Água cheia<b id="eac">150</b></div><div class="estoque">Água vazia<b id="eav">0</b></div></div></div>
+<div class="card"><b>🛒 Últimas vendas</b><table><thead><tr><th>Data</th><th>Cliente</th><th>Prod</th><th>Total</th></tr></thead><tbody id="ult"></tbody></table></div>
+</div>
+<div id="clientes" class="tela">
+<div class="card"><b>👤 Novo Cliente</b><input id="ncli" placeholder="Nome *"><input id="zcli" placeholder="WhatsApp" style="margin-top:8px"><button class="btn green" onclick="addCli()">Salvar Cliente</button></div>
+<div class="card"><b>Lista</b><div id="lcli" style="margin-top:8px"></div></div>
+</div>
+<div id="vendas" class="tela">
+<div class="card"><b>🛒 Nova Venda - Fórmula Qtd x Valor</b><select id="scli" style="margin-top:8px"></select><select id="sprod" style="margin-top:8px" onchange="calc()"><option>Gás - R$ 110</option><option>Água - R$ 10</option><option>Outro</option></select><input id="qtd" type="number" value="1" oninput="calc()"><input id="val" type="number" value="110" oninput="calc()"><input id="tot" disabled style="background:#d4edda;font-weight:bold;font-size:18px"><input id="dven" type="date"><select id="pag"><option>PIX</option><option>DINHEIRO</option><option>CARTAO</option><option>FIADO</option></select><button class="btn green" onclick="addVen()">✅ Registrar - Total=Qtd*Valor</button><button class="btn blue" onclick="addRap()">+1 Venda Rápida</button></div>
+<div class="card"><b>Vendas de Hoje</b><div id="lhoje"></div></div>
+<div class="card"><button class="btn" style="background:#00897b" onclick="zerar()">ZERAR DIA (acumula no mês)</button><div id="lzer" style="margin-top:8px"></div></div>
+</div>
+<div id="receber" class="tela"><div class="card"><b>💰 Fiados</b><div id="lrec"></div></div></div>
+<div id="estoque" class="tela"><div class="card"><b>📦 Estoque</b><div id="est"></div></div></div>
+<div id="mes" class="tela"><div class="card"><b>📅 Mês</b><div id="mres"></div><button class="btn blue" onclick="zap()">WhatsApp Mês</button></div></div>
+</main>
+<div id="toast"></div>
+<script>
+let C=JSON.parse(localStorage.getItem("C5")||"[]");
+let V=JSON.parse(localStorage.getItem("V5")||"[]");
+let Z=JSON.parse(localStorage.getItem("Z5")||"[]");
+let E=JSON.parse(localStorage.getItem("E5")||'{"gc":200,"gv":0,"ac":150,"av":0}');
+function save(){localStorage.setItem("C5",JSON.stringify(C));localStorage.setItem("V5",JSON.stringify(V));localStorage.setItem("Z5",JSON.stringify(Z));localStorage.setItem("E5",JSON.stringify(E));render();}
+function toast(m){let t=document.getElementById("toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2000);}
+function abrir(id){document.querySelectorAll(".tela").forEach(e=>e.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.getElementById("b-"+id).classList.add("active");}
+function calc(){let q=Number(document.getElementById("qtd").value||0);let v=Number(document.getElementById("val").value||0);let t=q*v;document.getElementById("tot").value="R$ "+t.toFixed(2)+" = "+q+" x R$"+v;return t;}
+function addCli(){let n=document.getElementById("ncli").value.trim();if(!n)return toast("Digite nome");let z=document.getElementById("zcli").value.trim();C.push({id:Date.now(),nome:n,zap:z});document.getElementById("ncli").value="";document.getElementById("zcli").value="";save();toast("Cliente salvo");abrir("vendas");}
+function addVen(){let sc=document.getElementById("scli").value;let pr=document.getElementById("sprod").value;let q=Number(document.getElementById("qtd").value||1);let vl=Number(document.getElementById("val").value||0);let to=calc();let dt=document.getElementById("dven").value||new Date().toISOString().slice(0,10);let pg=document.getElementById("pag").value;V.push({id:Date.now(),cid:sc,prod:pr,qtd:q,valor:vl,total:to,data:dt,pag:pg,status:pg==="FIADO"?"PENDENTE":"PAGO"});if(pr.includes("Gás")){E.gc=Math.max(0,E.gc-q);E.gv+=q;}if(pr.includes("Água")){E.ac=Math.max(0,E.ac-q);E.av+=q;}save();toast("Venda R$ "+to.toFixed(2));abrir("dashboard");}
+function addRap(){let u=V[V.length-1];let pr=u?u.prod:"Gás - R$ 110";let vl=u?u.valor:110;V.push({id:Date.now(),cid:u?u.cid:"",prod:pr,qtd:1,valor:vl,total:vl,data:new Date().toISOString().slice(0,10),pag:u?u.pag:"PIX",status:u&&u.pag==="FIADO"?"PENDENTE":"PAGO"});if(pr.includes("Gás")){E.gc=Math.max(0,E.gc-1);E.gv+=1;}else{E.ac=Math.max(0,E.ac-1);E.av+=1;}save();toast("+1 venda");}
+function zerar(){let hoje=new Date().toISOString().slice(0,10);let hj=V.filter(v=>v.data===hoje);if(!hj.length)return toast("Nada hoje");let tot=hj.reduce((s,v)=>s+v.total,0);Z.push({data:hoje,qtd:hj.length,total:tot,vendas:hj});V=V.filter(v=>v.data!==hoje);save();toast("Dia zerado - foi pro mês");}
+function render(){
+let mes=new Date().toISOString().slice(0,7);
+let vMes=V.filter(v=>v.data.startsWith(mes));
+let vZ=[];Z.forEach(z=>{if(z.data.startsWith(mes))vZ=vZ.concat(z.vendas);});
+let todas=vMes.concat(vZ);
+let rec=todas.filter(v=>v.status==="PAGO").reduce((s,v)=>s+v.total,0);
+let pend=todas.filter(v=>v.status!=="PAGO").reduce((s,v)=>s+v.total,0);
+document.getElementById("c1").textContent=C.length;
+document.getElementById("c2").textContent=todas.length;
+document.getElementById("c3").textContent="R$ "+rec.toFixed(2);
+document.getElementById("c4").textContent="R$ "+pend.toFixed(2);
+document.getElementById("resumo").innerHTML="Vendido: R$ "+(rec+pend).toFixed(2)+"<br>Recebido: R$ "+rec.toFixed(2)+"<br>A receber: R$ "+pend.toFixed(2)+"<br><b>Lucro: R$ "+rec.toFixed(2)+"</b><br><small>Fórmula: Total = Qtd × Valor</small>";
+document.getElementById("egc").textContent=E.gc;document.getElementById("egv").textContent=E.gv;document.getElementById("eac").textContent=E.ac;document.getElementById("eav").textContent=E.av;
+document.getElementById("ult").innerHTML=todas.slice(-8).reverse().map(v=>"<tr><td>"+v.data.slice(5)+"</td><td>"+(C.find(c=>c.id==v.cid)?.nome||"Cons").split(" ")[0]+"</td><td>"+v.prod.split(" ")[0]+"</td><td>R$ "+v.total+"</td></tr>").join("")||"<tr><td colspan=4 style='text-align:center'>Nenhuma</td></tr>";
+document.getElementById("lcli").innerHTML=C.map(c=>"<div style='padding:8px;border-bottom:1px solid #eee'><b>"+c.nome+"</b> - "+c.zap+"</div>").join("")||"Nenhum";
+document.getElementById("scli").innerHTML="<option value=''>Consumidor avulso</option>"+C.map(c=>"<option value='"+c.id+"'>"+c.nome+"</option>").join("");
+let hoje=new Date().toISOString().slice(0,10);
+document.getElementById("lhoje").innerHTML=V.filter(v=>v.data===hoje).map(v=>"<div style='padding:6px;border-bottom:1px solid #eee'>"+v.prod+" "+v.qtd+"x R$"+v.valor+" = <b>R$"+v.total+"</b></div>").join("")||"Nenhuma hoje";
+document.getElementById("lrec").innerHTML=V.filter(v=>v.status!=="PAGO").map(v=>"<div style='padding:8px;border-bottom:1px solid #eee'>"+(C.find(c=>c.id==v.cid)?.nome||"Cons")+" - "+v.prod+" <b>R$"+v.total+"</b></div>").join("")||"Nenhum fiado";
+document.getElementById("est").innerHTML="<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px'><div class='estoque'>Gás cheio<b style='display:block;font-size:20px'>"+E.gc+"</b></div><div class='estoque'>Gás vazio<b style='display:block;font-size:20px'>"+E.gv+"</b></div><div class='estoque'>Água cheia<b style='display:block;font-size:20px'>"+E.ac+"</b></div><div class='estoque'>Água vazia<b style='display:block;font-size:20px'>"+E.av+"</b></div></div>";
+document.getElementById("mres").innerHTML="Mês "+mes+"<br>Vendas: "+todas.length+"<br>Total: R$ "+(rec+pend).toFixed(2)+"<br>Gás: "+todas.filter(v=>v.prod.includes("Gás")).reduce((s,v)=>s+v.qtd,0)+" unid.<br>Água: "+todas.filter(v=>v.prod.includes("Água")).reduce((s,v)=>s+v.qtd,0)+" unid.";
+document.getElementById("lzer").innerHTML=Z.map((z,i)=>"<div style='padding:6px;border:1px solid #ccc;margin:4px 0;border-radius:6px'>📅 "+z.data+" - "+z.qtd+" vendas - R$ "+z.total+"</div>").join("")||"Nenhum dia zerado";
 }
-function mostrarDiasZerados(){
-let html="";
-for(let i=0;i<diasZerados.length;i++){
-let d=diasZerados[i];
-html+="<div class='relItem'><span>📅 "+dataBR(d.data)+" - "+d.qtd+" vend - G:"+d.gas+" A:"+d.agua+" R$"+d.total+"</span><span>PIX R$"+d.pix+" DH R$"+d.dh+" CART R$"+d.cart+" FIADO R$"+d.fiado+"</span><button class='btn red' onclick='apagarDia("+i+")'>X</button></div>";
-}
-document.getElementById("listaDiasZerados").innerHTML=html||"Nenhum dia zerado ainda.";
-document.getElementById("listaDiasMes").innerHTML=html||"Nenhum";
-}
-function apagarDia(i){if(confirm("Apagar dia zerado?")){diasZerados.splice(i,1);salvar();}}
-function mostrarReceber(){
-let todas=banco.vendas.filter(function(v){return v.pagamento==="FIADO"});
-let pend=todas.filter(function(v){return statusVenda(v)==="PENDENTE"});
-let venc=todas.filter(function(v){return statusVenda(v)==="VENCIDA"});
-let pagas=todas.filter(function(v){return statusVenda(v)==="PAGO"});
-document.getElementById("receberStats").innerHTML="<div class='stat sorange'><small>PENDENTES</small><strong>"+dinheiro(pend.reduce(function(s,v){return s+v.total},0))+"</strong></div><div class='stat sred'><small>VENCIDAS</small><strong>"+dinheiro(venc.reduce(function(s,v){return s+v.total},0))+"</strong></div><div class='stat sgreen'><small>PAGAS</small><strong>"+dinheiro(pagas.reduce(function(s,v){return s+v.total},0))+"</strong></div><div class='stat sblue'><small>A RECEBER</small><strong>"+dinheiro(pend.concat(venc).reduce(function(s,v){return s+v.total},0))+"</strong></div>";
-let busca=(document.getElementById("buscaReceber").value||"").toLowerCase();
-let lista=pend.concat(venc).filter(function(v){return nomeCliente(v.clienteId).toLowerCase().indexOf(busca)>=0});
-let html="";
-for(let i=0;i<lista.length;i++){
-let v=lista[i];
-html+="<tr><td>"+dataBR(v.vencimento)+"</td><td>"+escapar(nomeCliente(v.clienteId))+"</td><td>"+escapar(v.produto)+"</td><td>"+dinheiro(v.total)+"</td><td><span class='badge "+(statusVenda(v)==="VENCIDA"?"vencida":"pendente")+"'>"+statusVenda(v)+"</span></td><td><button class='btn green' onclick='marcarPago(\""+v.id+"\")'>Paga</button></td></tr>";
-}
-document.getElementById("listaReceber").innerHTML=html||"<tr><td colspan='6' class='vazio'>Nenhuma conta</td></tr>";
-}
-function marcarPago(id){let v=banco.vendas.find(function(x){return x.id===id});if(!v)return;v.status="PAGO";salvar();aviso("Pago!");}
-function mostrarEstoque(){let e=banco.estoque;document.getElementById("estoqueCards").innerHTML="<div class='estoque'>GÁS CHEIO<b>"+e.gasCheio+"</b></div><div class='estoque'>GÁS VAZIO<b>"+e.gasVazio+"</b></div><div class='estoque'>ÁGUA CHEIA<b>"+e.aguaCheia+"</b></div><div class='estoque'>ÁGUA VAZIA<b>"+e.aguaVazia+"</b></div>";}
-function ajustarEstoque(){let prod=document.getElementById("estoqueProduto").value;let qtd=Number(document.getElementById("estoqueQuantidade").value||0);if(qtd<=0)return;if(document.getElementById("estoqueOperacao").value==="entrada")banco.estoque[prod]+=qtd;else banco.estoque[prod]=Math.max(0,banco.estoque[prod]-qtd);salvar();aviso("Estoque ok!");}
-document.getElementById("formDespesa").onsubmit=function(e){e.preventDefault();banco.despesas.push({id:Math.random().toString(36).substr(2,9),valor:Number(document.getElementById("despesaValor").value),data:document.getElementById("despesaData").value||hoje(),motivo:document.getElementById("despesaMotivo").value});salvar();aviso("Despesa salva!");document.getElementById("formDespesa").reset();document.getElementById("despesaData").value=hoje();};
-function mostrarDespesas(){let lista=banco.despesas.slice().sort(function(a,b){return b.data.localeCompare(a.data)});let html="";for(let i=0;i<lista.length;i++){let d=lista[i];html+="<tr><td>"+dataBR(d.data)+"</td><td>"+escapar(d.motivo)+"</td><td>"+dinheiro(d.valor)+"</td><td><button class='btn red' onclick='excluirDespesa(\""+d.id+"\")'>X</button></td></tr>";}document.getElementById("listaDespesas").innerHTML=html||"<tr><td colspan='4' class='vazio'>Nenhuma</td></tr>";}
-function excluirDespesa(id){banco.despesas=banco.despesas.filter(function(x){return x.id!==id});salvar();}
-document.getElementById("mesSelecionado").value=hoje().slice(0,7);
-document.getElementById("mesSelecionado").onchange=mostrarMes;
-function mostrarMes(){
-let mes=document.getElementById("mesSelecionado").value;
-let vendasMes=banco.vendas.filter(function(v){return v.data.indexOf(mes)===0});
-let vendasZ=[];
-for(let i=0;i<diasZerados.length;i++){if(diasZerados[i].data.indexOf(mes)===0){for(let j=0;j<diasZerados[i].vendas.length;j++)vendasZ.push(diasZerados[i].vendas[j]);}}
-let todas=vendasMes.concat(vendasZ);
-let despesas=banco.despesas.filter(function(d){return d.data.indexOf(mes)===0});
-let vendido=todas.reduce(function(s,v){return s+v.total},0);
-let recebido=todas.filter(function(v){return statusVenda(v)==="PAGO"}).reduce(function(s,v){return s+v.total},0);
-let receber=todas.filter(function(v){return statusVenda(v)!=="PAGO"}).reduce(function(s,v){return s+v.total},0);
-let desp=despesas.reduce(function(s,d){return s+d.valor},0);
-document.getElementById("mesStats").innerHTML="<div class='stat sblue'><small>VENDAS MÊS</small><strong>"+todas.length+"</strong></div><div class='stat sgreen'><small>RECEBIDO</small><strong>"+dinheiro(recebido)+"</strong></div><div class='stat sred'><small>A RECEBER</small><strong>"+dinheiro(receber)+"</strong></div><div class='stat spurple'><small>LUCRO</small><strong>"+dinheiro(recebido-desp)+"</strong></div>";
-let gas=todas.filter(function(v){return v.produto==="Gás"}).reduce(function(s,v){return s+v.quantidade},0);
-let agua=todas.filter(function(v){return v.produto==="Água"}).reduce(function(s,v){return s+v.quantidade},0);
-let pix=todas.filter(function(v){return v.pagamento==="PIX"}).reduce(function(s,v){return s+v.total},0);
-let din=todas.filter(function(v){return v.pagamento==="DINHEIRO"}).reduce(function(s,v){return s+v.total},0);
-let cart=todas.filter(function(v){return v.pagamento==="CARTAO"}).reduce(function(s,v){return s+v.total},0);
-document.getElementById("resumoMes").innerHTML="<tr><th>RESUMO</th><th>VALOR</th></tr><tr><td>TOTAL GÁS MÊS</td><td>"+gas+" unid.</td></tr><tr><td>TOTAL ÁGUA MÊS</td><td>"+agua+" unid.</td></tr><tr><td>TOTAL VENDIDO</td><td>"+dinheiro(vendido)+"</td></tr><tr><td>PIX</td><td>"+dinheiro(pix)+"</td></tr><tr><td>DINHEIRO</td><td>"+dinheiro(din)+"</td></tr><tr><td>CARTÃO</td><td>"+dinheiro(cart)+"</td></tr><tr><td>FIADO</td><td>"+dinheiro(receber)+"</td></tr><tr><td>DESPESAS</td><td>"+dinheiro(desp)+"</td></tr><tr><td><b>LUCRO</b></td><td><b>"+dinheiro(recebido-desp)+"</b></td></tr>";
-}
-function compartilharMes(){
-let mes=document.getElementById("mesSelecionado").value;
-let vendasMes=banco.vendas.filter(function(v){return v.data.indexOf(mes)===0});
-let vendasZ=[];for(let i=0;i<diasZerados.length;i++){if(diasZerados[i].data.indexOf(mes)===0)for(let j=0;j<diasZerados[i].vendas.length;j++)vendasZ.push(diasZerados[i].vendas[j]);}
-let todas=vendasMes.concat(vendasZ);
-let recebido=todas.filter(function(v){return statusVenda(v)==="PAGO"}).reduce(function(s,v){return s+v.total},0);
-let receber=todas.filter(function(v){return statusVenda(v)!=="PAGO"}).reduce(function(s,v){return s+v.total},0);
-let desp=banco.despesas.filter(function(d){return d.data.indexOf(mes)===0}).reduce(function(s,d){return s+d.valor},0);
-let texto="🔥 EL SHADAY - MÊS "+mes+"\nVendas: "+todas.length+"\nRecebido: "+dinheiro(recebido)+"\nA receber: "+dinheiro(receber)+"\nDespesas: "+dinheiro(desp)+"\nLucro: "+dinheiro(recebido-desp)+"\n";
-window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank");
-}
-function fecharMes(){if(!confirm("FECHAR MÊS?"))return;let mes=document.getElementById("mesSelecionado").value;let hist=[];try{hist=JSON.parse(localStorage.getItem("historicoMeses")||"[]")}catch(e){hist=[]}hist.push({mes:mes,dias:diasZerados.filter(function(d){return d.data.indexOf(mes)===0}),vendas:banco.vendas.filter(function(v){return v.data.indexOf(mes)===0}),data:new Date().toISOString()});localStorage.setItem("historicoMeses",JSON.stringify(hist));banco.vendas=banco.vendas.filter(function(v){return v.data.indexOf(mes)!==0});banco.despesas=banco.despesas.filter(function(d){return d.data.indexOf(mes)!==0});diasZerados=diasZerados.filter(function(d){return d.data.indexOf(mes)!==0});salvar();aviso("Mês fechado!");}
-function mostrarDashboard(){
-let mes=hoje().slice(0,7);
-let vendasMes=banco.vendas.filter(function(v){return v.data.indexOf(mes)===0});
-let vendasZ=[];for(let i=0;i<diasZerados.length;i++){if(diasZerados[i].data.indexOf(mes)===0)for(let j=0;j<diasZerados[i].vendas.length;j++)vendasZ.push(diasZerados[i].vendas[j]);}
-let vendas=vendasMes.concat(vendasZ);
-let recebido=vendas.filter(function(v){return statusVenda(v)==="PAGO"}).reduce(function(s,v){return s+v.total},0);
-let pendente=vendas.filter(function(v){return statusVenda(v)!=="PAGO"}).reduce(function(s,v){return s+v.total},0);
-document.getElementById("dashboardStats").innerHTML="<div class='stat sblue'><small>CLIENTES</small><strong>"+banco.clientes.length+"</strong></div><div class='stat sgreen'><small>VENDAS MÊS</small><strong>"+vendas.length+"</strong></div><div class='stat spurple'><small>RECEBIDO</small><strong>"+dinheiro(recebido)+"</strong></div><div class='stat sred'><small>PENDENTE</small><strong>"+dinheiro(pendente)+"</strong></div>";
-let despesas=banco.despesas.filter(function(d){return d.data.indexOf(mes)===0}).reduce(function(s,d){return s+d.valor},0);
-let vendido=vendas.reduce(function(s,v){return s+v.total},0);
-document.getElementById("financeiro").innerHTML="<p><b>Vendido:</b> "+dinheiro(vendido)+"</p><p><b>Recebido:</b> "+dinheiro(recebido)+"</p><p><b>A receber:</b> "+dinheiro(pendente)+"</p><p><b>Despesas:</b> "+dinheiro(despesas)+"</p><p><b>Lucro:</b> "+dinheiro(recebido-despesas)+"</p>";
-let e=banco.estoque;
-document.getElementById("estoqueResumo").innerHTML="<div class='estoque'>Gás cheio<b>"+e.gasCheio+"</b></div><div class='estoque'>Gás vazio<b>"+e.gasVazio+"</b></div><div class='estoque'>Água cheia<b>"+e.aguaCheia+"</b></div><div class='estoque'>Água vazia<b>"+e.aguaVazia+"</b></div>";
-let ultimas=vendas.slice().sort(function(a,b){return b.data.localeCompare(a.data)}).slice(0,8);
-let html="";for(let i=0;i<ultimas.length;i++){let v=ultimas[i];html+="<tr><td>"+dataBR(v.data)+"</td><td>"+escapar(nomeCliente(v.clienteId))+"</td><td>"+escapar(v.produto)+"</td><td>"+dinheiro(v.total)+"</td></tr>";}
-document.getElementById("ultimasVendas").innerHTML=html||"<tr><td colspan='4' class='vazio'>Nenhuma venda no mês</td></tr>";
-}
-function baixarBackup(){let blob=new Blob([JSON.stringify({banco:banco,diasZerados:diasZerados},null,2)],{type:"application/json"});let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download="el-shaday-backup-"+hoje()+".json";a.click();URL.revokeObjectURL(url);}
-document.getElementById("arquivoBackup").onchange=function(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(){try{let dados=JSON.parse(r.result);let b=dados.banco||dados;if(!b.clientes)throw 0;if(confirm("Restaurar backup?")){banco=b;if(dados.diasZerados)diasZerados=dados.diasZerados;salvar();aviso("Restaurado!");}}catch(err){aviso("Backup inválido");}};r.readAsText(f);};
-function apagarTudo(){if(!confirm("Apagar TUDO?"))return;localStorage.removeItem(CHAVE);localStorage.removeItem(CHAVE_Z);location.reload();}
-function atualizarTudo(){try{mostrarDashboard();}catch(e){}try{mostrarClientes();}catch(e){}try{carregarClientesVenda();}catch(e){}try{mostrarVendas();}catch(e){}try{mostrarReceber();}catch(e){}try{mostrarEstoque();}catch(e){}try{mostrarDespesas();}catch(e){}try{mostrarMes();}catch(e){}try{mostrarDiasZerados();}catch(e){}}
-document.getElementById("vendaData").value=hoje();
-document.getElementById("despesaData").value=hoje();
-document.getElementById("mesSelecionado").value=hoje().slice(0,7);
-atualizarTudo();
+function zap(){let mes=new Date().toISOString().slice(0,7);let vMes=V.filter(v=>v.data.startsWith(mes));let vZ=[];Z.forEach(z=>{if(z.data.startsWith(mes))vZ=vZ.concat(z.vendas);});let todas=vMes.concat(vZ);let tot=todas.reduce((s,v)=>s+v.total,0);let txt="🔥 EL SHADAY - "+mes+"%0AVendas: "+todas.length+"%0ATotal: R$ "+tot.toFixed(2);window.open("https://wa.me/?text="+txt,"_blank");}
+document.getElementById("dven").valueAsDate=new Date();calc();render();
 </script>
 </body>
-                           </html>
+</html>
