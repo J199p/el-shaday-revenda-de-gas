@@ -25,7 +25,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#087f3f">
-<title>EL SHADAY GÁS E ÁGUA - CORRIGIDO</title>
+<title>PLANILHA GESTÃO DE VENDAS - Gás e água</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#eef3f0;color:#17251d}
@@ -73,8 +73,8 @@ th{background:#204574;color:white}
 </head>
 <body>
 <header>
-<h1>🔥 EL SHADAY GÁS E ÁGUA 💧</h1>
-<p>APP CORRIGIDO - 2 BOTÕES NA FOLHA + ZERAR QUE ACUMULA NO MÊS</p>
+<h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1>
+<p>Gás e água</p>
 </header>
 <nav>
 <button class="active" onclick="abrir('dashboard',this)">📊 Dashboard</button>
@@ -273,4 +273,4 @@ let dh=vendasHoje.filter(function(v){return v.pagamento==="DINHEIRO"}).reduce(fu
 let cart=vendasHoje.filter(function(v){return v.pagamento==="CARTAO"}).reduce(function(s,v){return s+v.total},0);
 let fiado=vendasHoje.filter(function(v){return v.pagamento==="FIADO"}).reduce(function(s,v){return s+v.total},0);
 diasZerados.push({data:hoje(),qtd:vendasHoje.length,gas:gas,agua:agua,total:total,pix:pix,dh:dh,cart:cart,fiado:fiado,vendas:JSON.parse(JSON.stringify(vendasHoje))});
-banco.vendas=banco.vendas.f
+banco.vendas=banco.vendas.filter(function(v){return v.data!==hoje(
