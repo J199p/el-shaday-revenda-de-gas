@@ -4,104 +4,1264 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#087f3f">
-<title>PLANILHA GESTÃO DE VENDAS</title>
+<meta name="description" content="Planilha de gestão de vendas de gás e água - El Shaday Gás e Água">
+<title>EL SHADAY GÁS E ÁGUA - Gestão de Vendas</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#eef3f0}
-header{background:#087f3f;color:#fff;padding:12px;text-align:center;position:sticky;top:0;z-index:20}header h1{font-size:18px;font-weight:900}
-nav{display:flex;gap:6px;overflow-x:auto;background:#fff;padding:8px;position:sticky;top:44px;z-index:19;border-bottom:2px solid #087f3f}
-nav button{flex:0 0 auto;padding:11px 14px;border-radius:10px;font-weight:900;border:0;background:#e7eee9;color:#14562f}nav button.ativo{background:#087f3f;color:#fff}
-main{max-width:1200px;margin:auto;padding:10px}.tela{display:none}.tela.ativa{display:block}
-.card{background:#fff;border-radius:14px;padding:12px;margin-bottom:10px;box-shadow:0 2px 8px #0001}
-.grid{display:grid;gap:8px}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}
-.stat{color:#fff;padding:12px;border-radius:12px}.stat small{font-size:10px;font-weight:bold}.stat strong{font-size:16px;display:block}
-.sgreen{background:#087f3f}.sblue{background:#1557a6}.sred{background:#d92727}.sorange{background:#ef7d00}
-input,select{width:100%;padding:11px;border:2px solid #aaa;border-radius:10px}.btn{padding:11px 14px;border-radius:10px;color:#fff;font-weight:900;border:0}
-.green{background:#087f3f}.blue{background:#1557a6}.red{background:#d92727}.gray{background:#657c89}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #eee;text-align:left}th{background:#204574;color:#fff}
-.tabela{overflow:auto;max-height:380px}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;display:none;z-index:99}
-.sug{position:absolute;top:100%;left:0;right:0;background:#fff;border:2px solid #087f3f;border-radius:10px;max-height:200px;overflow:auto;z-index:50;display:none}
-.sug div{padding:10px;border-bottom:1px solid #eee}.rel{position:relative}
-@media(max-width:700px){.g4{grid-template-columns:1fr 1fr}}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --verde:#087f3f;
+  --verde2:#0a9b50;
+  --azul:#1557a6;
+  --vermelho:#d92727;
+  --laranja:#ef7d00;
+  --roxo:#7b1fa2;
+  --cinza:#657c89;
+  --teal:#00897b;
+  --fundo:#eef3f0;
+  --texto:#17251d;
+  --branco:#fff;
+  --borda:#ddd;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:var(--fundo);
+  color:var(--texto);
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+header{
+  background:var(--verde);
+  color:#fff;
+  padding:16px 10px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  text-align:center;
+  box-shadow:0 2px 8px #0003;
+}
+
+header h1{
+  font-size:20px;
+  font-weight:900;
+}
+
+header p{
+  font-size:12px;
+  margin-top:5px;
+  opacity:.92;
+}
+
+nav{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  background:#fff;
+  padding:8px;
+  position:sticky;
+  top:70px;
+  z-index:19;
+  border-bottom:1px solid #ddd;
+  scrollbar-width:none;
+}
+
+nav::-webkit-scrollbar{
+  display:none;
+}
+
+nav button{
+  background:#e7eee9;
+  color:#14562f;
+  padding:10px 13px;
+  border-radius:10px;
+  font-weight:bold;
+  white-space:nowrap;
+  font-size:13px;
+}
+
+nav button.active{
+  background:var(--verde);
+  color:#fff;
+}
+
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:10px;
+}
+
+.tela{
+  display:none;
+}
+
+.tela.active{
+  display:block;
+}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 2px 10px #0001;
+}
+
+h2{
+  font-size:17px;
+  margin-bottom:10px;
+}
+
+h3{
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.grid{
+  display:grid;
+  gap:10px;
+}
+
+.g2{
+  grid-template-columns:repeat(2,1fr);
+}
+
+.g3{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.g4{
+  grid-template-columns:repeat(4,1fr);
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  font-size:12px;
+  margin:6px 0 4px;
+}
+
+input,
+select{
+  width:100%;
+  padding:11px;
+  border:2px solid #aaa;
+  border-radius:10px;
+  background:#fff;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--verde);
+}
+
+.btn{
+  padding:10px 13px;
+  border-radius:10px;
+  color:#fff;
+  font-weight:bold;
+  margin:3px;
+  font-size:13px;
+}
+
+.btn:hover{
+  opacity:.9;
+}
+
+.green{background:var(--verde)}
+.blue{background:var(--azul)}
+.red{background:var(--vermelho)}
+.purple{background:var(--roxo)}
+.orange{background:var(--laranja)}
+.gray{background:var(--cinza)}
+.black{background:#111}
+.teal{background:var(--teal)}
+.zap{background:#25D366}
+
+.acoes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:10px;
+}
+
+.stat{
+  color:#fff;
+  padding:13px;
+  border-radius:13px;
+  min-height:80px;
+  box-shadow:0 2px 7px #0002;
+}
+
+.stat small{
+  font-weight:bold;
+  font-size:11px;
+}
+
+.stat strong{
+  display:block;
+  font-size:21px;
+  margin-top:6px;
+}
+
+.sblue{background:var(--azul)}
+.sgreen{background:var(--verde)}
+.sred{background:var(--vermelho)}
+.spurple{background:var(--roxo)}
+.sorange{background:var(--laranja)}
+.steal{background:var(--teal)}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+th,
+td{
+  padding:8px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+  vertical-align:middle;
+}
+
+th{
+  background:#204574;
+  color:#fff;
+  position:sticky;
+  top:0;
+  z-index:1;
+}
+
+.tabela{
+  overflow:auto;
+  max-height:500px;
+}
+
+.estoque{
+  border:2px solid #244f83;
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+  background:#fafdff;
+}
+
+.estoque b{
+  display:block;
+  font-size:25px;
+  margin:6px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.pendente{
+  background:#fff0bd;
+  color:#805500;
+}
+
+.vencida{
+  background:#ffd7d7;
+  color:#a00000;
+}
+
+.paga{
+  background:#d6f5dc;
+  color:#126b2e;
+}
+
+.parcial{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+.fechada{
+  background:#e5e7eb;
+  color:#374151;
+}
+
+.vazio{
+  text-align:center;
+  color:#777;
+  padding:20px;
+}
+
+.info{
+  background:#f1f8f4;
+  border-left:4px solid var(--verde);
+  padding:10px;
+  border-radius:8px;
+  margin:10px 0;
+  font-size:12px;
+}
+
+.alerta{
+  background:#fff7df;
+  border-left:4px solid var(--laranja);
+  padding:10px;
+  border-radius:8px;
+  margin:10px 0;
+  font-size:12px;
+}
+
+#toast{
+  display:none;
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  color:#fff;
+  padding:11px 16px;
+  border-radius:10px;
+  z-index:99;
+  font-weight:bold;
+  font-size:13px;
+  box-shadow:0 4px 15px #0004;
+}
+
+.botoes-folha{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:12px 0;
+}
+
+.btn-folha{
+  border:2px solid #000;
+  border-radius:12px;
+  padding:16px;
+  color:#fff;
+  font-weight:900;
+  font-size:15px;
+}
+
+.relatorioDia{
+  border:2px dashed var(--verde);
+  border-radius:12px;
+  padding:10px;
+  margin:10px 0;
+  background:#f6fffa;
+}
+
+.relItem{
+  border:1px solid #ddd;
+  padding:9px;
+  border-radius:8px;
+  margin:5px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:700;
+  font-size:11px;
+  background:#fff;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0008;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modalBox{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  max-width:420px;
+  width:100%;
+  box-shadow:0 10px 40px #0005;
+}
+
+.resumo-box{
+  line-height:1.8;
+  font-size:13px;
+}
+
+.total-destaque{
+  font-size:22px;
+  font-weight:900;
+  color:var(--verde);
+}
+
+.mini{
+  font-size:11px;
+  color:#666;
+}
+
+@media(max-width:700px){
+
+  header h1{
+    font-size:17px;
+  }
+
+  header p{
+    font-size:10px;
+  }
+
+  nav{
+    top:64px;
+  }
+
+  main{
+    padding:8px;
+  }
+
+  .g4{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .g3,
+  .g2{
+    grid-template-columns:1fr;
+  }
+
+  table{
+    font-size:12px;
+  }
+
+  th,
+  td{
+    padding:7px;
+  }
+
+  .btn{
+    font-size:12px;
+    padding:9px 11px;
+  }
+}
 </style>
 </head>
+
 <body>
-<header><h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1></header>
-<nav id="menu">
-<button class="ativo" data-t="dashboard">📊 Dashboard</button>
-<button data-t="clientes">👤 Clientes</button>
-<button data-t="vendas">🛒 Vendas</button>
-<button data-t="receber">💰 Receber</button>
-<button data-t="estoque">📦 Estoque</button>
-<button data-t="despesas">💸 Despesas</button>
-<button data-t="mes">📅 Mês</button>
-<button data-t="backup">💾 Backup</button>
+
+<header>
+  <h1>🔥 PLANILHA GESTÃO DE VENDAS 💧</h1>
+  <p>EL SHADAY GÁS E ÁGUA — Gestão completa de vendas, clientes, estoque e recebimentos</p>
+</header>
+
+<nav>
+  <button class="active" onclick="abrir('dashboard',this)">📊 Dashboard</button>
+  <button onclick="abrir('clientes',this)">👤 Clientes</button>
+  <button onclick="abrir('vendas',this)">🛒 Vendas</button>
+  <button onclick="abrir('receber',this)">💰 Receber</button>
+  <button onclick="abrir('estoque',this)">📦 Estoque</button>
+  <button onclick="abrir('despesas',this)">💸 Despesas</button>
+  <button onclick="abrir('mes',this)">📅 Mês</button>
+  <button onclick="abrir('backup',this)">💾 Backup</button>
 </nav>
+
 <main>
-<section id="dashboard" class="tela ativa">
-<div class="grid g4" id="dashCards"></div>
-<div class="card"><b>HOJE - <span id="hojeTxt"></span></b><div id="fechHoje" style="font-weight:900"></div><button class="btn green" style="width:100%;margin-top:6px" id="btnZerar">✅ ZERAR DIA</button></div>
-<div class="card"><b>MÊS - <span id="mesTxt"></span></b><div id="fechMes"></div><div class="grid g4" id="breakdown" style="margin-top:6px"></div><div style="margin-top:8px"><button class="btn blue" id="btnZap">📲 WhatsApp</button> <button class="btn gray" id="btnVerMes">Ver mês</button></div></div>
-<div class="card"><b>Resumo</b><div id="resFin"></div></div>
-<div class="card"><b>Estoque</b><div class="grid g2" id="est3d"></div></div>
-<div class="card"><b>Últimas</b><div class="tabela"><table><thead><tr><th>Data</th><th>Cliente</th><th>Pag</th><th>Total</th></tr></thead><tbody id="ultVendas"></tbody></table></div></div>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="tela active">
+
+  <div class="grid g4" id="dashboardStats"></div>
+
+  <div class="grid g2">
+
+    <div class="card">
+      <h2>💰 Resumo financeiro</h2>
+      <div id="financeiro"></div>
+    </div>
+
+    <div class="card">
+      <h2>📦 Estoque atual</h2>
+      <div class="grid g2" id="estoqueResumo"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>🛒 Últimas vendas</h2>
+
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="ultimasVendas"></tbody>
+      </table>
+    </div>
+
+  </div>
+
 </section>
+
+
+<!-- CLIENTES -->
 <section id="clientes" class="tela">
-<div class="card"><h3>👤 Cliente 2000+</h3><form id="fCli"><input type="hidden" id="cId"><div class="grid g2"><input id="cNome" placeholder="Nome *" required><input id="cZap" placeholder="WhatsApp *" required></div><button class="btn green" type="submit" style="width:100%;margin-top:8px">Salvar</button></form><div style="display:flex;gap:6px;margin-top:8px"><button class="btn blue" id="btnGerar2000">⚡ Gerar 2000</button><button class="btn gray" id="btnLimparCli">Limpar</button></div><div>Total: <b id="totalCli">0</b></div></div>
-<div class="card"><input id="buscaCli" placeholder="🔍 Buscar"><div class="tabela" style="margin-top:8px"><table><thead><tr><th>Nome</th><th>Whats</th><th>Débito</th><th>Ação</th></tr></thead><tbody id="listaCli"></tbody></table></div><button class="btn gray" id="btnMaisCli" style="width:100%;margin-top:6px">+50</button></div>
+
+  <div class="card">
+
+    <h2>👤 Cadastrar Cliente</h2>
+
+    <form id="formCliente">
+
+      <input type="hidden" id="clienteId">
+
+      <div class="grid g2">
+
+        <div>
+          <label>Nome *</label>
+          <input id="clienteNome" required>
+        </div>
+
+        <div>
+          <label>WhatsApp *</label>
+          <input id="clienteWhatsApp" required placeholder="(82) 99999-9999">
+        </div>
+
+        <div>
+          <label>Endereço</label>
+          <input id="clienteEndereco">
+        </div>
+
+        <div>
+          <label>Bairro</label>
+          <input id="clienteBairro">
+        </div>
+
+        <div>
+          <label>Cidade</label>
+          <input id="clienteCidade" value="Maceió">
+        </div>
+
+        <div>
+          <label>Observações</label>
+          <input id="clienteObs">
+        </div>
+
+      </div>
+
+      <div class="acoes">
+        <button class="btn green" type="submit">💾 Salvar</button>
+        <button class="btn gray" type="button" onclick="limparCliente()">Limpar</button>
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>🔎 Clientes cadastrados</h2>
+
+    <input
+      id="buscaCliente"
+      placeholder="Buscar nome ou telefone..."
+      oninput="mostrarClientes()"
+    >
+
+    <br><br>
+
+    <div class="tabela">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>WhatsApp</th>
+            <th>Endereço</th>
+            <th>Débito</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="listaClientes"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
+
+
+<!-- VENDAS -->
 <section id="vendas" class="tela">
-<div class="card"><h3>🛒 Venda</h3><form id="fVenda">
-<div class="rel"><input id="vBuscaCli" placeholder="🔍 Cliente" autocomplete="off"><div id="sugCli" class="sug"></div><input type="hidden" id="vCliId"></div>
-<div id="vCliSel" style="margin:6px 0;font-weight:900;color:#087f3f">Cliente: Consumidor</div>
-<div class="grid g2"><select id="vProd"><option>Gás</option><option>Água</option></select><input id="vQtd" type="number" value="1"><input id="vValor" type="number" value="120"><input id="vData" type="date"><select id="vPag"><option>PIX</option><option>DINHEIRO</option><option>CARTAO</option><option>FIADO</option><option value="MISTO_DH_PIX">🔀 MISTO DH + PIX</option></select></div>
-<div id="boxMisto" style="display:none;background:#f0fdf4;border:2px dashed #087f3f;border-radius:10px;padding:10px;margin-top:8px">
-<b>MISTO - Total <span id="mTotal">R$ 120,00</span></b><div class="grid g2" style="margin-top:6px"><div><small>DH R$</small><input id="mDin" type="number" placeholder="60"></div><div><small>PIX R$</small><input id="mPix" type="number" placeholder="60"></div></div><div id="mResto" style="font-weight:900;margin-top:6px"></div>
-</div>
-<button class="btn green" type="submit" style="width:100%;margin-top:8px">Registrar</button>
-</form><div style="display:flex;gap:6px;margin-top:10px"><button class="btn green" style="flex:1" id="btnMais">+1 RÁPIDA</button><button class="btn red" style="flex:1" id="btnMenos">-1 ÚLTIMA</button></div></div>
-<div class="card"><h3>Hoje - <span id="qtdHoje">0</span></h3><div class="tabela"><table><thead><tr><th>Cliente</th><th>Pag</th><th>Total</th><th>X</th></tr></thead><tbody id="listaVendas"></tbody></table></div></div>
+
+  <div class="card">
+
+    <h2>🛒 Registrar Venda</h2>
+
+    <form id="formVenda">
+
+      <div class="grid g3">
+
+        <div>
+          <label>Cliente</label>
+          <select id="vendaCliente"></select>
+        </div>
+
+        <div>
+          <label>Produto</label>
+          <select id="vendaProduto">
+            <option value="Gás">Gás</option>
+            <option value="Água">Água</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Quantidade</label>
+          <input id="vendaQuantidade" type="number" min="1" value="1">
+        </div>
+
+        <div>
+          <label>Valor unitário R$</label>
+          <input id="vendaValor" type="number" min="0" step="0.01" value="120">
+        </div>
+
+        <div>
+          <label>Data</label>
+          <input id="vendaData" type="date">
+        </div>
+
+        <div>
+          <label>Pagamento</label>
+          <select id="vendaPagamento">
+            <option value="PIX">PIX</option>
+            <option value="DINHEIRO">Dinheiro</option>
+            <option value="CARTAO">Cartão</option>
+            <option value="FIADO">Fiado</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Vencimento</label>
+          <input id="vendaVencimento" type="date">
+        </div>
+
+        <div>
+          <label>Observação</label>
+          <input id="vendaObs">
+        </div>
+
+      </div>
+
+      <div class="acoes">
+
+        <button class="btn green" type="submit">
+          🛒 Registrar Venda
+        </button>
+
+        <button class="btn gray" type="button" onclick="limparVenda()">
+          Limpar
+        </button>
+
+      </div>
+
+    </form>
+
+
+    <div class="botoes-folha">
+
+      <button class="btn-folha green" onclick="addVendaRapida()">
+        +1 VENDA
+      </button>
+
+      <button class="btn-folha red" onclick="removerUltimaVenda()">
+        -1 VENDA
+      </button>
+
+    </div>
+
+    <div class="info">
+      📒 <b>Folha do dia:</b> use +1 Venda para registrar rapidamente uma venda usando os últimos dados utilizados.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📋 Vendas de Hoje</h2>
+
+    <div class="tabela">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Prod.</th>
+            <th>Qtd.</th>
+            <th>Total</th>
+            <th>Pag.</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+
+        <tbody id="listaVendas"></tbody>
+
+      </table>
+
+    </div>
+
+    <div class="acoes">
+
+      <button class="btn teal" onclick="zerarDia()">
+        ✅ ZERAR DIA
+      </button>
+
+      <button class="btn blue" onclick="compartilharMes()">
+        📲 WhatsApp MÊS
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="relatorioDia">
+
+      <h2>📅 Dias fechados</h2>
+
+      <div id="listaDiasZerados">
+        Nenhum dia fechado ainda.
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
-<section id="receber" class="tela"><div class="card"><h3>💰 A Receber</h3><div id="recStats"></div><div class="tabela"><table><thead><tr><th>Cliente</th><th>Pendente</th><th>Ação</th></tr></thead><tbody id="listaRec"></tbody></table></div></div></section>
-<section id="estoque" class="tela"><div class="card"><h3>📦 Estoque</h3><div class="grid g2" id="estCards"></div></div></section>
-<section id="despesas" class="tela"><div class="card"><h3>💸 Despesa</h3><form id="fDesp"><input id="dValor" type="number" placeholder="Valor" required><input id="dData" type="date"><input id="dMot" placeholder="Motivo" required style="margin-top:6px"><button class="btn red" type="submit" style="width:100%;margin-top:6px">Registrar</button></form></div><div class="card"><div class="tabela"><table><thead><tr><th>Data</th><th>Motivo</th><th>Valor</th><th>X</th></tr></thead><tbody id="listaDesp"></tbody></table></div></div></section>
-<section id="mes" class="tela"><div class="card"><h3>📅 Mês <input id="mesSel" type="month"></h3><div class="grid g4" id="mesCards"></div><div id="mesRes"></div><button class="btn blue" id="btnZap2" style="margin-top:8px">WhatsApp</button></div></section>
-<section id="backup" class="tela"><div class="card"><h3>💾 Backup</h3><button class="btn blue" id="btnDown">Baixar</button> <button class="btn red" id="btnApagar">Apagar Tudo</button></div></section>
+
+
+<!-- RECEBER -->
+<section id="receber" class="tela">
+
+  <div class="grid g4" id="receberStats"></div>
+
+  <div class="card">
+
+    <h2>💰 Contas a Receber</h2>
+
+    <div class="info">
+      📲 <b>Zap</b> envia uma cobrança pronta.
+      <br>
+      💵 <b>50%</b> recebe metade.
+      <br>
+      🧩 <b>Pedaço</b> registra qualquer valor.
+      <br>
+      ✅ <b>Total</b> quita a dívida.
+    </div>
+
+    <input
+      id="buscaReceber"
+      placeholder="Buscar cliente..."
+      oninput="mostrarReceber()"
+    >
+
+    <br><br>
+
+    <div class="tabela">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Original</th>
+            <th>Pendente</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="listaReceber"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ESTOQUE -->
+<section id="estoque" class="tela">
+
+  <div class="card">
+
+    <h2>📦 Estoque</h2>
+
+    <div class="grid g4" id="estoqueCards"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>⚙️ Ajustar Estoque</h2>
+
+    <div class="grid g3">
+
+      <div>
+        <label>Produto</label>
+
+        <select id="estoqueProduto">
+
+          <option value="gasCheio">Gás cheio</option>
+          <option value="gasVazio">Gás vazio</option>
+          <option value="aguaCheia">Água cheia</option>
+          <option value="aguaVazia">Água vazia</option>
+
+        </select>
+      </div>
+
+      <div>
+        <label>Quantidade</label>
+        <input id="estoqueQuantidade" type="number" min="1" value="1">
+      </div>
+
+      <div>
+        <label>Operação</label>
+
+        <select id="estoqueOperacao">
+
+          <option value="entrada">Entrada</option>
+          <option value="saida">Saída</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="acoes">
+
+      <button class="btn green" onclick="ajustarEstoque()">
+        💾 Salvar
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- DESPESAS -->
+<section id="despesas" class="tela">
+
+  <div class="card">
+
+    <h2>💸 Registrar Despesa</h2>
+
+    <form id="formDespesa">
+
+      <div class="grid g3">
+
+        <div>
+          <label>Valor R$</label>
+          <input id="despesaValor" type="number" step="0.01" min="0" required>
+        </div>
+
+        <div>
+          <label>Data</label>
+          <input id="despesaData" type="date">
+        </div>
+
+        <div>
+          <label>Motivo</label>
+          <input id="despesaMotivo" required>
+        </div>
+
+      </div>
+
+      <div class="acoes">
+
+        <button class="btn red" type="submit">
+          💸 Registrar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📋 Histórico de Despesas</h2>
+
+    <div class="tabela">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Motivo</th>
+            <th>Valor</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+
+        <tbody id="listaDespesas"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MÊS -->
+<section id="mes" class="tela">
+
+  <div class="card">
+
+    <h2>📅 Acumulado Mensal</h2>
+
+    <label>Selecionar mês</label>
+
+    <input
+      id="mesSelecionado"
+      type="month"
+      onchange="mostrarMes()"
+    >
+
+    <br><br>
+
+    <div class="grid g4" id="mesStats"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📊 Resumo do Mês</h2>
+
+    <div class="tabela">
+
+      <table>
+
+        <tbody id="resumoMes"></tbody>
+
+      </table>
+
+    </div>
+
+    <div class="acoes">
+
+      <button class="btn green" onclick="compartilharMes()">
+        📲 WhatsApp MÊS
+      </button>
+
+      <button class="btn teal" onclick="zerarDia()">
+        ✅ ZERAR DIA
+      </button>
+
+      <button class="btn red" onclick="fecharMes()">
+        🔒 FECHAR MÊS
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📅 Dias fechados no mês</h2>
+
+    <div id="listaDiasMes">
+      Nenhum dia.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- BACKUP -->
+<section id="backup" class="tela">
+
+  <div class="card">
+
+    <h2>💾 Backup e Segurança</h2>
+
+    <div class="info">
+      O backup salva clientes, vendas, despesas, estoque e histórico dos dias fechados.
+    </div>
+
+    <div class="acoes">
+
+      <button class="btn blue" onclick="baixarBackup()">
+        💾 Baixar Backup
+      </button>
+
+      <label class="btn purple" style="display:inline-block;cursor:pointer">
+        📂 Restaurar Backup
+
+        <input
+          type="file"
+          id="arquivoBackup"
+          accept=".json"
+          hidden
+        >
+
+      </label>
+
+      <button class="btn red" onclick="apagarTudo()">
+        🗑️ Apagar Tudo
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
 </main>
+
+
+<!-- MODAL RECEBIMENTO -->
+<div
+  id="modalParcial"
+  class="modal"
+  onclick="if(event.target===this)fecharModal()"
+>
+
+  <div class="modalBox">
+
+    <h2>💰 Receber em pedaços</h2>
+
+    <p
+      id="modalInfo"
+      style="margin:10px 0;font-size:13px"
+    ></p>
+
+    <label>Quanto recebeu agora? R$</label>
+
+    <input
+      id="modalValor"
+      type="number"
+      min="0"
+      step="0.01"
+      placeholder="Ex.: 50"
+    >
+
+    <div class="acoes">
+
+      <button class="btn green" onclick="confirmarParcial()">
+        ✅ Confirmar
+      </button>
+
+      <button class="btn gray" onclick="fecharModal()">
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <div id="toast"></div>
+
+
 <script>
-const CHAVE='EL_V15_FINAL_OK';
-let banco=null;try{banco=JSON.parse(localStorage.getItem(CHAVE))}catch(e){}
-if(!banco){banco={clientes:[],vendas:[],despesas:[],estoque:{gasCheio:200,gasVazio:0,aguaCheia:150,aguaVazia:0}}}
-function salvar(){localStorage.setItem(CHAVE,JSON.stringify(banco));atualizar()}
-function hoje(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function dinheiro(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
-function dataBR(d){if(!d)return'-';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
-function escapar(t){const d=document.createElement('div');d.textContent=t||'';return d.innerHTML}
-function idNovo(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(()=>e.style.display='none',2500)}
-function abrir(id){document.querySelectorAll('.tela').forEach(x=>x.classList.remove('ativa'));document.getElementById(id).classList.add('ativa');document.querySelectorAll('#menu button').forEach(b=>b.classList.toggle('ativo',b.dataset.t===id))}
-document.getElementById('menu').addEventListener('click',e=>{const b=e.target.closest('button[data-t]');if(b)abrir(b.dataset.t)});
-let limiteCli=50,cliFiltrados=[];
-function getCli(id){return banco.clientes.find(x=>x.id===id)}
-function nomeCli(id){const c=getCli(id);return c?c.nome:'Consumidor'}
-function filtrarClientes(){const q=(document.getElementById('buscaCli').value||'').toLowerCase();cliFiltrados=!q?banco.clientes:banco.clientes.filter(c=>(c.nome+' '+c.whatsapp).toLowerCase().includes(q));limiteCli=50;renderClientes()}
-function renderClientes(){const lista=cliFiltrados.slice(0,limiteCli);let h='';lista.forEach(c=>{const deb=banco.vendas.filter(v=>v.clienteId===c.id&&v.pagamento==='FIADO'&&v.status!=='PAGO').reduce((s,v)=>s+Number(v.total||0),0);h+='<tr><td><b>'+escapar(c.nome)+'</b></td><td>'+escapar(c.whatsapp)+'</td><td>'+dinheiro(deb)+'</td><td><button class="btn blue" data-edit="'+c.id+'">Ed</button></td></tr>'});document.getElementById('listaCli').innerHTML=h||'<tr><td colspan="4" style="text-align:center">Nenhum</td></tr>';document.getElementById('totalCli').textContent=banco.clientes.length;document.getElementById('btnMaisCli').style.display=cliFiltrados.length>limiteCli?'block':'none';document.querySelectorAll('[data-edit]').forEach(b=>{b.onclick=function(){const c=getCli(this.dataset.edit);if(!c)return;document.getElementById('cId').value=c.id;document.getElementById('cNome').value=c.nome;document.getElementById('cZap').value=c.whatsapp;abrir('clientes')}})}
-document.getElementById('buscaCli').addEventListener('input',filtrarClientes);
-document.getElementById('btnMaisCli').onclick=()=>{limiteCli+=50;renderClientes()};
-const inputBusca=document.getElementById('vBuscaCli'),sugDiv=document.getElementById('sugCli');
-inputBusca.addEventListener('input',function(){const q=this.value.toLowerCase().trim();if(!q){sugDiv.style.display='none';document.getElementById('vCliId').value='';document.getElementById('vCliSel').textContent='Cliente: Consumidor';return}const ach=banco.clientes.filter(c=>(c.nome+' '+c.whatsapp).toLowerCase().includes(q)).slice(0,20);if(!ach.length){sugDiv.style.display='none';return}sugDiv.innerHTML=ach.map(c=>'<div data-id="'+c.id+'" data-nome="'+escapar(c.nome)+'">'+escapar(c.nome)+' - '+escapar(c.whatsapp)+'</div>').join('');sugDiv.style.display='block';sugDiv.querySelectorAll('div').forEach(d=>{d.onclick=function(){document.getElementById('vCliId').value=this.dataset.id;document.getElementById('vCliSel').textContent='Cliente: '+this.dataset.nome;inputBusca.value=this.dataset.nome;sugDiv.style.display='none'}})});
-document.addEventListener('click',e=>{if(!e.target.closest('.rel'))sugDiv.style.display='none'});
-function ajustarEst(p,q){q=Number(q||0);if(p==='Gás'){banco.estoque.gasCheio=Math.max(0,banco.estoque.gasCheio-q);banco.estoque.gasVazio+=q}if(p==='Água'){banco.estoque.aguaCheia=Math.max(0,banco.estoque.aguaCheia-q);banco.estoque.aguaVazia+=q}}
-function devolverEst(v){const q=Number(v.quantidade||0);if(v.produto==='Gás'){banco.estoque.gasCheio+=q;banco.estoque.gasVazio=Math.max(0,banco.estoque.gasVazio-q)}if(v.produto==='Água'){banco.estoque.aguaCheia+=q;banco.estoque.aguaVazia=Math.max(0,banco.estoque.aguaVazia-q)}}
-const vPag=document.getElementById('vPag'),boxMisto=document.getElementById('boxMisto'),mDin=document.getElementById('mDin'),mPix=document.getElementById('mPix');
-function calcMisto(){const total=Number(document.getElementById('vQtd').value||0)*Number(document.getElementById('vValor').value||0);document.getElementById('mTotal').textContent=dinheiro(total);const d=Number(mDin.value||0),p=Number(mPix.value||0),s=d+p,r=total-s;const el=document.getElementById('mResto');if(s===0){el.textContent='Digite DH e PIX';el.style.color='#d92727'}else if(Math.abs(r)<0.01){el.textContent='✅ Fechado '+dinheiro(d)+' + '+dinheiro(p);el.style.color='#087f3f'}else{el.textContent='Falta '+dinheiro(r);el.style.color='#d92727'}}
-vPag.onchange=function(){boxMisto.style.display=this.value==='MISTO_DH_PIX'?'block':'none';calcMisto()};
-['vQtd','vValor'].forEach(id=>document.getElementById(id).addEventListener('input',calcMisto));mDin.addEventListener('input',calcMisto);mPix.addEventListener('input',calcMisto);
-function mostrarVendas(){const lista=banco.vendas.filter(v=>v.data===hoje()&&!v.fechado);let h='';lista.forEach(v=>{let pag=v.pagamento;if(v.pagamento==='MISTO_DH_PIX') pag='DH '+dinheiro(v.mDin)+' + PIX '+dinheiro(v.mPix);h+='<tr><td>'+escapar(nomeCli(v.clienteId))+'</td><td>'+escapar(pag)+'</td><td>'+dinheiro(v.total)+'</td><td><button class="btn red" data-del="'+v.id+'">X</button></td></tr>'});document.getElementById('listaVendas').innerHTML=h||'<tr><td colspan="4" style="text-align:center">Nenhuma</td></tr>';document.getElementById('qtdHoje').textContent=lista.length;document.querySelectorAll('[data-del]').forEach(b=>{b.onclick=function(){if(!confirm('Excluir?'))return;const v=banco.vendas.find(x=>x.id===this.dataset.del);if(v)devolverEst(v);banco.vendas=banco.vendas.filter(x=>x.id!==this.dataset.del);salvar()}})}
-function mostrarReceber(){const lista=banco.vendas.filter(v=>v.pagamento==='FIADO'&&v.status!=='PAGO'&&Number(v.total)>0);let h='';lista.forEach(v=>{h+='<tr><td><b>'+escapar(nomeCli(v.clienteId))+'</b></td><td style="color:#d92727"><b>'+dinheiro(v.total)+'</b></td><td><button class="btn green" data-rec="'+v.id+'">Receber</button></td></tr>'});document.getElementById('listaRec').innerHTML=h||'<tr><td colspan="3" style="text-align:center">Nenhum</td></tr>';document.getElementById('recStats').innerHTML='A RECEBER: '+dinheiro(lista.reduce((s,v)=>s+Number(v.total||0),0));document.querySelectorAll('[data-rec]').forEach(b=>{b.onclick=function(){const v=banco.vendas.find(x=>x.id===this.dataset.rec);if(v){v.total=0;v.status='PAGO';salvar()}}})}
-function mostrarEstoque(){const e=banco.estoque;document.getElementById('estCards').innerHTML='<div class="card">🔥 CHEIO<br><b>'+e.gasCheio+'</b></div><div class="card">VAZIO<br><b>'+e.gasVazio+'</b></div><div class="card">💧 CHEIA<br><b>'+e.aguaCheia+'</b></div><div class="card">VAZIA<br><b>'+e.aguaVazia+'</b></div>';document.getElementById('est3d').innerHTML=document.getElementById('estCards').innerHTML}
-function mostrarDesp(){let h='';banco.despesas.forEach(d=>{h+='<tr><td>'+dataBR(d.data)+'</td><td>'+escapar(d.motivo)+'</td><td>'+dinheiro(d.valor)+'</td><td><button class="btn red" data-deld="'+d.id+'">X</button></td></tr>'});document.getElementById('listaDesp').innerHTML=h||'<tr><td colspan="4" style="text-align:center">Nenhuma</td></tr>';document.querySelectorAll('[data-deld]').forEach(b=>{b.onclick=function(){banco.despesas=banco.despesas.filter(x=>x.id!==this.dataset.deld);salvar()}})}
-function totalMes(m){return banco.vendas.filter(v=>String(v.data||'').slice(0,7)===m).reduce((s,v)=>s+Number(v.totalOriginal||v.total||0),0)}
-function mostrarDash(){const mes=hoje().slice(0,7);const vendasMes=banco.vendas.filter(v=>String(v.data).slice(0,7)===mes);const total=totalMes(mes);let rec=0,pix=0,din=0,cart=0,fiado=0;vendasMes.forEach(v=>{const t=Number(v.totalOriginal||v.total||0);if(v.pagamento==='PIX'){pix+=t;rec+=t}else if(v.pagamento==='DINHEIRO'){din+=t;rec+=t}else if(v.pagamento==='CARTAO'){cart+=t;rec+=t}else if(v.pagamento==='MISTO_DH_PIX'){din+=Number(v.mDin||0);pix+=Number(v.mPix||0);rec+=t}else if(v.pagamento==='FIADO'){fiado+=t;rec+=Number(v.recebido||0)}});const aRec=banco.vendas.filter(v=>v.pagamento==='FIADO'&&v.status!=='PAGO').reduce((s,v)=>s+Number(v.total||0),0);const desp=banco.despesas.filter(d=>String(d.data).slice(0,7)===mes).reduce((s,d)=>s+Number(d.valor||0),0);const hojeVendas=banco.vendas.filter(v=>v.data===hoje()&&!v.fechado);const hojeTotal=hojeVendas.reduce((s,v)=>s+Number(v.total||0),0);document.getElementById('dashCards').innerHTML='<div class="stat sgreen"><small>VENDAS</small><strong>'+dinheiro(total)+'</strong></div><div class="stat sblue"><small>RECEBIDO</small><strong>'+dinheiro(rec)+'</strong></div><div class="stat sorange"><small>A RECEBER</small><strong>'+dinheiro(aRec)+'</strong></div><div class="stat sred"><small>DESP</small><strong>'+dinheiro(desp)+'</strong></div>';document.getElementById('hojeTxt').textContent=dataBR(hoje())+' - '+hojeVendas.length;document.getElementById('fechHoje').textContent=dinheiro(hojeTotal);document.getElementById('mesTxt').textContent=mes;document.getElementById('fechMes').innerHTML='Total <b>'+dinheiro(total)+'</b> Rec <b>'+dinheiro(rec)+'</b> Lucro <b>'+dinheiro(rec-desp)+'</b>';document.getElementById('breakdown').innerHTML='<div class="stat sblue"><small>PIX</small><strong>'+dinheiro(pix)+'</strong></div><div class="stat sgreen"><small>DIN</small><strong>'+dinheiro(din)+'</strong></div><div class="stat sorange"><small>CART</small><strong>'+dinheiro(cart)+'</strong></div><div class="stat sred"><small>FIADO</small><strong>'+dinheiro(fiado)+'</strong></div>';document.getElementById('resFin').textContent='Resultado '+dinheiro(rec-desp);const ult=banco.vendas.slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))).slice(0,5);let h='';ult.forEach(v=>{let p=v.pagamento;if(p==='MISTO_DH_PIX')p='DH+PIX';h+='<tr><td>'+dataBR(v.data)+'</td><td>'+escapar(nomeCli(v.clienteId))+'</td><td>'+escapar(p)+'</td><td>'+dinheiro(v.total)+'</td></tr>'});document.getElementById('ultVendas').innerHTML=h||'<tr><td colspan="4" style="text-align:center">Sem</td></tr>';document.getElementById('mesCards').innerHTML='<div class="stat sgreen"><small>TOTAL</small><strong>'+dinheiro(total)+'</strong></div>';document.getElementById('mesRes').textContent='Total '+dinheiro(total)}
-document.getElementById('fCli').onsubmit=function(e){e.preventDefault();const id=document.getElementById('cId').value||idNovo();const cli={id,nome:document.getElementById('cNome').value.trim(),whatsapp:document.getElementById('cZap').value.trim()};const pos=banco.clientes.findIndex(x=>x.id===id);if(pos>=0)banco.clientes[pos]=cli;else banco.clientes.push(cli);salvar();this.reset();toast('Salvo! '+banco.clientes.length)}
-document.getElementById('fVenda').onsubmit=function(e){e.preventDefault();const qtd=Number(document.getElementById('vQtd').value||0),valor=Number(document.getElementById('vValor').value||0);if(qtd<=0)return;const prod=document.getElementById('vProd').value,pag=document.getElementById('vPag').value,data=document.getElementById('vData').value||hoje(),total=Math.round(qtd*valor*100)/100;if(pag==='MISTO_DH_PIX'){const d=Number(mDin.value||0),p=Number(mPix.value||0);if(Math.abs((d+p)-total)>0.01){toast('MISTO não bate! DH+PIX='+dinheiro(total));return}banco.vendas.push({id:idNovo(),clienteId:document.getElementById('vCliId').value,produto:prod,quantidade:qtd,valor,total,totalOriginal:total,mDin:d,mPix:p,recebido:total,data,pagamento:pag,status:'PAGO',fechado:false})}else{banco.vendas.push({id:idNovo(),clienteId:document.getElementById('vCliId').value,produto:prod,quantidade:qtd,valor,total,totalOriginal:total,recebido:pag==='FIADO'?0:total,data,pagamento:pag,status:pag==='FIADO'?'PENDENTE':'PAGO',fechado:false})}ajustarEst(prod,qtd);salvar();t
+
+/* =========================================================
+   BANCO LOCAL
+========================================================= */
+
+const CHAVE = "EL_SHADAY_GESTAO_FINAL_V4";
+const CHAVE_Z = "EL_SHADAY_DIAS_FECHADOS_V4";
+const CHAVE_M = "EL_SHADAY_MESES_FECHADOS_V4";
+
+let banco = null;
+let diasZerados = [];
+let mesesFechados = [];
+
+try{
+  banco = JSON.parse(localStorage.getItem(CHAVE));
+}catch(e){
+  banco = null;
+}
+
+try{
+  diasZerados = JSON.parse(localStorage.getItem(CHAVE_Z)) || [];
+}catch(e){
+  diasZerados = [];
+}
+
+try{
+  mesesFechados = JSON.parse(localStorage.getItem(CHAVE_M)) || [];
+}catch(e){
+  mesesFechados = [];
+}
+
+
+/* =========================================================
+   BANCO PADRÃO
+========================================================= */
+
+if(!banco){
+
+  banco = {
+
+    clientes:[],
+
+    vendas:[],
+
+    despesas:[],
+
+    estoque:{
+      gasCheio:200,
+      gasVazio:0,
+      aguaCheia:150,
+      aguaVazia:0
+    }
+
+  };
+
+}
+
+
+/* =========================================================
+   FUNÇÕES BÁSICAS
+========================================================= */
+
+function salvar(){
+
+  localStorage.setItem(
+    CHAVE,
+    JSON.stringify(banco)
+  );
+
+  localStorage.setItem(
+    CHAVE_Z,
+    JSON.stringify(diasZerados)
+  );
+
+  localStorage.setItem(
+    CHAVE_M,
+    JSON.stringify(mesesFechados)
+  );
+
+  atualizarTudo();
+}
+
+
+function hoje(){
+
+  const d = new Date();
+
+  const ano = d.getFullYear();
+
+  const mes = String(d.getMonth()+1).padStart(2,"0");
+
+  const dia = String(d.getDate()).padStart(2,"0");
+
+  return ano+"-"+mes+"-"+dia;
+}
+
+
+function mesAtual(){
+
+  return hoje().slice(0,7);
+
+}
+
+
+function dinheiro(v){
+
+  return Number(v || 0).toLocaleString(
+    "pt-BR",
+    {
+      style:"currency",
+      currency:"BRL"
+    }
+  );
+
+}
+
+
+function dataBR(d){
+
+  if(!d) return "-";
+
+  const p = d.split("-");
+
+  if(p.length !== 3) return d;
+
+  return p[2]+"/"+p[1]+"/"+p[0];
+
+}
+
+
+function escapar(t){
+
+  const d = document.createElement("div");
+
+  d.textContent = t == null ? "" : String(t);
+
+  return d.innerHTML;
+
+}
+
+
+function idNovo(){
+
+  return Date.now().toString(36) +
+    
