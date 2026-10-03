@@ -1,51 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BULLEX TIMER PRO - 57s</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', sans-serif;}
+  body{background:#0a0a0a;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+  .logo{width:120px;height:120px;background:#000;border:2px solid #00ff88;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 0 30px rgba(0,255,136,0.3);}
+  .logo h1{color:#00ff88;font-size:18px;line-height:18px;text-align:center;}
+  .logo span{color:#00ff88;font-size:32px;font-weight:900;}
+  .card{background:#111;border:1px solid #222;border-radius:20px;padding:25px;width:100%;max-width:380px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);}
+  .time{font-size:80px;font-weight:900;color:#fff;letter-spacing:-3px;margin:10px 0;}
+  .time.green{color:#00ff88;text-shadow:0 0 20px #00ff88;}
+  .label{color:#888;text-transform:uppercase;letter-spacing:3px;font-size:12px;margin-bottom:15px;}
+  .signal{height:60px;background:#1a1a1a;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin-top:20px;transition:0.3s;border:2px solid #222;}
+  .signal.active{background:#00ff88;color:#000;border-color:#00ff88;animation:pulse 0.5s infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .progress{width:100%;height:6px;background:#222;border-radius:10px;margin-top:20px;overflow:hidden;}
+  .progress-bar{height:100%;background:#00ff88;width:0%;transition:width 1s linear;}
+  .info{margin-top:20px;color:#555;font-size:11px;}
+  .btn-vibrate{margin-top:15px;background:#222;color:#888;border:none;padding:8px 15px;border-radius:20px;font-size:11px;}
+</style>
+</head>
+<body>
 
-// INDICADOR BULLEX - SINAL NO TEMPO CERTO
-var podeEntrar = false;
-var ultimoSinal = "";
+<div class="logo">
+  <h1>BULLEX<br>TIMER PRO</h1>
+  <span>57s</span>
+</div>
 
-function verificarTempoCerto() {
-  var agora = new Date();
-  var segundos = agora.getSeconds();
+<div class="card">
+  <div class="label">Horário de Brasília</div>
+  <div class="time" id="clock">00:00:00</div>
   
-  // TEMPO CERTO DA BULLEX - 1 minuto
-  // A entrada tem que ser entre 57s e 59s pra pegar a próxima vela
-  if (segundos >= 57 && segundos <= 59) {
-    if (podeEntrar == false) { // pra não repetir
-      var r = detectarPuxadaCompra(window.candles);
-      
-      if (r.valido && r.pct >= 84) {
-        ultimoSinal = r.dir;
-        mostrarSinal(r);
-        podeEntrar = true;
-        
-        // Toca som de alerta
-        try { navigator.vibrate(500); } catch(e){}
-      }
-    }
-  } else if (segundos >= 0 && segundos <= 2) {
-    // Começou a nova vela - libera de novo
-    podeEntrar = false;
-  }
+  <div class="progress"><div class="progress-bar" id="progress"></div></div>
   
-  // Atualiza o cronômetro na tela
-  var falta = 60 - segundos;
-  document.getElementById('cronometro').innerText = falta + 's';
-}
-
-function mostrarSinal(resultado) {
-  var el = document.getElementById('sinal');
-  el.innerText = resultado.dir + ' ' + resultado.pct + '% - ENTRE AGORA!';
-  el.className = resultado.dir == 'CALL' ? 'call piscando' : 'put piscando';
+  <div class="signal" id="signal">AGUARDANDO...</div>
   
-  // Se for CALL, verde. PUT, vermelho.
-  if (resultado.dir == 'CALL') {
-    el.style.background = '#00ff88';
-    el.innerHTML = '▲ COMPRA<br>' + resultado.pct + '%<br><small>' + resultado.msg + '</small>';
-  } else {
-    el.style.background = '#ff3b3b';
-    el.innerHTML = '▼ VENDA<br>' + resultado.pct + '%<br><small>' + resultado.msg + '</small>';
-  }
-}
+  <div class="label" style="margin-top:20px;">Próxima entrada em</div>
+  <div class="time" id="countdown" style="font-size:40px;">00s</div>
+</div>
 
-// RODA A CADA 500ms - verifica o tempo certo
-setInterval(verificarTempoCerto, 500);
+<div class="info">BULLEX READER TIMER v1.0 | Estratégia 57s</div>
+<button class="btn-vibrate" onclick="testVibrate()">Testar Vibração</button>
+
+<script>
+  const clockEl = document.getElementById('clock');
+  const countdownEl = document.getElementById('countdown');
+  const signalEl = document.getElementById('signal');
+  const progressEl = document.getElementById('progress');
+
+  let hasAlertedThisMinute = false;
+
+  function testVibrate(){
+    if(navigator.vibrate) navigator.vibrate([200,100
